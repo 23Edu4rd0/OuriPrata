@@ -1,0 +1,124 @@
+{% load static %}
+
+<!-- Carrossel responsivo de imagens principais da landing page -->
+<div class="relative w-full h-[300px] md:h-[400px] overflow-hidden" role="region" aria-label="Carrossel de destaques">
+  <div
+    class="flex transition-transform duration-500 ease-in-out h-full"
+    id="carousel"
+  >
+    <!-- Imagem principal do carrossel, usa srcset para responsividade e qualidade -->
+    <img
+      src="{% static 'assets/landing_page/teste1-800.webp' %}"
+      srcset="{% static 'assets/landing_page/teste1-800.webp' %} 800w,
+              {% static 'assets/landing_page/teste1-1600.webp' %} 1600w"
+      sizes="(max-width: 500px) 800px, 1600px"
+      class="w-full h-full object-cover flex-shrink-0"
+      alt="Foto numero 1 joalheria "
+    />
+    <!-- Segunda imagem do carrossel -->
+    <img
+      src="{% static 'assets/landing_page/teste2.png' %}"
+      class="w-full h-full object-cover flex-shrink-0"
+      alt="Foto numero 2 joalheria "
+    />
+  </div>
+
+  <!-- Botões de navegação do carrossel -->
+  <button
+    onclick="prevSlide()"
+    class="absolute left-0 top-1/2 transform -translate-y-1/2 px-3 py-3  bg-black bg-opacity-50 text-white z-10"
+    aria-label="Slide anterior"
+  >
+    ‹
+  </button>
+  <button
+    onclick="nextSlide()"
+    class="absolute right-0 top-1/2 transform -translate-y-1/2 px-3 py-3 bg-black bg-opacity-50 text-white z-10"
+    aria-label="Próximo slide"
+  >
+    ›
+  </button>
+
+  <!-- Indicadores de slide (bolinhas) -->
+  <div
+    id="indicators"
+    class="absolute bottom-4 w-full flex justify-center gap-2 z-10"
+    aria-label="Indicadores do carrossel"
+    role="tablist"
+  >
+    <!-- Bolinhas serão adicionadas por JavaScript -->
+  </div>
+</div>
+
+<!-- Script de funcionamento do carrossel: transição, swipe, indicadores -->
+<script>
+  // Elementos principais do carrossel
+  const carousel = document.getElementById("carousel");
+  const totalSlides = carousel.children.length;
+  let currentIndex = 0;
+
+  // Atualiza a posição do carrossel e os indicadores
+  function updateCarousel() {
+    const offset = -currentIndex * carousel.parentElement.offsetWidth;
+    carousel.style.transform = `translateX(${offset}px)`;
+    updateIndicators();
+  }
+
+  // Próximo slide
+  function nextSlide() {
+    currentIndex = (currentIndex + 1) % totalSlides;
+    updateCarousel();
+  }
+
+  // Slide anterior
+  function prevSlide() {
+    currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+    updateCarousel();
+  }
+
+  // Criação dos indicadores (bolinhas)
+  const indicators = document.getElementById("indicators");
+  for (let i = 0; i < totalSlides; i++) {
+    const dot = document.createElement("div");
+    dot.className =
+      "w-3 h-3 rounded-full bg-white opacity-50 hover:opacity-100 cursor-pointer";
+    dot.addEventListener("click", () => {
+      currentIndex = i;
+      updateCarousel();
+    });
+    indicators.appendChild(dot);
+  }
+
+  // Atualiza o estado visual dos indicadores
+  function updateIndicators() {
+    const dots = indicators.children;
+    for (let i = 0; i < dots.length; i++) {
+      dots[i].classList.remove("bg-blue-500", "opacity-100");
+      dots[i].classList.add("bg-white", "opacity-50");
+    }
+    dots[currentIndex].classList.remove("bg-white", "opacity-50");
+    dots[currentIndex].classList.add("bg-blue-500", "opacity-100");
+  }
+
+  // Suporte a swipe em dispositivos móveis
+  let startX = 0;
+  let isDragging = false;
+
+  carousel.addEventListener("touchstart", (e) => {
+    isDragging = true;
+    startX = e.touches[0].clientX;
+  });
+
+  carousel.addEventListener("touchend", (e) => {
+    if (!isDragging) return;
+    const endX = e.changedTouches[0].clientX;
+    const diff = endX - startX;
+    if (diff > 50) prevSlide();
+    else if (diff < -50) nextSlide();
+    isDragging = false;
+  });
+
+  // Atualiza carrossel ao redimensionar tela e ao carregar página
+  window.addEventListener("resize", updateCarousel);
+  window.addEventListener("DOMContentLoaded", updateCarousel);
+</script>
