@@ -4,8 +4,7 @@ from django.template import loader
 
 # Create your views here.
 def index(request):
-    template = loader.get_template('landing_page/index.html')
-    return HttpResponse(template.render())
+    return render(request, 'landing_page/index.html')
 
 def contact(request):
     template = loader.get_template('landing_page/contact.html')
@@ -13,3 +12,6 @@ def contact(request):
 
 def items(request):
     return HttpResponse('<h1>Just testing, never mind.</h1>')
+
+def about(request):
+    return render(request, 'landing_page/about.html')

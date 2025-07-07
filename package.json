@@ -24,7 +24,9 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npx tailwindcss -i ./frontend/input.css -o ./static/assets/landing_page/output.css --minify"
+    "build": "npx tailwindcss -i ./src/input.css -o ./catalogo/static/assets/landing_page/output.css --minify",
+    "build-css": "tailwindcss -i ./src/input.css -o ./catalogo/static/assets/landing_page/output.css",
+    "watch-css": "tailwindcss -i ./src/input.css -o ./catalogo/static/assets/landing_page/output.css --watch"
   },
   "repository": {
     "type": "git",
