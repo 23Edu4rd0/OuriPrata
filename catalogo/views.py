@@ -15,3 +15,6 @@ def items(request):
 
 def about(request):
     return render(request, 'landing_page/about.html')
+
+def policy(request):
+    return render(request, 'landing_page/private_policy.html')
