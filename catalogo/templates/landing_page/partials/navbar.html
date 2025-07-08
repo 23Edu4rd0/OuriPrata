@@ -40,7 +40,7 @@
       </div>
 
       <!-- Menu PC -->
-      <nav aria-label="Menu principal" class="hidden md:flex space-x-6 text-black font-semibold items-center">
+      <nav id="main-menu" aria-label="Menu principal" class="hidden md:flex space-x-6 text-black font-semibold items-center">
         <ul class="flex space-x-6 items-center">
           <li>
             <a href="#" class="flex items-center hover:text-yellow-400 space-x-2" aria-label="Meu Carrinho">
@@ -64,7 +64,7 @@
             </a>
           </li>
           <li>
-            <a href="#" class="flex items-center hover:text-yellow-400 space-x-2" aria-label="Minha Conta">
+            <a href="{% url 'product' %}" class="flex items-center hover:text-yellow-400 space-x-2" aria-label="Minha Conta">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -128,36 +128,36 @@
     </div>
   </nav>
 
-  <!-- Menu Mobile -->
+  <!-- Menu Mobile (gerado dinamicamente) -->
   <nav id="mobile-menu" class="hidden md:hidden bg-black text-white px-4 py-2 space-y-2" aria-label="Menu mobile">
-    <ul class="space-y-2">
-      <li>
-        <a href="#" class="flex items-center hover:text-yellow-400 space-x-2" aria-label="Meu Carrinho">
-          <svg class="size-6" ...></svg>
-          <span>Meu Carrinho</span>
-        </a>
-      </li>
-      <li>
-        <a href="#" class="flex items-center hover:text-yellow-400 space-x-2" aria-label="Minha Conta">
-          <svg class="size-6" ...></svg>
-          <span>Minha Conta</span>
-        </a>
-      </li>
-      <li>
-        <a href="{% url 'contact' %}" class="flex items-center hover:text-yellow-400 space-x-2" aria-label="Contato">
-          <svg class="size-6" ...></svg>
-          <span>Contato</span>
-        </a>
-      </li>
-    </ul>
+    <!-- O conteúdo será gerado via JS -->
   </nav>
 
   <!-- Script Menu Mobile -->
   <script>
     const toggleBtn = document.getElementById("menu-toggle");
     const mobileMenu = document.getElementById("mobile-menu");
+    const mainMenu = document.getElementById("main-menu");
     toggleBtn?.addEventListener("click", () => {
       mobileMenu.classList.toggle("hidden");
     });
+    // Gera o menu mobile a partir do menu desktop
+    if (mainMenu && mobileMenu) {
+      const desktopList = mainMenu.querySelector("ul");
+      if (desktopList) {
+        // Clona o HTML do menu desktop
+        const mobileList = desktopList.cloneNode(true);
+        // Ajusta classes para mobile
+        mobileList.className = "flex flex-col space-y-2";
+        // Troca cor do texto e fundo
+        mobileList.querySelectorAll("a").forEach(a => {
+          a.classList.remove("text-black");
+          a.classList.add("text-white");
+        });
+        // Limpa o menu mobile e adiciona o novo
+        mobileMenu.innerHTML = "";
+        mobileMenu.appendChild(mobileList);
+      }
+    }
   </script>
 </header>

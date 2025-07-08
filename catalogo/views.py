@@ -18,3 +18,6 @@ def about(request):
 
 def policy(request):
     return render(request, 'landing_page/private_policy.html')
+
+def product(request):
+    return render(request, 'landing_page/product.html')
