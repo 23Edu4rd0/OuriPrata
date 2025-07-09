@@ -1,0 +1,178 @@
+{% load static %}
+<main class="container py-5">
+  <div class="row g-5">
+    <!-- Imagem principal -->
+    <div class="col-lg-6 bg-light d-flex flex-column justify-content-center align-items-center p-4 rounded-4 shadow">
+      <img
+        id="main-product-image"
+        src="{% static 'assets/landing_page/teste2.png' %}"
+        class="img-fluid rounded-4 shadow mb-3"
+        alt="Imagem do produto"
+        style="max-width: 400px;"
+      />
+      <div class="d-flex gap-2 mt-2">
+        {% for img in imagens %}
+          <img
+            src="{{ img }}"
+            class="rounded-3 border border-secondary object-fit-cover cursor-pointer hover-shadow product-thumb"
+            style="width: 56px; height: 56px; object-fit: cover;"
+          />
+        {% endfor %}
+      </div>
+    </div>
+    <!-- Informações -->
+    <div class="col-lg-6 d-flex flex-column justify-content-between bg-white p-4 rounded-4 shadow">
+      <div>
+        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-md-between gap-2 mb-2">
+          <h1 class="h3 fw-bold mb-0">Colar OuriPrata em Prata 925</h1>
+          <span class="h4 fw-bold text-warning mb-0">R$ 299,00</span>
+        </div>
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <span class="text-warning fs-5">★★★★★</span>
+          <span class="text-muted small">(42 avaliações)</span>
+        </div>
+        <p class="text-muted small mb-2">Código: OP-2025</p>
+        <hr>
+        <h3 class="h5 fw-semibold mb-2">Descrição</h3>
+        <p class="mb-3">
+          Este colar exclusivo da OuriPrata combina a elegância da prata 925 com a beleza natural de ouriços-do-mar fossilizados. Cada peça é única, com variações naturais nas pedras que garantem um toque especial à sua joia. Perfeito para quem busca sofisticação com um toque de natureza.
+        </p>
+        <ul class="mb-4">
+          <li>Prata 925 (92,5% prata pura)</li>
+          <li>Pedras naturais de ouriço-do-mar fossilizado</li>
+          <li>Comprimento ajustável de 45cm a 50cm</li>
+          <li>Fecho de segurança banhado a ouro</li>
+          <li>Peso aproximado: 12g</li>
+          <li>Embalagem presenteável incluída</li>
+        </ul>
+        <div class="d-flex flex-wrap gap-3 mb-4 align-items-center">
+          <div class="input-group" style="width: 120px;">
+            <span class="input-group-text">Qtd</span>
+            <input type="number" value="1" min="1" max="5" class="form-control text-center" />
+          </div>
+          <button class="btn btn-warning text-white fw-semibold d-flex align-items-center gap-2 shadow">
+            <i class="bi bi-cart3"></i> Adicionar ao Carrinho
+          </button>
+          <button class="btn btn-outline-warning fw-semibold">Comprar Agora</button>
+        </div>
+        <div class="alert alert-warning d-flex align-items-center gap-2 py-2 mb-3" role="alert">
+          <i class="bi bi-truck"></i>
+          <span class="small">FRETE GRÁTIS para todo Brasil em compras acima de R$ 300,00</span>
+        </div>
+        <div class="d-flex flex-wrap gap-3 mb-2">
+          <span class="badge bg-success bg-opacity-10 text-success d-flex align-items-center gap-1"><i class="bi bi-check-circle"></i> Entrega garantida</span>
+          <span class="badge bg-success bg-opacity-10 text-success d-flex align-items-center gap-1"><i class="bi bi-check-circle"></i> Certificado de autenticidade</span>
+          <span class="badge bg-success bg-opacity-10 text-success d-flex align-items-center gap-1"><i class="bi bi-check-circle"></i> Garantia de 1 ano</span>
+        </div>
+        <p class="text-muted small text-end mt-2">
+          Entrega estimada: <strong class="text-dark">3 dias úteis</strong> para grandes capitais
+        </p>
+      </div>
+    </div>
+  </div>
+  <section class="py-5 bg-light">
+            <div class="container px-4 px-lg-5 mt-5">
+                <h2 class="fw-bolder mb-4">Related products</h2>
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                    <div class="col mb-5">
+                        <div class="card h-100">
+                            <!-- Product image-->
+                            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder">Fancy Product</h5>
+                                    <!-- Product price-->
+                                    $40.00 - $80.00
+                                </div>
+                            </div>
+                            <!-- Product actions-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col mb-5">
+                        <div class="card h-100">
+                            <!-- Sale badge-->
+                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
+                            <!-- Product image-->
+                            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder">Special Item</h5>
+                                    <!-- Product reviews-->
+                                    <div class="d-flex justify-content-center small text-warning mb-2">
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                    </div>
+                                    <!-- Product price-->
+                                    <span class="text-muted text-decoration-line-through">$20.00</span>
+                                    $18.00
+                                </div>
+                            </div>
+                            <!-- Product actions-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col mb-5">
+                        <div class="card h-100">
+                            <!-- Sale badge-->
+                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
+                            <!-- Product image-->
+                            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder">Sale Item</h5>
+                                    <!-- Product price-->
+                                    <span class="text-muted text-decoration-line-through">$50.00</span>
+                                    $25.00
+                                </div>
+                            </div>
+                            <!-- Product actions-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col mb-5">
+                        <div class="card h-100">
+                            <!-- Product image-->
+                            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder">Popular Item</h5>
+                                    <!-- Product reviews-->
+                                    <div class="d-flex justify-content-center small text-warning mb-2">
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                    </div>
+                                    <!-- Product price-->
+                                    $40.00
+                                </div>
+                            </div>
+                            <!-- Product actions-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+</main>

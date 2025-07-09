@@ -1,160 +1,97 @@
 {% load static %}
 <header class="font-montserrat">
   <!-- Navbar principal -->
-  <nav class="bg-white py-4 shadow-md  md:border-b md:border-gray-200">
-    <div class="container mx-auto px-4 flex flex-wrap items-center justify-between gap-4">
-      
+  <nav class="bg-white py-3 shadow-sm border-bottom">
+    <div class="container d-flex flex-wrap align-items-center justify-content-between gap-3">
       <!-- Logo -->
       <a href="{% url 'index' %}" class="flex-shrink-0">
         <img
           src="{% static 'assets/landing_page/logo.png' %}"
           alt="Logo OuriPrata"
-          class="w-32 md:w-48"
+          class="logo-navbar"
+          style="width: 8rem; max-width: 100%;"
         />
       </a>
-
       <!-- Search Bar -->
-      <div class="relative w-full max-w-xs md:max-w-md mx-auto flex-1">
+      <form class="position-relative flex-grow-1 mx-3" style="max-width: 320px;">
         <input
           type="text"
           placeholder="Buscar..."
-          class="w-full pl-10 pr-4 py-2 rounded-2xl shadow-sm border border-gray-300 bg-[#f5fffa] focus:outline-none focus:ring-2 focus:ring-yellow-400 text-gray-700"
+          class="form-control ps-5 pe-3 py-2 rounded-pill shadow-sm border border-secondary bg-light text-dark"
         />
-        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-          <!-- Ícone de busca -->
-          <svg
-            class="w-5 h-5 text-gray-400"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z"
-            />
-          </svg>
-        </div>
-      </div>
-
+        <span class="position-absolute top-50 start-0 translate-middle-y ps-3 text-secondary">
+          <i class="bi bi-search"></i>
+        </span>
+      </form>
       <!-- Menu PC -->
-      <nav id="main-menu" aria-label="Menu principal" class="hidden md:flex space-x-6 text-black font-semibold items-center">
-        <ul class="flex space-x-6 items-center">
-          <li>
-            <a href="#" class="flex items-center hover:text-yellow-400 space-x-2" aria-label="Meu Carrinho">
-              <!-- Ícone Carrinho -->
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="size-6"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
-                />
-              </svg>
+      <nav id="main-menu" aria-label="Menu principal" class="d-none d-md-flex align-items-center fw-semibold">
+        <ul class="nav">
+          <li class="nav-item">
+            <a href="#" class="nav-link d-flex align-items-center text-dark px-2" aria-label="Meu Carrinho">
+              <i class="bi bi-cart3 fs-5 me-1"></i>
               <span>Meu Carrinho</span>
             </a>
           </li>
-          <li>
-            <a href="{% url 'product' %}" class="flex items-center hover:text-yellow-400 space-x-2" aria-label="Minha Conta">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                class="size-6"
-                aria-hidden="true"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M18.685 19.097A9.723 9.723 0 0 0 21.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 0 0 3.065 7.097A9.716 9.716 0 0 0 12 21.75a9.716 9.716 0 0 0 6.685-2.653Zm-12.54-1.285A7.486 7.486 0 0 1 12 15a7.486 7.486 0 0 1 5.855 2.812A8.224 8.224 0 0 1 12 20.25a8.224 8.224 0 0 1-5.855-2.438ZM15.75 9a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"
-                  clip-rule="evenodd"
-                />
-              </svg>
+          <li class="nav-item">
+            <a href="{% url 'product' %}" class="nav-link d-flex align-items-center text-dark px-2" aria-label="Minha Conta">
+              <i class="bi bi-person-circle fs-5 me-1"></i>
               <span>Minha Conta</span>
             </a>
           </li>
-          <li>
-            <a href="{% url 'contact' %}" class="flex items-center hover:text-yellow-400 space-x-2" aria-label="Contato">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="size-6"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"
-                />
-              </svg>
+          <li class="nav-item">
+            <a href="{% url 'contact' %}" class="nav-link d-flex align-items-center text-dark px-2" aria-label="Contato">
+              <i class="bi bi-envelope fs-5 me-1"></i>
               <span>Contato</span>
             </a>
           </li>
         </ul>
       </nav>
-
       <!-- Botão Menu Mobile -->
-      <button id="menu-toggle" class="md:hidden ml-auto text-black focus:outline-none">
-        <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
+      <button id="menu-toggle" class="d-md-none ms-auto btn btn-link text-dark p-0" style="font-size: 2rem;">
+        <i class="bi bi-list"></i>
       </button>
     </div>
   </nav>
-
   <!-- Menu de categorias -->
-  <nav class="hidden sm:block bg-white shadow-sm border-b border-gray-100" aria-label="Categorias">
-    <div class="container mx-auto px-4">
-      <ul class="flex flex-wrap justify-center gap-6 py-2 font-semibold text-gray-700">
-        <li><a href="#" class="hover:text-yellow-400 transition" aria-label="Alianças">Alianças</a></li>
-        <li><a href="#" class="hover:text-yellow-400 transition" aria-label="Casamento">Casamento</a></li>
-        <li><a href="#" class="hover:text-yellow-400 transition" aria-label="Pingentes">Pingentes</a></li>
-        <li><a href="#" class="hover:text-yellow-400 transition" aria-label="Aparadores">Aparadores</a></li>
-        <li><a href="#" class="hover:text-yellow-400 transition" aria-label="Conjuntos">Conjuntos</a></li>
-        <li><a href="#" class="hover:text-yellow-400 transition" aria-label="Manuscritos">Manuscritos</a></li>
-        <li><a href="#" class="hover:text-yellow-400 transition" aria-label="Pulseiras / Brincos">Pulseiras / Brincos</a></li>
+  <nav class="d-none d-sm-block bg-white shadow-sm border-bottom" aria-label="Categorias">
+    <div class="container">
+      <ul class="nav justify-content-center fw-semibold text-secondary py-2">
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-secondary hover-text-warning" aria-label="Alianças">Alianças</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-secondary hover-text-warning" aria-label="Casamento">Casamento</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-secondary hover-text-warning" aria-label="Pingentes">Pingentes</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-secondary hover-text-warning" aria-label="Aparadores">Aparadores</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-secondary hover-text-warning" aria-label="Conjuntos">Conjuntos</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-secondary hover-text-warning" aria-label="Manuscritos">Manuscritos</a></li>
+        <li class="nav-item"><a href="#" class="nav-link px-2 text-secondary hover-text-warning" aria-label="Pulseiras / Brincos">Pulseiras / Brincos</a></li>
       </ul>
     </div>
   </nav>
-
   <!-- Menu Mobile (gerado dinamicamente) -->
-  <nav id="mobile-menu" class="hidden md:hidden bg-black text-white px-4 py-2 space-y-2" aria-label="Menu mobile">
+  <nav id="mobile-menu" class="d-md-none bg-dark text-white px-4 py-2" style="display: none;" aria-label="Menu mobile">
     <!-- O conteúdo será gerado via JS -->
   </nav>
-
   <!-- Script Menu Mobile -->
   <script>
     const toggleBtn = document.getElementById("menu-toggle");
     const mobileMenu = document.getElementById("mobile-menu");
     const mainMenu = document.getElementById("main-menu");
     toggleBtn?.addEventListener("click", () => {
-      mobileMenu.classList.toggle("hidden");
+      if (mobileMenu.style.display === "none" || !mobileMenu.style.display) {
+        mobileMenu.style.display = "block";
+      } else {
+        mobileMenu.style.display = "none";
+      }
     });
     // Gera o menu mobile a partir do menu desktop
     if (mainMenu && mobileMenu) {
       const desktopList = mainMenu.querySelector("ul");
       if (desktopList) {
-        // Clona o HTML do menu desktop
         const mobileList = desktopList.cloneNode(true);
-        // Ajusta classes para mobile
-        mobileList.className = "flex flex-col space-y-2";
-        // Troca cor do texto e fundo
+        mobileList.className = "nav flex-column";
         mobileList.querySelectorAll("a").forEach(a => {
-          a.classList.remove("text-black");
+          a.classList.remove("text-dark");
           a.classList.add("text-white");
         });
-        // Limpa o menu mobile e adiciona o novo
         mobileMenu.innerHTML = "";
         mobileMenu.appendChild(mobileList);
       }
