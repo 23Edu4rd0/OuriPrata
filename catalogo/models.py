@@ -2,8 +2,26 @@ from django.db import models
 
 
 # Create your models here.
-class Categories(models.Model):
+
+class Joais(models.Model):
     nome = models.CharField(max_length=100, null=False, blank=False)
+    descricao = models.TextField(null=True, blank=True)
+    preco = models.DecimalField(max_digits=10, decimal_places=2, null=False, blank=False)
+    imagem = models.ImageField(upload_to='catalogo', blank=True, null=True)
+    material = models.ForeignKey('Material', on_delete=models.CASCADE)
+    ocasiao = models.ForeignKey('Ocasiao', on_delete=models.CASCADE, null=True, blank=True)
+    destaque = models.BooleanField(default=False)
+    
+    
+    class Meta:
+        verbose_name = "Joia"
+        verbose_name_plural = "Joias"
+
+    def __str__(self):
+        return self.nome
+    
+class Categorias(models.Model):
+    nome = models.CharField(max_length=50, null=False, blank=False)
     
     class Meta:
         verbose_name = "Categoria"
@@ -11,18 +29,26 @@ class Categories(models.Model):
     
     def __str__(self):
         return self.nome
-    
-class Menu_Items(models.Model):
-    nome = models.CharField(max_length=100, null=False, blank=False)
-    descricao = models.TextField(null=True, blank=True)
-    preco = models.DecimalField(max_digits=10, decimal_places=2, null=False, blank=False)
-    imagem = models.ImageField(upload_to='catalogo', blank=True, null=True)
-    categoria = models.ForeignKey(Categories, on_delete=models.CASCADE, related_name='itens')
-    disponivel = models.BooleanField(default=True)
+
+class SubCategorias(models.Model):
+    nome = models.CharField(max_length=50, null=False, blank=False)
+    categoria = models.ForeignKey(Categorias, on_delete=models.CASCADE, related_name='subcategorias')
     
     class Meta:
-        verbose_name = "Produto"
-        verbose_name_plural = "Produtos"
+        verbose_name = "Subcategoria"
+        verbose_name_plural = "Subcategorias"
     
     def __str__(self):
         return self.nome
+
+class Material(models.Model):
+    material = models.CharField(max_length=50)
+    
+    def __str__(self):
+        return self.material
+    
+class Ocasiao(models.Model):
+    ocasiao = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.ocasiao

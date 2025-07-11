@@ -1,6 +1,9 @@
 from django.contrib import admin
-from .models import Categories, Menu_Items
+from .models import *
 
 # Register your models here.
-admin.site.register(Categories)
-admin.site.register(Menu_Items)
+admin.site.register(Joais)
+admin.site.register(Categorias)
+admin.site.register(SubCategorias)
+admin.site.register(Material)
+admin.site.register(Ocasiao)
