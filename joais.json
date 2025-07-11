@@ -1,0 +1,92 @@
+[
+    {
+        "model": "catalogo.joais",
+        "pk": 1,
+        "fields": {
+            "nome": "Anel com Pedra Safira",
+            "descricao": "Anel elegante com pedra safira azul, ideal para ocasiões especiais, como formaturas",
+            "preco": "299.99",
+            "preco_promocional": null,
+            "em_promocao": false,
+            "imagem": "catalogo/anel_safira.png",
+            "material": 7,
+            "ocasiao": 4,
+            "destaque": true
+        }
+    },
+    {
+        "model": "catalogo.joais",
+        "pk": 2,
+        "fields": {
+            "nome": "Anel Brilho Rubi",
+            "descricao": "Este elegante anel em banho de ouro é um verdadeiro símbolo de sofisticação. Seu design curvo e fluido envolve uma pedra central rubi em lapidação redonda, trazendo um toque vibrante e romântico à peça. Lateralmente, fileiras de pequenas pedras brilhantes acentuam o brilho e a delicadeza do modelo, criando um contraste luxuoso.\r\n\r\nPerfeito para ocasiões especiais, como formaturas ou presente romântico.",
+            "preco": "349.90",
+            "preco_promocional": "300.00",
+            "em_promocao": true,
+            "imagem": "catalogo/anel_roxo_OH4a4W5.png",
+            "material": 11,
+            "ocasiao": 5,
+            "destaque": false
+        }
+    },
+    {
+        "model": "catalogo.joais",
+        "pk": 3,
+        "fields": {
+            "nome": "Alianças Douradas Essência",
+            "descricao": "Clássicas e atemporais, essas alianças representam o compromisso com elegância e sobriedade. Produzidas com acabamento polido e detalhe central em baixo relevo, o par traz sofisticação sem excessos — ideal para casais que valorizam a beleza discreta e o significado profundo de um laço duradouro.\r\n\r\nPerfeitas para noivados, casamentos ou para renovar votos com estilo.",
+            "preco": "599.90",
+            "preco_promocional": "499.99",
+            "em_promocao": true,
+            "imagem": "catalogo/alianca_basica_eunFfNj.png",
+            "material": 3,
+            "ocasiao": 3,
+            "destaque": true
+        }
+    },
+    {
+        "model": "catalogo.joais",
+        "pk": 4,
+        "fields": {
+            "nome": "Brincos Gota Dourada Minimal",
+            "descricao": "Leves, modernos e elegantes — esses brincos são a escolha perfeita para quem busca estilo com sutileza. Seu design em formato de gota alongada e estrutura fina cria um visual sofisticado e versátil, ideal tanto para o dia a dia quanto para eventos especiais.\r\n\r\nCom acabamento polido e toque minimalista, combinam com todos os estilos e valorizam o contorno do rosto com leveza e harmonia.",
+            "preco": "119.00",
+            "preco_promocional": "100.00",
+            "em_promocao": false,
+            "imagem": "catalogo/brincos_teste_yqHIQw8.png",
+            "material": 2,
+            "ocasiao": 6,
+            "destaque": false
+        }
+    },
+    {
+        "model": "catalogo.joais",
+        "pk": 5,
+        "fields": {
+            "nome": "Aparadores Dourados Luxo Cristal",
+            "descricao": "Delicadeza e brilho definem este par de aparadores com acabamento polido e fileira de zircônias. Criados para complementar alianças ou anéis solitários, esses aparadores dourados valorizam ainda mais a joia central, oferecendo um toque sofisticado e moderno.\r\n\r\nIdeais para ocasiões especiais ou para transformar o visual do dia a dia com elegância.",
+            "preco": "249.00",
+            "preco_promocional": "220.00",
+            "em_promocao": false,
+            "imagem": "catalogo/aparadores_L1lh77S.png",
+            "material": 2,
+            "ocasiao": 6,
+            "destaque": false
+        }
+    },
+    {
+        "model": "catalogo.joais",
+        "pk": 6,
+        "fields": {
+            "nome": "teste",
+            "descricao": "teste",
+            "preco": "10.00",
+            "preco_promocional": "10.00",
+            "em_promocao": false,
+            "imagem": "",
+            "material": 4,
+            "ocasiao": 2,
+            "destaque": false
+        }
+    }
+]
