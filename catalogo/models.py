@@ -7,6 +7,8 @@ class Joais(models.Model):
     nome = models.CharField(max_length=100, null=False, blank=False)
     descricao = models.TextField(null=True, blank=True)
     preco = models.DecimalField(max_digits=10, decimal_places=2, null=False, blank=False)
+    preco_promocional = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    em_promocao = models.BooleanField(default=False)
     imagem = models.ImageField(upload_to='catalogo', blank=True, null=True)
     material = models.ForeignKey('Material', on_delete=models.CASCADE)
     ocasiao = models.ForeignKey('Ocasiao', on_delete=models.CASCADE, null=True, blank=True)
@@ -42,13 +44,13 @@ class SubCategorias(models.Model):
         return self.nome
 
 class Material(models.Model):
-    material = models.CharField(max_length=50)
+    nome = models.CharField(max_length=50)
     
     def __str__(self):
-        return self.material
+        return self.nome
     
 class Ocasiao(models.Model):
-    ocasiao = models.CharField(max_length=50)
+    nome = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.ocasiao
+        return self.nome
