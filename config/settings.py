@@ -13,8 +13,13 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from dotenv import load_dotenv
 from pathlib import Path
+import mercadopago
 
 load_dotenv()
+
+MERCADO_PAGO_PUBLIC_KEY = 'PROD_PUBLIC_KEY'
+MERCADO_PAGO_ACCESS_TOKEN = 'PROD_ACCESS_TOKEN'
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
