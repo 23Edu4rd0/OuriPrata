@@ -1,10 +1,11 @@
 from django.db import models
-
+from django.utils.text import slugify
 
 # Create your models here.
 
 class Joais(models.Model):
     nome = models.CharField(max_length=100, null=False, blank=False)
+    slug = models.SlugField(blank=True, null=True)
     descricao = models.TextField(null=True, blank=True)
     preco = models.DecimalField(max_digits=10, decimal_places=2, null=False, blank=False)
     preco_promocional = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
@@ -21,6 +22,17 @@ class Joais(models.Model):
 
     def __str__(self):
         return self.nome
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base_slug = slugify(self.nome)
+            slug = base_slug
+            contador = 1
+            while Joais.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{contador}"
+                contador += 1
+            self.slug = slug
+        super().save(*args, **kwargs)
     
 class Categorias(models.Model):
     nome = models.CharField(max_length=50, null=False, blank=False)
