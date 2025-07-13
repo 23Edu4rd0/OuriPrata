@@ -1,0 +1,71 @@
+<section class="pt-0 pb-3">
+  <div class="container px-4 px-lg-5">
+    <h2 class="text-center mb-2 fw-bold" style="letter-spacing: 1px">
+      Produtos em Promoção
+    </h2>
+
+    {% with promocional_products=products|dictsort:"em_promocao" %}
+      {% if promocional_products %}
+        <div class="row gx-3 gx-lg-4 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+          {% for product in promocional_products %}
+            {% if product.em_promocao and product.preco_promocional %}
+              <div class="col mb-2">
+                <div class="card h-100 border-0 shadow-sm rounded-4 featured-card">
+                  <div class="position-relative overflow-hidden rounded-4">
+                    <img
+                      class="card-img-top transition-scale"
+                      src="{% if product.imagem %}{{ product.imagem.url }}{% else %}/static/assets/landing_page/logo.png{% endif %}"
+                      alt="{{ product.nome }}"
+                      style="object-fit: cover; height: 200px"
+                    />
+                  </div>
+                  <div class="card-body p-3">
+                    <div class="text-center">
+                      <h5 class="fw-bold mb-2" style="font-size: 1.1rem">
+                        {{ product.nome }}
+                      </h5>
+                      <div>
+                        <span class="text-muted text-decoration-line-through small">
+                          R$ {{ product.preco }}
+                        </span>
+                        <span class="fw-bold text-success ms-2 fs-5">
+                          R$ {{ product.preco_promocional }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-footer bg-transparent border-0 pt-0 pb-3">
+                    <div class="text-center">
+                      <a
+                        class="btn btn-outline-dark fw-semibold px-4 py-2 rounded-3 shadow-sm"
+                        href="{% url 'product_detail' product.slug %}"
+                      >
+                        Ver opções
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="text-center">Nenhum produto em promoção no momento.</p>
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  <style>
+    .featured-card:hover {
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .transition-scale {
+      transition: transform 0.3s;
+    }
+
+    .featured-card:hover .transition-scale {
+      transform: scale(1.05);
+    }
+  </style>
+</section>

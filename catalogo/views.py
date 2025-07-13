@@ -12,35 +12,58 @@ def home(request):
 
 def item_detail(request, slug):
     product = get_object_or_404(Joais, slug=slug)
+    product.preco = round(float(product.preco),2)
+    print("Product:", product.preco)
 
-    sdk = mercadopago.SDK(settings.MERCADO_PAGO_ACCESS_TOKEN)
+    try:
+        sdk = mercadopago.SDK(settings.MERCADO_PAGO_ACCESS_TOKEN)
 
-    preference_data = {
-        "items": [
-            {
-                "title": product.nome,
-                "quantity": 1,
-                "currency_id": "BRL",
-                "unit_price": float(product.preco)
-            }
-        ],
-        "back_urls": {
-            "success": "https://example.com/sucesso/",
-            "failure": "https://example.com/erro/",
-            "pending": "https://example.com/pendente/"
-        },
-        "auto_return": "approved"
-    }
+        # URLs dinâmicas baseadas no request atual
+        base_url = "https://9d8ce638b45f.ngrok-free.app"
+        print("Base URL Mercado Pago:", base_url)
+        
+        preference_data = {
+            "items": [
+                {
+                    "title": product.nome,
+                    "quantity": 1,
+                    "unit_price": product.preco,
+                }
+            ],
+            "back_urls": {
+                "success": f"{base_url}/sucesso/",
+                "failure": f"{base_url}/erro/",
+                "pending": f"{base_url}/pendente/"
+            },
+            "auto_return": "approved"
+        }
 
-    preference_response = sdk.preference().create(preference_data)
-    print(preference_response)  # <-- Isso mostra a resposta no terminal
-    preference = preference_response["response"]
-    preference_id = preference.get("id")
+        preference_response = sdk.preference().create(preference_data)
+        
+        # Verificar se a resposta foi bem-sucedida
+        if preference_response["status"] == 201:
+            preference = preference_response["response"]
+            preference_id = preference.get("id")
+            print("Id:",preference_id)
 
-    return render(request, 'landing_page/product_detail.html', {
-        'product': product,
-        'preference_id': preference_id
-    })
+            return render(request, 'landing_page/product_detail.html', {
+                'product': product,
+                'preference_id': preference_id,
+                'mercado_pago_public_key': settings.MERCADO_PAGO_PUBLIC_KEY
+            })
+        else:
+            print("Erro na criação da preferência:", preference_response)
+            return render(request, 'landing_page/product_detail.html', {
+                'product': product,
+                'error': 'Erro ao processar pagamento. Tente novamente.'
+            })
+            
+    except Exception as e:
+        print(f"Erro no Mercado Pago: {str(e)}")
+        return render(request, 'landing_page/product_detail.html', {
+            'product': product,
+            'error': 'Serviço de pagamento temporariamente indisponível.'
+        })
     
 def contact(request):
     return render(request, 'landing_page/contact_us.html')
@@ -51,9 +74,30 @@ def about(request):
 def policy(request):
     return render(request, 'landing_page/privacy_policy.html')
 
-def webrook(request):
+def webhook(request):
     if request.method == 'POST':
-        data = json.loads(request.body)
-        print('webrook recebido: ', data)
-        return JsonResponse({'status': 'success', 'message': 'Webhook received successfully'})
-    return JsonResponse ({'error': 'metodo invalido'}, status=400)
+        try:
+            data = json.loads(request.body)
+            print('Webhook do Mercado Pago recebido:', data)
+            
+            # Aqui você pode processar os dados do webhook
+            # Por exemplo, atualizar o status do pedido no banco de dados
+            
+            return JsonResponse({'status': 'success', 'message': 'Webhook received successfully'})
+        except json.JSONDecodeError:
+            print('Erro ao decodificar JSON do webhook')
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+        except Exception as e:
+            print(f'Erro no webhook: {str(e)}')
+            return JsonResponse({'error': 'Internal server error'}, status=500)
+    
+    return JsonResponse({'error': 'Método não permitido'}, status=405)
+
+def pagamento_sucesso(request):
+    return render(request, 'landing_page/pagamento_sucesso.html')
+
+def pagamento_erro(request):
+    return render(request, 'landing_page/pagamento_erro.html')
+
+def pagamento_pendente(request):
+    return render(request, 'landing_page/pagamento_pendente.html')

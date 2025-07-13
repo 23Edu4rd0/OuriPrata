@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <div class="alert alert-danger">
+                <h2><i class="fas fa-times-circle"></i> Pagamento Recusado</h2>
+                <p>Houve um problema com seu pagamento.</p>
+                <p>Verifique os dados do cartão e tente novamente.</p>
+                <a href="javascript:history.back()" class="btn btn-primary">Tentar Novamente</a>
+                <a href="{% url 'home' %}" class="btn btn-secondary">Voltar ao Catálogo</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -17,8 +17,8 @@ import mercadopago
 
 load_dotenv()
 
-MERCADO_PAGO_PUBLIC_KEY = 'PROD_PUBLIC_KEY'
-MERCADO_PAGO_ACCESS_TOKEN = 'PROD_ACCESS_TOKEN'
+MERCADO_PAGO_PUBLIC_KEY = os.getenv('MERCADO_PAGO_PUBLIC_KEY')
+MERCADO_PAGO_ACCESS_TOKEN = os.getenv('MERCADO_PAGO_ACCESS_KEY')
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
