@@ -74,14 +74,6 @@
             <i class="bi bi-cart3"></i> Adicionar ao Carrinho
           </button>
           <div id="wallet_container" class="mt-2">
-            <!--
-            <script
-              src="https://www.mercadopago.com.br/integrations/v1/web-payment-checkout.js"
-              data-preference-id="{{ preference_id }}"
-              data-button-label="Pagar com Mercado Pago"
-              data-button-class="btn btn-warning text-white fw-semibold d-flex align-items-center gap-2 shadow w-100"
-            ></script>
-            -->
             <div id="walletBrick_container" class="mt-2"></div>
             <script src="https://sdk.mercadopago.com/js/v2"></script>
             <script>
@@ -137,7 +129,7 @@
         <div class="container px-4 px-lg-5 mt-5">
           <h2 class="fw-bolder mb-4">Produtos Relacionados</h2>
           <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-            {% for i in "1234" %}
+            {% for product in related_products %}
             <div class="col mb-4">
               <div class="card h-100 border-0 shadow-sm rounded-4 related-card">
                 <div class="position-relative overflow-hidden rounded-4">
@@ -146,10 +138,10 @@
                 </div>
                 <div class="card-body p-3">
                   <div class="text-center">
-                    <h5 class="fw-bold mb-2">Nome do Produto</h5>
+                    <h5 class="fw-bold mb-2">{{ product.nome }}</h5>
                     <div>
-                      <span class="text-muted text-decoration-line-through small">R$ 399,90</span>
-                      <span class="fw-bold text-success ms-2 fs-5">R$ 299,90</span>
+                      <span class="text-muted text-decoration-line-through small">R$ {{ product.preco_antigo }}</span>
+                      <span class="fw-bold text-success ms-2 fs-5">R$ {{ product.preco }}</span>
                     </div>
                   </div>
                 </div>

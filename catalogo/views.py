@@ -9,19 +9,22 @@ def home(request):
     products = Joais.objects.all()
     return render(request, 'landing_page/home.html', {'products': products})
 
+def login(request):
+    return render(request, 'landing_page/login.html')
+
+def sing_up(request):
+    return render(request, 'landing_page/sing_up.html')
 
 def item_detail(request, slug):
     product = get_object_or_404(Joais, slug=slug)
     product.preco = round(float(product.preco),2)
-    print("Product:", product.preco)
+
+    # Produtos relacionados (exemplo: destaque=True, exclui o atual)
+    related_products = Joais.objects.filter(destaque=True).exclude(id=product.id)[:4]
 
     try:
         sdk = mercadopago.SDK(settings.MERCADO_PAGO_ACCESS_TOKEN)
-
-        # URLs dinâmicas baseadas no request atual
         base_url = "https://9d8ce638b45f.ngrok-free.app"
-        print("Base URL Mercado Pago:", base_url)
-        
         preference_data = {
             "items": [
                 {
@@ -37,32 +40,27 @@ def item_detail(request, slug):
             },
             "auto_return": "approved"
         }
-
         preference_response = sdk.preference().create(preference_data)
-        
-        # Verificar se a resposta foi bem-sucedida
         if preference_response["status"] == 201:
             preference = preference_response["response"]
             preference_id = preference.get("id")
-            print("Id:",preference_id)
-
             return render(request, 'landing_page/product_detail.html', {
                 'product': product,
                 'preference_id': preference_id,
-                'mercado_pago_public_key': settings.MERCADO_PAGO_PUBLIC_KEY
+                'mercado_pago_public_key': settings.MERCADO_PAGO_PUBLIC_KEY,
+                'related_products': related_products
             })
         else:
-            print("Erro na criação da preferência:", preference_response)
             return render(request, 'landing_page/product_detail.html', {
                 'product': product,
-                'error': 'Erro ao processar pagamento. Tente novamente.'
+                'error': 'Erro ao processar pagamento. Tente novamente.',
+                'related_products': related_products
             })
-            
     except Exception as e:
-        print(f"Erro no Mercado Pago: {str(e)}")
         return render(request, 'landing_page/product_detail.html', {
             'product': product,
-            'error': 'Serviço de pagamento temporariamente indisponível.'
+            'error': 'Serviço de pagamento temporariamente indisponível.',
+            'related_products': related_products
         })
     
 def contact(request):
