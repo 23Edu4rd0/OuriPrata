@@ -9,12 +9,6 @@ def home(request):
     products = Joais.objects.all()
     return render(request, 'landing_page/home.html', {'products': products})
 
-def login(request):
-    return render(request, 'landing_page/login.html')
-
-def sing_up(request):
-    return render(request, 'landing_page/sing_up.html')
-
 def item_detail(request, slug):
     product = get_object_or_404(Joais, slug=slug)
     product.preco = round(float(product.preco),2)
