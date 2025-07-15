@@ -8,9 +8,11 @@
       <div class="col-12 col-lg-6">
         <div class="mb-5 text-center">
           <h2 class="display-5 fw-bold">Login</h2>
-          <p class="m-0">Ainda não tem uma conta? <a href="{% url 'sing_up' %}">Cadastre-se</a></p>
+          <p class="m-0">Ainda não tem uma conta? <a href="{% url 'register' %}">Cadastre-se</a></p>
         </div>
-        <form action="#!" class="mb-4">
+        <form method="POST" action="#!" class="mb-4">
+        {% csrf_token %}
+        
           <div class="row gy-3">
             <div class="col-12">
               <div class="form-floating mb-3">

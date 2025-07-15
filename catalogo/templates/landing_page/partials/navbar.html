@@ -1,7 +1,6 @@
 {% load static %}
 <header class="font-montserrat">
-  <!-- Navbar principal -->
-  <nav class="bg-white py-3 shadow-sm border-bottom">
+  <nav class="bg-white py-1 shadow-sm border-bottom" style="min-height: 56px;">
     <div class="container d-flex flex-wrap align-items-center justify-content-between gap-3">
       <!-- Logo -->
       <a href="{% url 'home' %}" class="flex-shrink-0">
@@ -13,33 +12,80 @@
         />
       </a>
       <!-- Search Bar -->
-      <form class="position-relative flex-grow-1 mx-3" style="max-width: 320px;">
+      <form class="position-relative flex-grow-1 mx-3" style="max-width: 320px;" method="get">
         <input
           type="text"
+          name="q"
           placeholder="Buscar..."
-          class="form-control ps-5 pe-3 py-2 rounded-pill shadow-sm border border-secondary bg-light text-dark"
+          class="form-control pe-5 ps-3 py-2 rounded-pill shadow-sm border-0 bg-light text-dark"
+          style="box-shadow: 0 2px 8px rgba(0,0,0,0.04);"
+          id="search-input"
+          autocomplete="off"
         />
-        <span class="position-absolute top-50 start-0 translate-middle-y ps-3 text-secondary">
+        <button type="submit" class="btn position-absolute top-50 end-0 translate-middle-y pe-3 text-secondary bg-transparent border-0" style="z-index:2;">
           <i class="bi bi-search"></i>
-        </span>
+        </button>
+        <!-- Menu de categorias como sugestões -->
+        <div id="category-suggestions" class="position-absolute w-100 bg-white shadow rounded-4 mt-2" style="display:none; z-index:10;">
+          <ul class="nav flex-column fw-semibold text-secondary py-2 gap-1">
+            <li class="nav-item"><a href="#" class="nav-link px-3 py-2 rounded-pill hover-link text-secondary" aria-label="Alianças">Alianças</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-3 py-2 rounded-pill hover-link text-secondary" aria-label="Casamento">Casamento</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-3 py-2 rounded-pill hover-link text-secondary" aria-label="Pingentes">Pingentes</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-3 py-2 rounded-pill hover-link text-secondary" aria-label="Aparadores">Aparadores</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-3 py-2 rounded-pill hover-link text-secondary" aria-label="Conjuntos">Conjuntos</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-3 py-2 rounded-pill hover-link text-secondary" aria-label="Manuscritos">Manuscritos</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-3 py-2 rounded-pill hover-link text-secondary" aria-label="Pulseiras / Brincos">Pulseiras / Brincos</a></li>
+          </ul>
+        </div>
       </form>
       <!-- Menu PC -->
-      <nav id="main-menu" aria-label="Menu principal" class="d-none d-md-flex align-items-center fw-semibold">
-        <ul class="nav">
+      <nav id="main-menu" aria-label="Menu principal" class="d-none d-md-flex align-items-center fw-semibold ms-5">
+        <ul class="nav gap-3">
           <li class="nav-item">
-            <a href="#" class="nav-link d-flex align-items-center text-dark px-2" aria-label="Meu Carrinho">
-              <i class="bi bi-cart3 fs-5 me-1"></i>
-              <span>Meu Carrinho</span>
-            </a>
+            {% if user.is_authenticated %}
+              <a href="{% url 'login' %}" class="nav-link d-flex align-items-center px-3 py-2 rounded-pill bg-light text-dark shadow-sm hover-link" aria-label="Meu Carrinho" style="transition:all .2s;">
+                <i class="bi bi-cart3 fs-5 me-1"></i>
+                <span>Meu Carrinho</span>
+              </a>
+            {% else %}
+              <a href="{% url 'login' %}" class="nav-link d-flex align-items-center px-3 py-2 rounded-pill bg-light text-dark shadow-sm hover-link" aria-label="Faça login para acessar o carrinho" style="transition:all .2s;">
+                <i class="bi bi-cart3 fs-5 me-1"></i>
+                <span>Faça login</span>
+              </a>
+            {% endif %}
           </li>
-          <li class="nav-item">
-            <a href="{% url 'login' %}" class="nav-link d-flex align-items-center text-dark px-2" aria-label="Minha Conta">
+          <li class="nav-item dropdown">
+            <a href="#" id="userMenuBtn" class="nav-link d-flex align-items-center px-3 py-2 rounded-pill bg-light text-dark shadow-sm hover-link"
+               aria-label="Minha Conta" style="transition:all .2s;" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="bi bi-person-circle fs-5 me-1"></i>
               <span>Minha Conta</span>
+              <i class="bi bi-chevron-down ms-2"></i>
             </a>
+            <div class="dropdown-menu p-3 shadow rounded-4 user-dropdown-menu" aria-labelledby="userMenuBtn" style="min-width: 260px;">
+              {% if user.is_authenticated %}
+                <div class="mb-2 fw-semibold">Bem-vindo, {{ user.first_name|default:user.username }}</div>
+                <div class="text-muted mb-3" style="font-size: 0.95rem;">Acesse sua conta e pedidos</div>
+                <a href="#" class="dropdown-item d-flex align-items-center py-2"><i class="bi bi-person me-2"></i> Meu Perfil</a>
+                <a href="#" class="dropdown-item d-flex align-items-center py-2"><i class="bi bi-box-seam me-2"></i> Meus Pedidos</a>
+                <a href="#" class="dropdown-item d-flex align-items-center py-2"><i class="bi bi-heart me-2"></i> Minha Lista</a>
+                <a href="#" class="dropdown-item d-flex align-items-center py-2"><i class="bi bi-gear me-2"></i> Configurações</a>
+                <hr>
+                <form method="post" action="{% url 'logout' %}">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-danger w-100 rounded-pill">Sair</button>
+                </form>
+              {% else %}
+                <div class="mb-2 fw-semibold text-center">Bem-vindo!</div>
+                <div class="text-muted mb-3 text-center" style="font-size: 0.95rem;">Acesse sua conta ou cadastre-se</div>
+                <div class="d-flex flex-column align-items-center" style="max-width: 200px; margin: 0 auto;">
+                  <a href="{% url 'login' %}" class="btn btn-primary w-100 rounded-pill mb-2">Entrar</a>
+                  <a href="{% url 'register' %}" class="btn btn-outline-primary w-100 rounded-pill">Cadastrar</a>
+                </div>
+              {% endif %}
+            </div>
           </li>
           <li class="nav-item">
-            <a href="{% url 'contact' %}" class="nav-link d-flex align-items-center text-dark px-2" aria-label="Contato">
+            <a href="{% url 'contact' %}" class="nav-link d-flex align-items-center px-3 py-2 rounded-pill bg-light text-dark shadow-sm hover-link" aria-label="Contato" style="transition:all .2s;">
               <i class="bi bi-envelope fs-5 me-1"></i>
               <span>Contato</span>
             </a>
@@ -47,23 +93,9 @@
         </ul>
       </nav>
       <!-- Botão Menu Mobile -->
-      <button id="menu-toggle" class="d-md-none ms-auto btn btn-link text-dark p-0" style="font-size: 2rem;">
+      <button id="menu-toggle" class="d-md-none ms-auto btn btn-light rounded-circle shadow-sm p-2" style="font-size: 2rem;">
         <i class="bi bi-list"></i>
       </button>
-    </div>
-  </nav>
-  <!-- Menu de categorias -->
-  <nav class="d-none d-sm-block bg-white shadow-sm border-bottom" aria-label="Categorias">
-    <div class="container">
-      <ul class="nav justify-content-center fw-semibold text-secondary py-2">
-        <li class="nav-item"><a href="#" class="nav-link px-2 text-secondary hover-text-warning" aria-label="Alianças">Alianças</a></li>
-        <li class="nav-item"><a href="#" class="nav-link px-2 text-secondary hover-text-warning" aria-label="Casamento">Casamento</a></li>
-        <li class="nav-item"><a href="#" class="nav-link px-2 text-secondary hover-text-warning" aria-label="Pingentes">Pingentes</a></li>
-        <li class="nav-item"><a href="#" class="nav-link px-2 text-secondary hover-text-warning" aria-label="Aparadores">Aparadores</a></li>
-        <li class="nav-item"><a href="#" class="nav-link px-2 text-secondary hover-text-warning" aria-label="Conjuntos">Conjuntos</a></li>
-        <li class="nav-item"><a href="#" class="nav-link px-2 text-secondary hover-text-warning" aria-label="Manuscritos">Manuscritos</a></li>
-        <li class="nav-item"><a href="#" class="nav-link px-2 text-secondary hover-text-warning" aria-label="Pulseiras / Brincos">Pulseiras / Brincos</a></li>
-      </ul>
     </div>
   </nav>
   <!-- Menu Mobile (gerado dinamicamente) -->
@@ -91,10 +123,62 @@
         mobileList.querySelectorAll("a").forEach(a => {
           a.classList.remove("text-dark");
           a.classList.add("text-white");
+          a.classList.add("bg-dark");
+          a.classList.add("rounded-pill");
+          a.classList.add("mb-2");
         });
         mobileMenu.innerHTML = "";
         mobileMenu.appendChild(mobileList);
       }
     }
   </script>
+  <!-- Script Sugestões de Categoria -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const searchInput = document.getElementById("search-input");
+      const categorySuggestions = document.getElementById("category-suggestions");
+
+      if (searchInput && categorySuggestions) {
+        searchInput.addEventListener("focus", function() {
+          categorySuggestions.style.display = "block";
+        });
+        searchInput.addEventListener("blur", function() {
+          setTimeout(function() {
+            categorySuggestions.style.display = "none";
+          }, 150);
+        });
+      }
+    });
+  </script>
+  <style>
+    .hover-link:hover {
+      background: #ffeeba !important;
+      color: #d39e00 !important;
+      text-decoration: none;
+      box-shadow: 0 2px 8px rgba(211,158,0,0.08);
+      transition: background 0.2s, color 0.2s;
+    }
+    .nav-link {
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+    .nav .nav-link {
+      margin-right: 0.5rem;
+    }
+    .nav .nav-link:last-child {
+      margin-right: 0;
+    }
+    @media (max-width: 767px) {
+      .logo-navbar {
+        width: 6rem !important;
+      }
+    }
+    .user-dropdown-menu {
+      left: 50% !important;
+      transform: translateX(-50%) !important;
+      right: auto !important;
+      top: 100% !important;
+      margin-top: 0.5rem;
+    }
+  </style>
 </header>

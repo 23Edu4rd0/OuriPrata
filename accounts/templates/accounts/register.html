@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block navbar %}{% endblock %}
+{% block extra_head %}
+<style>
+  .form-check-input {
+    border: 2px solid #212529 !important;
+    box-shadow: none;
+  }
+</style>
+{% endblock %}
+{% block content %}
+
+<section class="py-3 py-md-5 py-xl-8">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-6">
+        <div class="mb-5 text-center">
+          <h2 class="display-5 fw-bold">Criar Conta</h2>
+          <p class="m-0">Já tem uma conta? <a href="{% url 'login' %}">Entrar</a></p>
+        </div>
+        <form method="POST" action="{% url 'register' %}" class="mb-4">
+          {% csrf_token %}
+          <div class="form-floating mb-3">
+            {{ form.username }}
+            <label for="{{ form.username.id_for_label }}">Usuário</label>
+            {% if form.username.help_text %}
+              <small class="form-text text-muted">
+                  Obrigatório. Até 150 caracteres. Letras, números e @/./+/-/_.
+              </small>
+            {% endif %}
+            {% for error in form.username.errors %}
+              <div class="text-danger small">{{ error }}</div>
+            {% endfor %}
+          </div>
+          <div class="form-floating mb-3">
+            {{ form.email }}
+            <label for="{{ form.email.id_for_label }}">E-mail</label>
+            {% for error in form.email.errors %}
+              <div class="text-danger small">{{ error }}</div>
+            {% endfor %}
+          </div>
+          <div class="form-floating mb-3">
+            {{ form.first_name }}
+            <label for="{{ form.first_name.id_for_label }}">Nome</label>
+            {% for error in form.first_name.errors %}
+              <div class="text-danger small">{{ error }}</div>
+            {% endfor %}
+          </div>
+          <div class="form-floating mb-3">
+            {{ form.last_name }}
+            <label for="{{ form.last_name.id_for_label }}">Sobrenome</label>
+            {% for error in form.last_name.errors %}
+              <div class="text-danger small">{{ error }}</div>
+            {% endfor %}
+          </div>
+          <div class="form-floating mb-3">
+            {{ form.password1 }}
+            <label for="{{ form.password1.id_for_label }}">Senha</label>
+            {% if form.password1.help_text %}
+              <small class="form-text text-muted">
+                <ul class="mb-0">
+                  <li>Sua senha não pode ser muito parecida com suas outras informações pessoais.</li>
+                  <li>Sua senha deve conter pelo menos 8 caracteres.</li>
+                  <li>Sua senha não pode ser uma senha comum.</li>
+                  <li>Sua senha não pode ser totalmente numérica.</li>
+                </ul>
+              </small>
+            {% endif %}
+            {% for error in form.password1.errors %}
+              <div class="text-danger small">{{ error }}</div>
+            {% endfor %}
+          </div>
+          <div class="form-floating mb-3">
+            {{ form.password2 }}
+            <label for="{{ form.password2.id_for_label }}">Confirmar Senha</label>
+            {% if form.password2.help_text %}
+              <small class="form-text text-muted">Digite a mesma senha acima para confirmação.</small>
+            {% endif %}
+            {% for error in form.password2.errors %}
+              <div class="text-danger small">{{ error }}</div>
+            {% endfor %}
+          </div>
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="aceitoPolitica" required>
+            <label class="form-check-label" for="aceitoPolitica">
+              Li e aceito a <a href="{% url 'politica_de_privacidade' %}" target="_blank">Política de Privacidade</a>
+            </label>
+          </div>
+          <div class="d-grid">
+            <button id="btnCadastrar" class="btn btn-lg btn-dark rounded-0 fs-6" type="submit" disabled>Cadastrar</button>
+          </div>
+          <script>
+            const aceitoPolitica = document.getElementById('aceitoPolitica');
+            const btnCadastrar = document.getElementById('btnCadastrar');
+            aceitoPolitica.addEventListener('change', function() {
+              btnCadastrar.disabled = !this.checked;
+            });
+          </script>
+        </form>
+        <div class="my-4 d-flex align-items-center">
+          <hr class="flex-grow-1">
+          <span class="mx-3 text-muted">ou</span>
+          <hr class="flex-grow-1">
+        </div>
+        <div class="d-flex flex-column align-items-center gap-3">
+          <a href="#!" class="btn bsb-btn-2xl btn-outline-dark rounded-0 d-flex align-items-center justify-content-center w-100">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-google text-danger me-2" viewBox="0 0 16 16">
+              <path d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z" />
+            </svg>
+            <span class="ms-2">Cadastrar com Google</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
