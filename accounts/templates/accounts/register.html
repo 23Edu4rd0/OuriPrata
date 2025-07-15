@@ -84,7 +84,7 @@
           <div class="form-check mb-3">
             <input class="form-check-input" type="checkbox" id="aceitoPolitica" required>
             <label class="form-check-label" for="aceitoPolitica">
-              Li e aceito a <a href="{% url 'politica_de_privacidade' %}" target="_blank">Política de Privacidade</a>
+              Li e aceito a <a href="{% url 'politica_de_privacidade' %}" target="_blank" id="lerPolitica">Política de Privacidade</a>
             </label>
           </div>
           <div class="d-grid">
@@ -93,8 +93,23 @@
           <script>
             const aceitoPolitica = document.getElementById('aceitoPolitica');
             const btnCadastrar = document.getElementById('btnCadastrar');
+            const lerPolitica = document.getElementById('lerPolitica');
+
             aceitoPolitica.addEventListener('change', function() {
               btnCadastrar.disabled = !this.checked;
+            });
+
+            lerPolitica.addEventListener('click', function() {
+              localStorage.setItem('marcarPoliticaAceita', 'true');
+            });
+
+            
+            window.addEventListener('DOMContentLoaded', function() {
+              if (localStorage.getItem('marcarPoliticaAceita') === 'true') {
+                aceitoPolitica.checked = true;
+                btnCadastrar.disabled = false;
+                localStorage.removeItem('marcarPoliticaAceita');
+              }
             });
           </script>
         </form>
