@@ -1,6 +1,6 @@
-<section class="pt-0 pb-3">
-  <div class="container px-4 px-lg-5">
-    <h2 class="text-center mb-2 fw-bold" style="letter-spacing: 1px">
+<section class="pt-0 pb-5">
+  <div class="container px-5 px-lg-5">
+    <h2 class="text-center mb-2" style="font-family: 'Montserrat', sans-serif; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #6c757d; font-size: 1.1rem;">
       Produtos em Promoção
     </h2>
 
@@ -21,7 +21,7 @@
                   </div>
                   <div class="card-body p-3">
                     <div class="text-center">
-                      <h5 class="fw-bold mb-2" style="font-size: 1.1rem">
+                      <h5 class="mb-2" style="font-family: 'Montserrat', sans-serif; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #6c757d; font-size: 1.1rem;">
                         {{ product.nome }}
                       </h5>
                       <div>
@@ -37,7 +37,8 @@
                   <div class="card-footer bg-transparent border-0 pt-0 pb-3">
                     <div class="text-center">
                       <a
-                        class="btn btn-outline-dark fw-semibold px-4 py-2 rounded-3 shadow-sm"
+                        class="btn btn-outline-dark px-4 py-2 rounded-3 shadow-sm"
+                        style="font-family: 'Montserrat', sans-serif; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; font-size: 0.9rem;"
                         href="{% url 'product_detail' product.slug %}"
                       >
                         Ver opções

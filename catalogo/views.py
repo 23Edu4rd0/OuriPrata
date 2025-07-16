@@ -1,13 +1,15 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
-from catalogo.models import Joais
+from catalogo.models import Joais, Categorias
 import json
 import mercadopago
 from django.conf import settings
 
 def home(request):
     products = Joais.objects.all()
-    return render(request, 'landing_page/home.html', {'products': products})
+    # Filtrar apenas as categorias desejadas
+    categories = Categorias.objects.filter(nome__in=['Anéis', 'Brincos', 'Pulseiras', 'Colares'])
+    return render(request, 'landing_page/home.html', {'products': products, 'categories': categories})
 
 def item_detail(request, slug):
     product = get_object_or_404(Joais, slug=slug)

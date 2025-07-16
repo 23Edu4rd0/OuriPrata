@@ -1,0 +1,85 @@
+{% load static %}
+<!-- Linha divisória dourada -->
+<div class="container">
+  <hr class="my-4" style="border: none; height: 2px; background: linear-gradient(90deg, transparent, #d4af37, transparent); width: 60%; margin: 0 auto;">
+</div>
+
+<section class="py-3 bg-light">
+  <div class="container">
+    <!-- Título da seção -->
+    <div class="text-center mb-3">
+      <h2 style="font-family: 'Montserrat', sans-serif; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #6c757d; font-size: 1.1rem;">
+        PARA TODOS OS MOMENTOS
+      </h2>
+    </div>
+
+    <!-- Grid de Categorias -->
+    <div class="row g-4 justify-content-center">
+      {% for category in categories %}
+        <div class="col-6 col-md-3">
+          <div class="text-center category-card">
+            <a href="#" class="text-decoration-none text-dark">
+              <div class="category-image-container mb-3 position-relative">
+                {% if category.imagem %}
+                  <!-- Imagem da categoria -->
+                  <div class="bg-white rounded-circle d-flex align-items-center justify-content-center mx-auto shadow-sm overflow-hidden" 
+                       style="width: 120px; height: 120px; transition: all 0.3s ease;">
+                    <img src="{{ category.imagem.url }}" alt="{{ category.nome }}" class="w-100 h-100" style="object-fit: cover;">
+                  </div>
+                {% else %}
+                  <!-- Fallback quando não tem imagem -->
+                  <div class="bg-white rounded-circle d-flex align-items-center justify-content-center mx-auto shadow-sm" 
+                       style="width: 120px; height: 120px; transition: all 0.3s ease;">
+                    <i class="bi bi-gem text-warning" style="font-size: 2.5rem;"></i>
+                  </div>
+                {% endif %}
+              </div>
+              <h6 class="fw-semibold text-muted mb-0" style="font-size: 0.9rem;">
+                {{ category.nome }}
+              </h6>
+            </a>
+          </div>
+        </div>
+      {% empty %}
+        <div class="col-12 text-center">
+          <p class="text-muted">Nenhuma categoria disponível no momento.</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  
+  <!-- Linha divisória dourada -->
+  <div class="container">
+    <hr class="my-4" style="border: none; height: 2px; background: linear-gradient(90deg, transparent, #d4af37, transparent); width: 60%; margin: 0 auto;">
+  </div>
+</section>
+
+<style>
+  .category-card:hover .category-image-container > div {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+  }
+  
+  .category-image-container {
+    overflow: hidden;
+  }
+  
+  .category-card {
+    transition: transform 0.3s ease;
+  }
+  
+  .category-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  @media (max-width: 768px) {
+    .category-image-container > div {
+      width: 100px !important;
+      height: 100px !important;
+    }
+    
+    .category-image-container i {
+      font-size: 2rem !important;
+    }
+  }
+</style>

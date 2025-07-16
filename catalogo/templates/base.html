@@ -44,18 +44,16 @@
     {% endblock %}
 
     {% if messages %}
-      <div class="container mt-3">
-        {% for message in messages %}
-          <div
-            class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-info{% endif %} d-flex align-items-center rounded-3 shadow-sm px-4 py-2 mb-2"
-            role="alert"
-            style="font-size: 1rem;"
-          >
-            <i class="bi bi-exclamation-circle me-2"></i>
-            <span>{{ message }}</span>
-          </div>
-        {% endfor %}
-      </div>
+      {% for message in messages %}
+        <div
+          class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-info{% endif %} d-flex align-items-center px-4 py-3 mb-0"
+          role="alert"
+          style="font-size: 1rem; border-radius: 0; margin: 0; width: 100vw; margin-left: calc(-50vw + 50%);"
+        >
+          <i class="bi bi-exclamation-circle me-2"></i>
+          <span>{{ message }}</span>
+        </div>
+      {% endfor %}
     {% endif %}
 
     <main class="flex-fill">

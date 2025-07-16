@@ -56,7 +56,9 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "catalogo.apps.CatalogoConfig",
     'social_django',
-    'accounts.apps.AccountsConfig'
+    'accounts.apps.AccountsConfig',
+    'wishlist.apps.WishlistConfig',
+    'cart.apps.CartConfig'
 ]
 
 MIDDLEWARE = [
@@ -168,5 +170,5 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://9a1e1122445a.ngrok-free.app',
+    'https://13e5b774b6c3.ngrok-free.app',
 ]

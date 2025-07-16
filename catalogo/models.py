@@ -36,6 +36,7 @@ class Joais(models.Model):
     
 class Categorias(models.Model):
     nome = models.CharField(max_length=50, null=False, blank=False)
+    imagem = models.ImageField(upload_to='categorias/', blank=True, null=True)
     
     class Meta:
         verbose_name = "Categoria"
