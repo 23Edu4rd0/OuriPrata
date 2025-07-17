@@ -16,9 +16,10 @@
     <!-- Grid de Categorias -->
     <div class="row g-4 justify-content-center">
       {% for category in categories %}
+        {% if category.slug %}
         <div class="col-6 col-md-3">
           <div class="text-center category-card">
-            <a href="#" class="text-decoration-none text-dark">
+            <a href="{% url 'products_by_category' category.slug %}" class="text-decoration-none text-dark">
               <div class="category-image-container mb-3 position-relative">
                 {% if category.imagem %}
                   <!-- Imagem da categoria -->
@@ -40,6 +41,7 @@
             </a>
           </div>
         </div>
+        {% endif %}
       {% empty %}
         <div class="col-12 text-center">
           <p class="text-muted">Nenhuma categoria disponível no momento.</p>

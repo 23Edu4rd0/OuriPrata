@@ -24,16 +24,36 @@
       rel="stylesheet"
     />
     <style>
-      .hover-box:hover {
-        background-color: #f1f1f1 !important;
-        transform: scale(1.01);
-        transition: all 0.3s ease-in-out;
-        cursor: pointer;
+      /* Estilos essenciais - apenas o que é necessário */
+      .font-montserrat {
+        font-family: 'Montserrat', sans-serif;
       }
-      .hover-link:hover {
-        color: #d39e00 !important;
-        text-decoration: underline;
-        transition: color 0.2s;
+      
+      /* Ícones com tamanho fixo quando necessário */
+      .icon-60 {
+        width: 60px;
+        height: 60px;
+      }
+      
+      .icon-40 {
+        width: 40px;
+        height: 40px;
+      }
+      
+      .icon-80 {
+        width: 80px;
+        height: 80px;
+      }
+      
+      /* Altura para imagens de produto */
+      .product-img-height {
+        height: 250px;
+        object-fit: cover;
+      }
+      
+      /* Largura para input de quantidade */
+      .quantity-input {
+        width: 120px;
       }
     </style>
     {% block extra_head %}{% endblock %}

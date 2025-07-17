@@ -1,296 +1,397 @@
 {% extends 'base.html' %}
-{% block title %}Produto - OuriPrata{% endblock %}
+{% block title %}{{ product.nome }} - OuriPrata{% endblock %}
 {% block content %}
 {% load static %}
 {% csrf_token %}
-<main class="container py-5">
-  <div class="row g-5">
-    <!-- Imagem principal -->
-    <div
-      class="col-lg-6 bg-light d-flex flex-column justify-content-center align-items-center p-4 rounded-4 shadow"
-    >
-      <img
-        id="main-product-image"
-        src="{{ product.imagem.url }}"
-        class="img-fluid rounded-4 shadow mb-3"
-        alt="{{ product.nome}}"
-        style="max-width: 400px"
-      />
-      <div class="d-flex gap-2 mt-2">
-        <img
-          src="{{ product.imagem.url }}"
-          class="rounded-3 border border-secondary object-fit-cover cursor-pointer hover-shadow product-thumb"
-          style="width: 56px; height: 56px; object-fit: cover"
-        />
+
+<main class="container py-4">
+  <nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-decoration-none text-muted">Início</a></li>
+      <li class="breadcrumb-item"><a href="#" class="text-decoration-none text-muted">Produtos</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ product.nome }}</li>
+    </ol>
+  </nav>
+
+  <div class="row g-4">
+    <div class="col-lg-6">
+      <div class="position-sticky" style="top: 2rem;">
+        <div class="card border-0 shadow-sm">
+          <div class="position-relative overflow-hidden">
+            <img id="main-product-image" 
+                 src="{{ product.imagem.url }}" 
+                 class="card-img-top" 
+                 alt="{{ product.nome }}" 
+                 style="height: 400px; object-fit: cover; cursor: zoom-in;">
+            
+            {% if product.em_promocao and product.preco_promocional %}
+            <span class="position-absolute top-0 end-0 m-3 badge bg-danger px-3 py-2 rounded-pill">
+              <i class="bi bi-lightning-fill me-1"></i>Oferta
+            </span>
+            {% endif %}
+          </div>
+          
+          <div class="card-body p-3">
+            <div class="d-flex gap-2 justify-content-center">
+              <img src="{{ product.imagem.url }}" 
+                   class="rounded border product-thumb" 
+                   style="width: 60px; height: 60px; object-fit: cover; cursor: pointer; opacity: 0.7;"
+                   onclick="changeMainImage(this.src)">
+              <img src="{{ product.imagem.url }}" 
+                   class="rounded border product-thumb" 
+                   style="width: 60px; height: 60px; object-fit: cover; cursor: pointer; opacity: 0.7;"
+                   onclick="changeMainImage(this.src)">
+              <img src="{{ product.imagem.url }}" 
+                   class="rounded border product-thumb" 
+                   style="width: 60px; height: 60px; object-fit: cover; cursor: pointer; opacity: 0.7;"
+                   onclick="changeMainImage(this.src)">
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <!-- Informações -->
-    <div
-      class="col-lg-6 d-flex flex-column justify-content-between bg-white p-4 rounded-4 shadow"
-    >
-      <div>
-        <div
-          class="d-flex flex-column flex-md-row align-items-md-center justify-content-md-between gap-2 mb-2"
-        >
-          <h1 class="h3 fw-bold mb-0">{{ product.nome }}</h1>
-          <span class="h4 fw-bold text-warning mb-0"
-            >R$ {{ product.preco }}</span
-          >
-        </div>
-        <div class="d-flex align-items-center gap-2 mb-2">
-          <span class="text-warning fs-5">★★★★★</span>
+
+    <div class="col-lg-6">
+      <div class="mb-4">
+        <h1 class="h3 fw-bold text-dark mb-3">{{ product.nome }}</h1>
+        
+        <div class="d-flex align-items-center gap-3 mb-3">
+          <div class="text-warning fs-5">
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+          </div>
           <span class="text-muted small">(42 avaliações)</span>
         </div>
-        <p class="text-muted small mb-2">Código: OP-2025</p>
-        <hr />
-        <h3 class="h5 fw-semibold mb-2">Descrição</h3>
-        <p class="mb-3">
-          {{ product.descricao|default:"Este produto não possui descrição." }}
-        </p>
-        <!--
         
-        <ul class="mb-4">
-          <li>Prata 925 (92,5% prata pura)</li>
-          <li>Pedras naturais de ouriço-do-mar fossilizado</li>
-          <li>Comprimento ajustável de 45cm a 50cm</li>
-          <li>Fecho de segurança banhado a ouro</li>
-          <li>Peso aproximado: 12g</li>
-          <li>Embalagem presenteável incluída</li>
-        </ul>
-        -->
-        <div class="d-flex flex-wrap gap-3 mb-4 align-items-center">
-          <div class="input-group" style="width: 120px">
-            <span class="input-group-text">Qtd</span>
-            <input
-              type="number"
-              value="1"
-              min="1"
-              max="5"
-              class="form-control text-center"
-              id="quantity-input"
-            />
+        <div class="mb-4">
+          {% if product.em_promocao and product.preco_promocional %}
+            <div class="d-flex align-items-center gap-3 mb-2">
+              <span class="text-muted text-decoration-line-through h5">R$ {{ product.preco }}</span>
+              <span class="text-danger h3 fw-bold mb-0">R$ {{ product.preco_promocional }}</span>
+            </div>
+            <small class="text-danger fw-semibold">
+              <i class="bi bi-arrow-down me-1"></i>
+              {% widthratio product.preco_promocional product.preco 100 as discount %}
+              {{ discount|floatformat:0 }}% OFF
+            </small>
+          {% else %}
+            <span class="text-dark h3 fw-bold">R$ {{ product.preco }}</span>
+          {% endif %}
+        </div>
+
+        <div class="mb-4">
+          <h5 class="fw-semibold mb-2">Descrição</h5>
+          <p class="text-muted">
+            {{ product.descricao|default:"Este produto não possui descrição." }}
+          </p>
+        </div>
+
+        <div class="row g-3 mb-4">
+          <div class="col-auto">
+            <div class="input-group">
+              <span class="input-group-text">Qtd</span>
+              <input type="number" 
+                     value="1" 
+                     min="1" 
+                     max="5" 
+                     class="form-control text-center" 
+                     id="quantity-input" 
+                     style="width: 80px;">
+            </div>
           </div>
-          <button
-            id="add-to-cart-btn"
-            class="btn btn-warning text-white fw-semibold d-flex align-items-center gap-2 shadow"
-            data-produto-id="{{ product.id }}"
-          >
-            <i class="bi bi-cart3"></i> Adicionar ao Carrinho
-          </button>
           
-          <!-- Botão Lista de Desejos -->
+          <div class="col">
+            <button id="add-to-cart-btn" 
+                    class="btn btn-warning text-white fw-semibold px-4 py-2 w-100" 
+                    data-produto-id="{{ product.id }}">
+              <i class="bi bi-cart3 me-2"></i>
+              Adicionar ao Carrinho
+            </button>
+          </div>
+        </div>
+
+        <div class="d-flex gap-2 mb-4">
           {% if user.is_authenticated %}
-            <button
-              id="wishlist-btn"
-              class="btn btn-outline-danger d-flex align-items-center gap-2 shadow-sm"
-              data-produto-id="{{ product.id }}"
-              title="Adicionar à Lista de Desejos"
-            >
+            <button id="wishlist-btn" 
+                    class="btn btn-outline-danger px-4 py-2 flex-fill" 
+                    data-produto-id="{{ product.id }}">
               <i class="bi bi-heart" id="wishlist-icon"></i>
-              <span id="wishlist-text">Lista de Desejos</span>
+              <span id="wishlist-text" class="ms-2">Lista de Desejos</span>
             </button>
           {% else %}
-            <a href="{% url 'login' %}" class="btn btn-outline-danger d-flex align-items-center gap-2 shadow-sm" title="Faça login para adicionar à lista de desejos">
-              <i class="bi bi-heart"></i>
-              <span>Lista de Desejos</span>
+            <a href="{% url 'login' %}" 
+               class="btn btn-outline-danger px-4 py-2 flex-fill">
+              <i class="bi bi-heart me-2"></i>
+              Lista de Desejos
             </a>
           {% endif %}
-          <div id="wallet_container" class="mt-2">
-            <div id="walletBrick_container" class="mt-2"></div>
-            <script src="https://sdk.mercadopago.com/js/v2"></script>
-            <script>
-              const publicKey = "{{ mercado_pago_public_key }}";
-              const preferenceId = "{{ preference_id }}";
-              const mp = new MercadoPago(publicKey);
+          
+          <button class="btn btn-outline-primary px-4 py-2">
+            <i class="bi bi-share"></i>
+          </button>
+        </div>
 
-              const bricksBuilder = mp.bricks();
-              const renderWalletBrick = async (bricksBuilder) => {
-                await bricksBuilder.create("wallet", "walletBrick_container", {
-                  initialization: {
-                    preferenceId: preferenceId,
-                  }
-                });
-              };
+        <div class="alert alert-warning d-flex align-items-center gap-2 py-2 mb-4">
+          <i class="bi bi-truck"></i>
+          <small>FRETE GRÁTIS para todo Brasil em compras acima de R$ 300,00</small>
+        </div>
 
-              renderWalletBrick(bricksBuilder);
-            </script>
+        <div class="row g-2 mb-3">
+          <div class="col-md-6">
+            <div class="d-flex align-items-center gap-2 text-success">
+              <i class="bi bi-check-circle"></i>
+              <small>Entrega garantida</small>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="d-flex align-items-center gap-2 text-success">
+              <i class="bi bi-check-circle"></i>
+              <small>Certificado de autenticidade</small>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="d-flex align-items-center gap-2 text-success">
+              <i class="bi bi-check-circle"></i>
+              <small>Garantia de 1 ano</small>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="d-flex align-items-center gap-2 text-success">
+              <i class="bi bi-check-circle"></i>
+              <small>Troca em 30 dias</small>
+            </div>
           </div>
         </div>
-        <div
-          class="alert alert-warning d-flex align-items-center gap-2 py-2 mb-3"
-          role="alert"
-        >
-          <i class="bi bi-truck"></i>
-          <span class="small"
-            >FRETE GRÁTIS para todo Brasil em compras acima de R$ 300,00</span
-          >
+
+        <div class="text-muted text-end">
+          <small>
+            Entrega estimada: <strong class="text-dark">3 dias úteis</strong>
+          </small>
         </div>
-        <div class="d-flex flex-wrap gap-3 mb-2">
-          <span
-            class="badge bg-success bg-opacity-10 text-success d-flex align-items-center gap-1"
-            ><i class="bi bi-check-circle"></i> Entrega garantida</span
-          >
-          <span
-            class="badge bg-success bg-opacity-10 text-success d-flex align-items-center gap-1"
-            ><i class="bi bi-check-circle"></i> Certificado de
-            autenticidade</span
-          >
-          <span
-            class="badge bg-success bg-opacity-10 text-success d-flex align-items-center gap-1"
-            ><i class="bi bi-check-circle"></i> Garantia de 1 ano</span
-          >
-        </div>
-        <p class="text-muted small text-end mt-2">
-          Entrega estimada: <strong class="text-dark">3 dias úteis</strong> para
-          grandes capitais
-        </p>
+      </div>
+
+      <div id="wallet_container" class="mt-4">
+        <div id="walletBrick_container"></div>
+        <script src="https://sdk.mercadopago.com/js/v2"></script>
+        <script>
+          const publicKey = "{{ mercado_pago_public_key }}";
+          const preferenceId = "{{ preference_id }}";
+          const mp = new MercadoPago(publicKey);
+          const bricksBuilder = mp.bricks();
+          const renderWalletBrick = async (bricksBuilder) => {
+            await bricksBuilder.create("wallet", "walletBrick_container", {
+              initialization: {
+                preferenceId: preferenceId,
+              }
+            });
+          };
+          renderWalletBrick(bricksBuilder);
+        </script>
       </div>
     </div>
   </div>
-      <section class="py-5 bg-light">
-        <div class="container px-4 px-lg-5 mt-5">
-          <h2 class="fw-bolder mb-4">Produtos Relacionados</h2>
-          <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-            {% for product in related_products %}
-            <div class="col mb-4">
-              <div class="card h-100 border-0 shadow-sm rounded-4 related-card">
-                <div class="position-relative overflow-hidden rounded-4">
-                  <img class="card-img-top transition-scale" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="Produto relacionado" style="object-fit:cover; height:200px;">
-                  <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-2 px-3 py-1 rounded-pill fs-6 shadow-sm">Promoção</span>
-                </div>
-                <div class="card-body p-3">
-                  <div class="text-center">
-                    <h5 class="fw-bold mb-2">{{ product.nome }}</h5>
-                    <div>
-                      <span class="text-muted text-decoration-line-through small">R$ {{ product.preco_antigo }}</span>
-                      <span class="fw-bold text-success ms-2 fs-5">R$ {{ product.preco }}</span>
-                    </div>
-                  </div>
-                </div>
-                <div class="card-footer bg-transparent border-0 pt-0 pb-3">
-                  <div class="text-center">
-                    <a class="btn btn-warning text-white fw-semibold px-4 py-2 rounded-3 shadow-sm" href="#">Ver opções</a>
-                  </div>
-                </div>
+  <section class="py-5">
+    <div class="container">
+      <div class="text-center mb-4">
+        <h2 class="h3 fw-bold text-dark mb-2">Produtos Relacionados</h2>
+        <p class="text-muted small">Outras peças que você pode gostar</p>
+        <div class="mx-auto bg-warning rounded-pill" style="height: 3px; width: 60px;"></div>
+      </div>
+
+      <div class="row g-3">
+        {% for product in related_products %}
+        <div class="col-lg-3 col-md-6 col-6">
+          <div class="card border-0 h-100 shadow-sm">
+            <div class="position-relative overflow-hidden">
+              <img class="card-img-top" 
+                   src="{{ product.imagem.url }}" 
+                   alt="{{ product.nome }}" 
+                   style="height: 150px; object-fit: cover;">
+              
+              {% if product.em_promocao and product.preco_promocional %}
+              <span class="position-absolute top-0 end-0 m-2 badge bg-danger px-2 py-1 rounded-pill small">
+                <i class="bi bi-lightning-fill me-1"></i>Oferta
+              </span>
+              {% endif %}
+              
+              <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center overlay-hover" 
+                   style="background: rgba(0,0,0,0.4); opacity: 0; transition: opacity 0.3s;">
+                <a href="{% url 'product_detail' product.slug %}" 
+                   class="btn btn-warning px-2 py-1 rounded-pill fw-semibold" 
+                   style="font-size: 0.8rem;">
+                  <i class="bi bi-eye me-1"></i>Ver
+                </a>
               </div>
             </div>
-            {% endfor %}
+            
+            <div class="card-body text-center p-2">
+              <h5 class="card-title fw-bold mb-2" style="font-size: 0.9rem; min-height: 2.5rem; display: flex; align-items: center; justify-content: center;">
+                {{ product.nome }}
+              </h5>
+              
+              <div class="mb-2" style="min-height: 2rem; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                {% if product.em_promocao and product.preco_promocional %}
+                  <div class="d-flex justify-content-center align-items-center gap-1">
+                    <span class="text-muted text-decoration-line-through" style="font-size: 0.8rem;">
+                      R$ {{ product.preco|floatformat:2 }}
+                    </span>
+                    <span class="fw-bold text-danger mb-0" style="font-size: 0.95rem;">
+                      R$ {{ product.preco_promocional|floatformat:2 }}
+                    </span>
+                  </div>
+                  <small class="text-danger fw-semibold" style="font-size: 0.75rem;">
+                    <i class="bi bi-arrow-down me-1"></i>
+                    {% widthratio product.preco_promocional product.preco 100 as discount %}
+                    {{ discount|floatformat:0 }}% OFF
+                  </small>
+                {% else %}
+                  <span class="fw-bold text-dark mb-0" style="font-size: 0.95rem;">
+                    R$ {{ product.preco|floatformat:2 }}
+                  </span>
+                {% endif %}
+              </div>
+              
+              <a href="{% url 'product_detail' product.slug %}" 
+                 class="btn btn-outline-warning px-2 py-1 rounded-pill fw-semibold" 
+                 style="font-size: 0.8rem;">
+                Ver Detalhes
+              </a>
+            </div>
           </div>
         </div>
-      </section>
-      <style>
-        .related-card:hover {
-          box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15)!important;
-        }
-        .transition-scale {
-          transition: transform 0.3s;
-        }
-        .related-card:hover .transition-scale {
-          transform: scale(1.05);
-        }
-      </style>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
 
-      <script>
-        document.addEventListener('DOMContentLoaded', function() {
-          const wishlistBtn = document.getElementById('wishlist-btn');
-          const wishlistIcon = document.getElementById('wishlist-icon');
-          const wishlistText = document.getElementById('wishlist-text');
-          const addToCartBtn = document.getElementById('add-to-cart-btn');
-          const quantityInput = document.getElementById('quantity-input');
-          
-          // Adicionar ao carrinho
-          if (addToCartBtn) {
-            addToCartBtn.addEventListener('click', function() {
-              const produtoId = this.getAttribute('data-produto-id');
-              const quantidade = quantityInput.value;
-              
-              fetch(`/cart/add/${produtoId}/`, {
-                method: 'POST',
-                headers: {
-                  'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
-                  'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `quantidade=${quantidade}`
-              })
-              .then(response => response.json())
-              .then(data => {
-                if (data.status === 'success') {
-                  // Feedback visual
-                  const originalText = this.innerHTML;
-                  this.innerHTML = '<i class="bi bi-check-circle"></i> Adicionado!';
-                  this.classList.add('btn-success');
-                  this.classList.remove('btn-warning');
-                  
-                  // Atualizar contador do carrinho
-                  if (window.updateCartCount) {
-                    window.updateCartCount();
-                  }
-                  
-                  setTimeout(() => {
-                    this.innerHTML = originalText;
-                    this.classList.remove('btn-success');
-                    this.classList.add('btn-warning');
-                  }, 2000);
-                }
-              })
-              .catch(error => {
-                console.error('Erro:', error);
-              });
-            });
-          }
-          
-          // Wishlist functionality
-          if (wishlistBtn) {
-            const produtoId = wishlistBtn.getAttribute('data-produto-id');
-            
-            // Verificar se o produto já está na lista de desejos
-            fetch(`/wishlist/check/${produtoId}/`)
-              .then(response => response.json())
-              .then(data => {
-                if (data.in_wishlist) {
-                  wishlistIcon.classList.remove('bi-heart');
-                  wishlistIcon.classList.add('bi-heart-fill');
-                  wishlistBtn.classList.remove('btn-outline-danger');
-                  wishlistBtn.classList.add('btn-danger');
-                  wishlistText.textContent = 'Na Lista';
-                }
-              })
-              .catch(error => console.error('Erro:', error));
-            
-            // Adicionar/remover da lista de desejos
-            wishlistBtn.addEventListener('click', function() {
-              const isInWishlist = wishlistIcon.classList.contains('bi-heart-fill');
-              const url = isInWishlist ? `/wishlist/remove/${produtoId}/` : `/wishlist/add/${produtoId}/`;
-              
-              fetch(url, {
-                method: 'POST',
-                headers: {
-                  'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
-                  'Content-Type': 'application/json',
-                },
-              })
-              .then(response => response.json())
-              .then(data => {
-                if (data.status === 'added') {
-                  wishlistIcon.classList.remove('bi-heart');
-                  wishlistIcon.classList.add('bi-heart-fill');
-                  wishlistBtn.classList.remove('btn-outline-danger');
-                  wishlistBtn.classList.add('btn-danger');
-                  wishlistText.textContent = 'Na Lista';
-                } else if (data.status === 'removed') {
-                  wishlistIcon.classList.remove('bi-heart-fill');
-                  wishlistIcon.classList.add('bi-heart');
-                  wishlistBtn.classList.remove('btn-danger');
-                  wishlistBtn.classList.add('btn-outline-danger');
-                  wishlistText.textContent = 'Lista de Desejos';
-                }
-              })
-              .catch(error => {
-                console.error('Erro:', error);
-              });
-            });
-          }
+  <script>
+    function changeMainImage(src) {
+      const mainImage = document.getElementById('main-product-image');
+      mainImage.src = src;
+      
+      document.querySelectorAll('.product-thumb').forEach(thumb => {
+        thumb.style.opacity = '0.7';
+        thumb.style.border = '1px solid #dee2e6';
+      });
+      
+      event.target.style.opacity = '1';
+      event.target.style.border = '2px solid #ffc107';
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      const wishlistBtn = document.getElementById('wishlist-btn');
+      const wishlistIcon = document.getElementById('wishlist-icon');
+      const wishlistText = document.getElementById('wishlist-text');
+      const addToCartBtn = document.getElementById('add-to-cart-btn');
+      const quantityInput = document.getElementById('quantity-input');
+      
+      const firstThumb = document.querySelector('.product-thumb');
+      if (firstThumb) {
+        firstThumb.style.opacity = '1';
+        firstThumb.style.border = '2px solid #ffc107';
+      }
+      
+      const productCards = document.querySelectorAll('.card .overlay-hover');
+      productCards.forEach(overlay => {
+        const card = overlay.closest('.card');
+        card.addEventListener('mouseenter', () => {
+          overlay.style.opacity = '1';
         });
-      </script>
+        card.addEventListener('mouseleave', () => {
+          overlay.style.opacity = '0';
+        });
+      });
+      
+      if (addToCartBtn) {
+        addToCartBtn.addEventListener('click', function() {
+          const produtoId = this.getAttribute('data-produto-id');
+          const quantidade = quantityInput.value;
+          
+          fetch(`/cart/add/${produtoId}/`, {
+            method: 'POST',
+            headers: {
+              'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `quantidade=${quantidade}`
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.status === 'success') {
+              const originalText = this.innerHTML;
+              this.innerHTML = '<i class="bi bi-check-circle me-2"></i>Adicionado!';
+              this.classList.add('btn-success');
+              this.classList.remove('btn-warning');
+              
+              if (window.updateCartCount) {
+                window.updateCartCount();
+              }
+              
+              setTimeout(() => {
+                this.innerHTML = originalText;
+                this.classList.remove('btn-success');
+                this.classList.add('btn-warning');
+              }, 2000);
+            }
+          })
+          .catch(error => {
+            console.error('Erro:', error);
+          });
+        });
+      }
+      
+      if (wishlistBtn) {
+        const produtoId = wishlistBtn.getAttribute('data-produto-id');
+        
+        fetch(`/wishlist/check/${produtoId}/`)
+          .then(response => response.json())
+          .then(data => {
+            if (data.in_wishlist) {
+              wishlistIcon.classList.remove('bi-heart');
+              wishlistIcon.classList.add('bi-heart-fill');
+              wishlistBtn.classList.remove('btn-outline-danger');
+              wishlistBtn.classList.add('btn-danger');
+              wishlistText.textContent = 'Na Lista';
+            }
+          })
+          .catch(error => console.error('Erro:', error));
+        
+        wishlistBtn.addEventListener('click', function() {
+          const isInWishlist = wishlistIcon.classList.contains('bi-heart-fill');
+          const url = isInWishlist ? `/wishlist/remove/${produtoId}/` : `/wishlist/add/${produtoId}/`;
+          
+          fetch(url, {
+            method: 'POST',
+            headers: {
+              'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+              'Content-Type': 'application/json',
+            },
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.status === 'added') {
+              wishlistIcon.classList.remove('bi-heart');
+              wishlistIcon.classList.add('bi-heart-fill');
+              wishlistBtn.classList.remove('btn-outline-danger');
+              wishlistBtn.classList.add('btn-danger');
+              wishlistText.textContent = 'Na Lista';
+            } else if (data.status === 'removed') {
+              wishlistIcon.classList.remove('bi-heart-fill');
+              wishlistIcon.classList.add('bi-heart');
+              wishlistBtn.classList.remove('btn-danger');
+              wishlistBtn.classList.add('btn-outline-danger');
+              wishlistText.textContent = 'Lista de Desejos';
+            }
+          })
+          .catch(error => {
+            console.error('Erro:', error);
+          });
+        });
+      }
+    });
+  </script>
 </main>
 {% endblock content %}

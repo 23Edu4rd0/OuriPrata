@@ -1,53 +1,180 @@
-<section class="pt-3 pb-3">
-  <div class="container px-2 px-lg-4">
-    <h2 class="text-center mb-4" style="font-family: 'Montserrat', sans-serif; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #6c757d; font-size: 1.1rem;">Confira nossos produtos</h2>
-    <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+<section class="py-4">
+  <div class="container">
+    <!-- Título da seção -->
+    <div class="text-center mb-4">
+      <h2 class="h3 fw-bold text-dark mb-2">Produtos em Destaque</h2>
+      <p class="text-muted small">Descubra nossas peças mais exclusivas</p>
+      <div class="mx-auto bg-warning rounded-pill" style="height: 3px; width: 60px;"></div>
+    </div>
+    
+    <!-- Grid de produtos -->
+    <div class="row g-3">
       {% for product in products|slice:":4" %}
-      <div class="col mb-3">
-        <div class="card h-100 border-0 shadow-sm rounded-4 featured-card">
-          <div class="position-relative overflow-hidden rounded-4">
-            <img class="card-img-top transition-scale" src="{% if product.imagem %}{{ product.imagem.url }}{% else %}/static/assets/landing_page/logo.png{% endif %}" alt="{{ product.nome }}" style="object-fit:cover; height:200px;">
+      <div class="col-lg-3 col-md-6 col-6">
+        <div class="card border-0 h-100 shadow-sm">
+          <!-- Imagem do produto -->
+          <div class="position-relative overflow-hidden">
+            <img class="card-img-top" 
+                 src="{% if product.imagem %}{{ product.imagem.url }}{% else %}/static/assets/landing_page/logo.png{% endif %}" 
+                 alt="{{ product.nome }}" 
+                 style="height: 150px; object-fit: cover;">
+            
+            <!-- Badge de promoção -->
             {% if product.em_promocao and product.preco_promocional %}
-            <span class="badge bg-dark text-white position-absolute top-0 end-0 m-2 px-3 py-1 rounded-pill fs-6 shadow-sm">Promoção</span>
+            <span class="position-absolute top-0 end-0 m-2 badge bg-danger px-2 py-1 rounded-pill small">
+              <i class="bi bi-lightning-fill me-1"></i>Oferta
+            </span>
             {% endif %}
-          </div>
-          <div class="card-body p-3">
-            <div class="text-center">
-              <h5 class="mb-2" style="font-family: 'Montserrat', sans-serif; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #6c757d; font-size: 1.1rem;">{{ product.nome }}</h5>
-              <div>
-                {% if product.em_promocao and product.preco_promocional %}
-                  <span class="text-muted text-decoration-line-through small">R$ {{ product.preco }}</span>
-                  <span class="fw-bold text-success ms-2 fs-5">R$ {{ product.preco_promocional }}</span>
-                {% else %}
-                  <span class="fw-bold text-dark fs-5">R$ {{ product.preco }}</span>
+            
+            <!-- Overlay com botão -->
+            <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center overlay-hover" 
+                 style="background: rgba(0,0,0,0.4); opacity: 0; transition: opacity 0.3s;">
+              <div class="d-flex gap-2">
+                <a href="{% url 'product_detail' product.slug %}" 
+                   class="btn btn-warning px-2 py-1 rounded-pill fw-semibold" 
+                   style="font-size: 0.8rem;">
+                  <i class="bi bi-eye me-1"></i>Ver
+                </a>
+                {% if user.is_authenticated %}
+                  <button class="btn btn-outline-light px-2 py-1 rounded-pill fw-semibold" 
+                          style="font-size: 0.8rem;"
+                          onclick="addToCart({{ product.id }})"
+                          data-product-id="{{ product.id }}">
+                    <i class="bi bi-cart-plus me-1"></i>Carrinho
+                  </button>
                 {% endif %}
               </div>
             </div>
           </div>
-          <div class="card-footer bg-transparent border-0 pt-0 pb-3">
-            <div class="text-center">
-              <a class="btn btn-outline-dark px-4 py-2 rounded-3 shadow-sm" style="font-family: 'Montserrat', sans-serif; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; font-size: 0.9rem;" href="{% url 'product_detail' product.slug %}">Ver opções</a>
+          
+          <!-- Conteúdo do card -->
+          <div class="card-body text-center p-2">
+            <h5 class="card-title fw-bold mb-2" style="font-size: 0.9rem; min-height: 2.5rem; display: flex; align-items: center; justify-content: center;">
+              {{ product.nome }}
+            </h5>
+            
+            <!-- Preços -->
+            <div class="mb-2" style="min-height: 2rem; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+              {% if product.em_promocao and product.preco_promocional %}
+                <div class="d-flex justify-content-center align-items-center gap-1">
+                  <span class="text-muted text-decoration-line-through" style="font-size: 0.8rem;">
+                    R$ {{ product.preco|floatformat:2 }}
+                  </span>
+                  <span class="fw-bold text-success mb-0" style="font-size: 0.95rem;">
+                    R$ {{ product.preco_promocional|floatformat:2 }}
+                  </span>
+                </div>
+                <small class="text-success fw-semibold" style="font-size: 0.75rem;">
+                  <i class="bi bi-arrow-down me-1"></i>
+                  {% widthratio product.preco_promocional product.preco 100 as discount %}
+                  {{ discount|floatformat:0 }}% OFF
+                </small>
+              {% else %}
+                <span class="fw-bold text-dark mb-0" style="font-size: 0.95rem;">
+                  R$ {{ product.preco|floatformat:2 }}
+                </span>
+              {% endif %}
+            </div>
+            
+            <!-- Botão de ação -->
+            <div class="d-flex gap-1">
+              <a href="{% url 'product_detail' product.slug %}" 
+                 class="btn btn-outline-dark px-2 py-1 rounded-pill fw-semibold flex-fill" 
+                 style="font-size: 0.8rem;">
+                Ver Detalhes
+              </a>
+              {% if user.is_authenticated %}
+                <button class="btn btn-warning px-2 py-1 rounded-pill fw-semibold" 
+                        style="font-size: 0.8rem;"
+                        onclick="addToCart({{ product.id }})"
+                        data-product-id="{{ product.id }}">
+                  <i class="bi bi-cart-plus"></i>
+                </button>
+              {% endif %}
             </div>
           </div>
         </div>
       </div>
       {% endfor %}
     </div>
-  </div>
-  <style>
-    .featured-card:hover {
-      box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15)!important;
-    }
-    .transition-scale {
-      transition: transform 0.3s;
-    }
-    .featured-card:hover .transition-scale {
-      transform: scale(1.05);
-    }
-  </style>
-  
-  <!-- Linha divisória dourada -->
-  <div class="container">
-    <hr class="my-4" style="border: none; height: 2px; background: linear-gradient(90deg, transparent, #d4af37, transparent); width: 60%; margin: 0 auto;">
+    
+    <!-- Botão para ver mais produtos -->
+    <div class="text-center mt-4">
+      <a href="{% url 'catalogo' %}" class="btn btn-dark px-4 py-2 rounded-pill fw-semibold">
+        <i class="bi bi-grid me-2"></i>Ver Todos os Produtos
+      </a>
+    </div>
   </div>
 </section>
+
+<script>
+{% csrf_token %}
+document.addEventListener('DOMContentLoaded', function() {
+    const productCards = document.querySelectorAll('.card');
+    
+    productCards.forEach(card => {
+        const overlay = card.querySelector('.overlay-hover');
+        
+        card.addEventListener('mouseenter', function() {
+            overlay.style.opacity = '1';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            overlay.style.opacity = '0';
+        });
+    });
+});
+
+function addToCart(productId) {
+    fetch(`/cart/add/${productId}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'quantidade=1'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            // Feedback visual com classes Bootstrap
+            const button = event.target.closest('button');
+            const originalHTML = button.innerHTML;
+            button.innerHTML = '<i class="bi bi-check-circle"></i>';
+            button.classList.remove('btn-warning', 'btn-outline-light');
+            button.classList.add('btn-success');
+            
+            setTimeout(() => {
+                button.innerHTML = originalHTML;
+                button.classList.remove('btn-success');
+                button.classList.add('btn-warning');
+            }, 2000);
+            
+            // Atualizar contador do carrinho se existir
+            if (window.updateCartCount) {
+                window.updateCartCount();
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+    });
+}
+</script>
+
+<!-- Divisória elegante -->
+<div class="container my-4">
+  <div class="row align-items-center">
+    <div class="col">
+      <hr class="border-secondary">
+    </div>
+    <div class="col-auto">
+      <span class="h6 fw-bold text-warning mb-0">
+        <i class="bi bi-gem"></i>
+      </span>
+    </div>
+    <div class="col">
+      <hr class="border-secondary">
+    </div>
+  </div>
+</div>

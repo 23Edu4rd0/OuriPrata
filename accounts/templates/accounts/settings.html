@@ -1,0 +1,406 @@
+{% extends 'base.html' %}
+
+{% block title %}Configurações da Conta{% endblock %}
+
+{% block content %}
+<div class="container-fluid bg-light min-vh-100">
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-12 col-xl-10">
+        
+        <!-- Cabeçalho com Breadcrumb -->
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-decoration-none text-muted">Início</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Configurações</li>
+          </ol>
+        </nav>
+
+        <div class="d-flex align-items-center mb-4">
+          <div class="bg-warning rounded-circle d-flex align-items-center justify-content-center me-3 flex-shrink-0 icon-60">
+            <i class="bi bi-gear-fill text-white fs-3"></i>
+          </div>
+          <div>
+            <h1 class="display-5 fw-bold mb-1">Configurações da Conta</h1>
+            <p class="text-muted mb-0">Gerencie suas informações pessoais e preferências</p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-8 col-xl-9">
+
+            <!-- Informações do Usuário -->
+            <div class="card border-0 shadow-sm mb-4">
+              <div class="card-header bg-white border-0 pb-0">
+                <div class="d-flex align-items-center">
+                  <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3 flex-shrink-0" style="width: 40px; height: 40px;">
+                    <i class="bi bi-person-circle text-primary fs-5"></i>
+                  </div>
+                  <div>
+                    <h5 class="mb-0 fw-semibold">Informações Pessoais</h5>
+                    <small class="text-muted">Atualize seus dados básicos</small>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                <form method="post" action="{% url 'change_profile' %}">
+                  {% csrf_token %}
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label for="first_name" class="form-label fw-semibold">Nome</label>
+                      <input type="text" class="form-control form-control-lg" id="first_name" name="first_name" value="{{ user.first_name }}" placeholder="Digite seu nome">
+                    </div>
+                    <div class="col-md-6">
+                      <label for="last_name" class="form-label fw-semibold">Sobrenome</label>
+                      <input type="text" class="form-control form-control-lg" id="last_name" name="last_name" value="{{ user.last_name }}" placeholder="Digite seu sobrenome">
+                    </div>
+                  </div>
+                  
+                  <div class="row mt-4">
+                    <div class="col-md-6">
+                      <div class="bg-light rounded-3 p-3">
+                        <div class="d-flex align-items-center mb-2">
+                          <i class="bi bi-person-badge text-muted me-2"></i>
+                          <strong class="text-muted">Nome de usuário</strong>
+                        </div>
+                        <p class="mb-0 fs-6">{{ user.username }}</p>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="bg-light rounded-3 p-3">
+                        <div class="d-flex align-items-center mb-2">
+                          <i class="bi bi-envelope text-muted me-2"></i>
+                          <strong class="text-muted">E-mail atual</strong>
+                        </div>
+                        <p class="mb-0 fs-6">{{ user.email|default:"Não informado" }}</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="row mt-3">
+                    <div class="col-md-6">
+                      <div class="bg-light rounded-3 p-3">
+                        <div class="d-flex align-items-center mb-2">
+                          <i class="bi bi-calendar-check text-muted me-2"></i>
+                          <strong class="text-muted">Membro desde</strong>
+                        </div>
+                        <p class="mb-0 fs-6">{{ user.date_joined|date:"d/m/Y" }}</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="d-flex justify-content-end mt-4">
+                    <button type="submit" class="btn btn-success btn-lg px-4">
+                      <i class="bi bi-check-circle me-2"></i>Salvar Alterações
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <!-- Alterar Senha -->
+            <div class="card border-0 shadow-sm mb-4">
+              <div class="card-header bg-white border-0 pb-0">
+                <div class="d-flex align-items-center">
+                  <div class="bg-warning bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                    <i class="bi bi-shield-lock text-warning fs-5"></i>
+                  </div>
+                  <div>
+                    <h5 class="mb-0 fw-semibold">Segurança</h5>
+                    <small class="text-muted">Altere sua senha de acesso</small>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                <form method="post" action="{% url 'change_password' %}">
+                  {% csrf_token %}
+                  <div class="row g-3">
+                    <div class="col-12">
+                      <label for="current_password" class="form-label fw-semibold">Senha Atual</label>
+                      <div class="input-group input-group-lg">
+                        <span class="input-group-text bg-light border-end-0">
+                          <i class="bi bi-lock text-muted"></i>
+                        </span>
+                        <input type="password" class="form-control border-start-0" id="current_password" name="current_password" required placeholder="Digite sua senha atual">
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="new_password" class="form-label fw-semibold">Nova Senha</label>
+                      <div class="input-group input-group-lg">
+                        <span class="input-group-text bg-light border-end-0">
+                          <i class="bi bi-key text-muted"></i>
+                        </span>
+                        <input type="password" class="form-control border-start-0" id="new_password" name="new_password" required placeholder="Digite a nova senha">
+                      </div>
+                      <div class="form-text">
+                        <i class="bi bi-info-circle me-1"></i>
+                        A senha deve ter pelo menos 6 caracteres
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="confirm_password" class="form-label fw-semibold">Confirmar Nova Senha</label>
+                      <div class="input-group input-group-lg">
+                        <span class="input-group-text bg-light border-end-0">
+                          <i class="bi bi-check-circle text-muted"></i>
+                        </span>
+                        <input type="password" class="form-control border-start-0" id="confirm_password" name="confirm_password" required placeholder="Confirme a nova senha">
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="d-flex justify-content-end mt-4">
+                    <button type="submit" class="btn btn-warning btn-lg px-4">
+                      <i class="bi bi-shield-lock me-2"></i>Alterar Senha
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <!-- Alterar E-mail -->
+            <div class="card border-0 shadow-sm mb-4">
+              <div class="card-header bg-white border-0 pb-0">
+                <div class="d-flex align-items-center">
+                  <div class="bg-info bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                    <i class="bi bi-envelope-at text-info fs-5"></i>
+                  </div>
+                  <div>
+                    <h5 class="mb-0 fw-semibold">E-mail</h5>
+                    <small class="text-muted">Altere seu endereço de e-mail</small>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                <form method="post" action="{% url 'change_email' %}">
+                  {% csrf_token %}
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label for="new_email" class="form-label fw-semibold">Novo E-mail</label>
+                      <div class="input-group input-group-lg">
+                        <span class="input-group-text bg-light border-end-0">
+                          <i class="bi bi-envelope text-muted"></i>
+                        </span>
+                        <input type="email" class="form-control border-start-0" id="new_email" name="new_email" required placeholder="Digite o novo e-mail">
+                      </div>
+                      <div class="form-text">
+                        <i class="bi bi-info-circle me-1"></i>
+                        Insira um endereço de e-mail válido
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="password_email" class="form-label fw-semibold">Confirme sua senha</label>
+                      <div class="input-group input-group-lg">
+                        <span class="input-group-text bg-light border-end-0">
+                          <i class="bi bi-lock text-muted"></i>
+                        </span>
+                        <input type="password" class="form-control border-start-0" id="password_email" name="password" required placeholder="Digite sua senha atual">
+                      </div>
+                      <div class="form-text">
+                        <i class="bi bi-shield-check me-1"></i>
+                        Por segurança, confirme sua senha
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="d-flex justify-content-end mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg px-4">
+                      <i class="bi bi-envelope-check me-2"></i>Alterar E-mail
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sidebar -->
+          <div class="col-lg-4 col-xl-3">
+            <div class="sticky-top" style="top: 2rem;">
+              
+              <!-- Card do Usuário -->
+              <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body text-center">
+                  <div class="bg-warning rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px;">
+                    <i class="bi bi-person-fill text-white fs-2"></i>
+                  </div>
+                  <h5 class="fw-bold mb-1">{{ user.first_name|default:user.username }}</h5>
+                  <p class="text-muted mb-2">{{ user.email|default:"Sem e-mail" }}</p>
+                  <small class="text-muted">Membro desde {{ user.date_joined|date:"M/Y" }}</small>
+                </div>
+              </div>
+
+              <!-- Menu de Navegação -->
+              <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0">
+                  <h6 class="mb-0 fw-semibold">Navegação Rápida</h6>
+                </div>
+                <div class="list-group list-group-flush">
+                  <a href="#profile-section" class="list-group-item list-group-item-action border-0 d-flex align-items-center">
+                    <i class="bi bi-person-circle text-primary me-3"></i>
+                    <span>Informações Pessoais</span>
+                  </a>
+                  <a href="#security-section" class="list-group-item list-group-item-action border-0 d-flex align-items-center">
+                    <i class="bi bi-shield-lock text-warning me-3"></i>
+                    <span>Segurança</span>
+                  </a>
+                  <a href="#email-section" class="list-group-item list-group-item-action border-0 d-flex align-items-center">
+                    <i class="bi bi-envelope-at text-info me-3"></i>
+                    <span>E-mail</span>
+                  </a>
+                  <a href="#danger-section" class="list-group-item list-group-item-action border-0 d-flex align-items-center">
+                    <i class="bi bi-exclamation-triangle text-danger me-3"></i>
+                    <span>Excluir Conta</span>
+                  </a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Zona de Perigo -->
+        <div class="row mt-4">
+          <div class="col-12">
+
+            <!-- Zona de Perigo -->
+            <div class="card border-danger shadow-sm" id="danger-section">
+              <div class="card-header bg-danger text-white border-0">
+                <div class="d-flex align-items-center">
+                  <div class="bg-white bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                    <i class="bi bi-exclamation-triangle text-white fs-5"></i>
+                  </div>
+                  <div>
+                    <h5 class="mb-0 fw-semibold">Zona de Perigo</h5>
+                    <small class="text-white-50">Ações irreversíveis</small>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="alert alert-warning d-flex align-items-start">
+                  <i class="bi bi-exclamation-triangle-fill text-warning me-3 mt-1"></i>
+                  <div>
+                    <h6 class="alert-heading fw-semibold mb-2">Atenção!</h6>
+                    <p class="mb-0">As ações nesta seção são irreversíveis e podem resultar na perda permanente de dados.</p>
+                  </div>
+                </div>
+                
+                <div class="row">
+                  <div class="col-md-8">
+                    <h6 class="text-danger fw-semibold mb-2">Excluir Conta Permanentemente</h6>
+                    <p class="text-muted mb-3">
+                      Ao excluir sua conta, você perderá permanentemente:
+                    </p>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <ul class="list-unstyled text-muted">
+                          <li class="mb-1"><i class="bi bi-x-circle text-danger me-2"></i>Dados pessoais</li>
+                          <li class="mb-1"><i class="bi bi-x-circle text-danger me-2"></i>Histórico de pedidos</li>
+                        </ul>
+                      </div>
+                      <div class="col-md-6">
+                        <ul class="list-unstyled text-muted">
+                          <li class="mb-1"><i class="bi bi-x-circle text-danger me-2"></i>Lista de desejos</li>
+                          <li class="mb-1"><i class="bi bi-x-circle text-danger me-2"></i>Carrinho de compras</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4 text-md-end">
+                    <button type="button" class="btn btn-outline-danger btn-lg" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
+                      <i class="bi bi-trash me-2"></i>Excluir Conta
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Botões de Ação -->
+            <div class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top">
+              <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-lg">
+                <i class="bi bi-arrow-left me-2"></i>Voltar ao Início
+              </a>
+              <div class="text-muted">
+                <small>
+                  <i class="bi bi-shield-check me-1"></i>
+                  Suas informações estão seguras
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Confirmação para Excluir Conta -->
+<div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header bg-danger text-white border-0">
+        <div class="d-flex align-items-center">
+          <div class="bg-white bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+            <i class="bi bi-exclamation-triangle text-white fs-5"></i>
+          </div>
+          <div>
+            <h5 class="modal-title mb-0" id="deleteAccountModalLabel">Confirmar Exclusão da Conta</h5>
+            <small class="text-white-50">Esta ação não pode ser desfeita</small>
+          </div>
+        </div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="post" action="{% url 'delete_account' %}">
+        {% csrf_token %}
+        <div class="modal-body p-4">
+          <div class="alert alert-danger border-0 d-flex align-items-start">
+            <i class="bi bi-exclamation-triangle-fill text-danger me-3 mt-1 fs-4"></i>
+            <div>
+              <h6 class="alert-heading fw-bold mb-2">Atenção: Ação Irreversível!</h6>
+              <p class="mb-0">Ao confirmar, sua conta será excluída permanentemente junto com todos os seus dados.</p>
+            </div>
+          </div>
+          
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="password_delete" class="form-label fw-semibold">Confirme sua senha</label>
+              <div class="input-group input-group-lg">
+                <span class="input-group-text bg-light border-end-0">
+                  <i class="bi bi-lock text-muted"></i>
+                </span>
+                <input type="password" class="form-control border-start-0" id="password_delete" name="password" required placeholder="Digite sua senha">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label for="confirm_delete" class="form-label fw-semibold">
+                Digite "EXCLUIR" para confirmar
+              </label>
+              <div class="input-group input-group-lg">
+                <span class="input-group-text bg-light border-end-0">
+                  <i class="bi bi-type text-muted"></i>
+                </span>
+                <input type="text" class="form-control border-start-0" id="confirm_delete" name="confirm_delete" required placeholder="Digite EXCLUIR">
+              </div>
+              <div class="form-text">
+                <i class="bi bi-info-circle me-1"></i>
+                Digite exatamente "EXCLUIR" (sem as aspas)
+              </div>
+              <div class="invalid-feedback">
+                <i class="bi bi-x-circle me-1"></i>
+                Digite exatamente "EXCLUIR"
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer bg-light border-0 p-4">
+          <button type="button" class="btn btn-outline-secondary btn-lg px-4" data-bs-dismiss="modal">
+            <i class="bi bi-x-circle me-2"></i>Cancelar
+          </button>
+          <button type="submit" class="btn btn-danger btn-lg px-4">
+            <i class="bi bi-trash me-2"></i>Excluir Conta Permanentemente
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

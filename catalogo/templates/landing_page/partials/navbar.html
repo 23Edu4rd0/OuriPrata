@@ -1,17 +1,14 @@
 {% load static %}
-<header class="font-montserrat">
-  <nav class="bg-white shadow-sm border-bottom" style="min-height: 70px;">
+<header class="fixed-top">
+  <nav class="bg-white shadow-sm border-bottom">
     <div class="container-fluid px-4">
-      <div class="d-flex align-items-center justify-content-between h-100 py-3">
+      <div class="d-flex align-items-center justify-content-between py-3" style="min-height: 70px;">
         
         <!-- Logo -->
-        <a href="{% url 'home' %}" class="flex-shrink-0">
-          <img
-            src="{% static 'assets/landing_page/logo.png' %}"
-            alt="Logo OuriPrata"
-            class="logo-navbar"
-            style="height: 40px; width: auto; max-width: 100%;"
-          />
+        <a href="{% url 'home' %}" class="text-decoration-none">
+          <h3 class="mb-0 fw-bold">
+            <span class="text-warning">Ouri</span><span class="text-secondary">Prata</span>
+          </h3>
         </a>
         
         <!-- Search Bar - Versão Desktop -->
@@ -23,7 +20,6 @@
                 name="q"
                 placeholder="Buscar produtos..."
                 class="form-control border-0 bg-light rounded-start-pill ps-4 pe-5"
-                style="height: 45px; font-size: 0.95rem;"
                 id="search-input"
                 autocomplete="off"
               />
@@ -39,10 +35,10 @@
           
           <!-- Carrinho -->
           {% if user.is_authenticated %}
-            <a href="{% url 'cart:cart' %}" class="btn btn-light position-relative rounded-pill px-4 py-2 d-flex align-items-center gap-2 text-decoration-none">
+            <a href="{% url 'cart:cart' %}" class="btn btn-light position-relative rounded-pill px-4 py-2 d-flex align-items-center gap-2 text-decoration-none" id="cart-link">
               <i class="bi bi-cart3 fs-5"></i>
               <span class="d-none d-lg-inline">Carrinho</span>
-              <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.7rem; display: none;">
+              <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;">
                 0
               </span>
             </a>
@@ -66,7 +62,7 @@
                 {% endif %}
               </span>
             </button>
-            <div class="dropdown-menu dropdown-menu-end p-0 shadow border-0 rounded-4" style="min-width: 280px;">
+            <div class="dropdown-menu dropdown-menu-end p-0 shadow border-0 rounded-4">
               {% if user.is_authenticated %}
                 <div class="p-4 border-bottom">
                   <div class="d-flex align-items-center gap-3">
@@ -81,10 +77,6 @@
                 </div>
                 <div class="py-2">
                   <a href="#" class="dropdown-item py-3 px-4 d-flex align-items-center gap-3">
-                    <i class="bi bi-person text-muted"></i>
-                    <span>Meu Perfil</span>
-                  </a>
-                  <a href="#" class="dropdown-item py-3 px-4 d-flex align-items-center gap-3">
                     <i class="bi bi-box-seam text-muted"></i>
                     <span>Meus Pedidos</span>
                   </a>
@@ -92,7 +84,7 @@
                     <i class="bi bi-heart text-muted"></i>
                     <span>Lista de Desejos</span>
                   </a>
-                  <a href="#" class="dropdown-item py-3 px-4 d-flex align-items-center gap-3">
+                  <a href="{% url 'settings' %}" class="dropdown-item py-3 px-4 d-flex align-items-center gap-3">
                     <i class="bi bi-gear text-muted"></i>
                     <span>Configurações</span>
                   </a>
@@ -113,7 +105,7 @@
               {% else %}
                 <div class="p-4 text-center">
                   <div class="mb-3">
-                    <i class="bi bi-person-circle text-muted" style="font-size: 3rem;"></i>
+                    <i class="bi bi-person-circle text-muted fs-1"></i>
                   </div>
                   <h6 class="mb-2">Bem-vindo!</h6>
                   <p class="text-muted small mb-4">Entre na sua conta ou cadastre-se para aproveitar todas as funcionalidades.</p>
@@ -140,7 +132,7 @@
         </div>
         
         <!-- Botão Menu Mobile -->
-        <button id="menu-toggle" class="d-md-none btn btn-light rounded-circle p-2" style="width: 45px; height: 45px;">
+        <button id="menu-toggle" class="d-md-none btn btn-light rounded-circle p-2">
           <i class="bi bi-list fs-5"></i>
         </button>
       </div>
@@ -150,15 +142,13 @@
   <!-- Search Bar Mobile -->
   <div class="d-md-none bg-light border-bottom px-3 py-2">
     <form method="get">
-      <div class="input-group">
-        <input
-          type="text"
-          name="q"
-          placeholder="Buscar produtos..."
-          class="form-control border-0 rounded-start-pill ps-3"
-          style="height: 40px; font-size: 0.9rem;"
-          autocomplete="off"
-        />
+      <div class="input-group">          <input
+            type="text"
+            name="q"
+            placeholder="Buscar produtos..."
+            class="form-control border-0 rounded-start-pill ps-3"
+            autocomplete="off"
+          />
         <button type="submit" class="btn btn-white border-0 rounded-end-pill px-3">
           <i class="bi bi-search text-muted"></i>
         </button>
@@ -184,13 +174,9 @@
           <a href="{% url 'cart:cart' %}" class="btn btn-light rounded-pill text-start py-3 position-relative">
             <i class="bi bi-cart3 me-3"></i>
             Meu Carrinho
-            <span id="cart-count-mobile" class="position-absolute badge rounded-pill bg-danger" style="font-size: 0.7rem; display: none; top: 8px; left: 20px;">
+            <span id="cart-count-mobile" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;">
               0
             </span>
-          </a>
-          <a href="#" class="btn btn-light rounded-pill text-start py-3">
-            <i class="bi bi-person me-3"></i>
-            Meu Perfil
           </a>
           <a href="#" class="btn btn-light rounded-pill text-start py-3">
             <i class="bi bi-box-seam me-3"></i>
@@ -199,6 +185,10 @@
           <a href="{% url 'wishlist:wishlist' %}" class="btn btn-light rounded-pill text-start py-3">
             <i class="bi bi-heart me-3"></i>
             Lista de Desejos
+          </a>
+          <a href="{% url 'settings' %}" class="btn btn-light rounded-pill text-start py-3">
+            <i class="bi bi-gear me-3"></i>
+            Configurações
           </a>
           <a href="{% url 'contact' %}" class="btn btn-light rounded-pill text-start py-3">
             <i class="bi bi-envelope me-3"></i>
@@ -217,7 +207,7 @@
         </div>
       {% else %}
         <div class="text-center mb-4">
-          <i class="bi bi-person-circle text-muted mb-3" style="font-size: 3rem;"></i>
+          <i class="bi bi-person-circle text-muted mb-3 fs-1"></i>
           <h6 class="mb-2">Bem-vindo!</h6>
           <p class="text-muted small">Entre na sua conta ou cadastre-se</p>
         </div>
@@ -244,13 +234,23 @@
     const toggleBtn = document.getElementById("menu-toggle");
     const mobileMenu = document.getElementById("mobile-menu");
     const mainMenu = document.getElementById("main-menu");
+    
+    // Função para recalcular padding (será definida depois)
+    let recalculatePadding = null;
+    
     toggleBtn?.addEventListener("click", () => {
       if (mobileMenu.style.display === "none" || !mobileMenu.style.display) {
         mobileMenu.style.display = "block";
       } else {
         mobileMenu.style.display = "none";
       }
+      
+      // Recalcular padding após mudança no menu
+      if (recalculatePadding) {
+        setTimeout(recalculatePadding, 100);
+      }
     });
+    
     // Gera o menu mobile a partir do menu desktop
     if (mainMenu && mobileMenu) {
       const desktopList = mainMenu.querySelector("ul");
@@ -289,6 +289,7 @@
       // Atualizar contador do carrinho
       const cartCountBadge = document.getElementById("cart-count");
       const cartCountMobile = document.getElementById("cart-count-mobile");
+      const cartLink = document.getElementById("cart-link");
       
       function updateCartCount() {
         {% if user.is_authenticated %}
@@ -306,6 +307,11 @@
                   cartCountMobile.textContent = data.count;
                   cartCountMobile.style.display = "inline-block";
                 }
+                
+                // Adicionar efeito hover no link do carrinho
+                if (cartLink) {
+                  cartLink.setAttribute('title', `${data.count} ${data.count === 1 ? 'item' : 'itens'} no carrinho`);
+                }
               } else {
                 // Ocultar ambos os contadores
                 if (cartCountBadge) {
@@ -313,6 +319,10 @@
                 }
                 if (cartCountMobile) {
                   cartCountMobile.style.display = "none";
+                }
+                
+                if (cartLink) {
+                  cartLink.setAttribute('title', 'Carrinho vazio');
                 }
               }
             })
@@ -330,96 +340,81 @@
       
       // Criar evento customizado para atualizar o carrinho
       window.updateCartCount = updateCartCount;
-    });
-  </script>
-  <style>
-    /* Navbar */
-    .navbar a, .nav-link {
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 500;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      font-size: 0.9rem;
-    }
-    
-    .btn {
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 600;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      font-size: 0.9rem;
-    }
-    
-    .hover-link:hover {
-      background: #ffeeba !important;
-      color: #d39e00 !important;
-      text-decoration: none;
-      box-shadow: 0 2px 8px rgba(211,158,0,0.08);
-      transition: background 0.2s, color 0.2s;
-    }
-    .nav-link {
-      font-weight: 500;
-      letter-spacing: 0.5px;
-    }
-    .nav .nav-link {
-      margin-right: 0.5rem;
-    }
-    .nav .nav-link:last-child {
-      margin-right: 0;
-    }
-    
-    /* Logo responsiva */
-    .logo-navbar {
-      transition: all 0.3s ease;
-    }
-    
-    @media (max-width: 767px) {
-      .logo-navbar {
-        height: 35px !important;
-        width: auto !important;
-      }
-    }
-    
-    @media (max-width: 480px) {
-      .logo-navbar {
-        height: 30px !important;
-        width: auto !important;
-      }
-    }
-    
-    .user-dropdown-menu {
-      left: 50% !important;
-      transform: translateX(-50%) !important;
-      right: auto !important;
-      top: 100% !important;
-      margin-top: 0.5rem;
-    }
-    
-    /* Estilo para o badge do carrinho */
-    #cart-count, #cart-count-mobile {
-      min-width: 18px;
-      min-height: 18px;
-      line-height: 1;
-      padding: 2px 6px;
-      animation: pulse 0.3s ease-in-out;
-    }
-    
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.2); }
-      100% { transform: scale(1); }
-    }
-    
-    /* Melhorar botões e espaçamento no mobile */
-    @media (max-width: 767px) {
-      .btn {
-        font-size: 0.9rem;
+      
+      // Configurar navbar fixa com JavaScript
+      function setupFixedNavbar() {
+        const header = document.querySelector('header');
+        const navbar = document.querySelector('nav');
+        const mobileSearchBar = document.querySelector('.d-md-none.bg-light.border-bottom');
+        
+        // Calcular altura total da navbar (incluindo barra de busca mobile)
+        function calculateNavbarHeight() {
+          let totalHeight = header.offsetHeight;
+          
+          // Se estivermos em mobile e a barra de busca estiver visível
+          if (window.innerWidth < 768 && mobileSearchBar) {
+            totalHeight = header.offsetHeight; // Já inclui a barra de busca
+          }
+          
+          return totalHeight;
+        }
+        
+        // Função para aplicar padding
+        function applyPadding() {
+          const navbarHeight = calculateNavbarHeight();
+          
+          // Aplicar padding apenas em mobile (largura < 768px)
+          if (window.innerWidth < 768) {
+            document.body.style.paddingTop = (navbarHeight + 10) + 'px';
+          } else {
+            // No desktop, aplicar apenas a altura da navbar sem padding extra
+            document.body.style.paddingTop = navbarHeight + 'px';
+          }
+        }
+        
+        // Aplicar padding inicial
+        applyPadding();
+        
+        // Efeito de sombra no scroll
+        let lastScrollTop = 0;
+        
+        window.addEventListener('scroll', function() {
+          let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          
+          // Adicionar sombra quando rolar
+          if (scrollTop > 50) {
+            header.style.boxShadow = '0 4px 20px rgba(0,0,0,0.15)';
+            header.style.transition = 'box-shadow 0.3s ease';
+          } else {
+            header.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+          }
+          
+          lastScrollTop = scrollTop;
+        });
+        
+        // Recalcular padding quando a janela for redimensionada
+        window.addEventListener('resize', function() {
+          setTimeout(applyPadding, 100); // Delay para garantir que o DOM foi atualizado
+        });
+        
+        // Recalcular quando a orientação mudar (mobile)
+        window.addEventListener('orientationchange', function() {
+          setTimeout(applyPadding, 200);
+        });
+        
+        // Observer para detectar mudanças na altura da navbar
+        const resizeObserver = new ResizeObserver(function(entries) {
+          applyPadding();
+        });
+        
+        resizeObserver.observe(header);
+        
+        // Disponibilizar função para outros scripts
+        recalculatePadding = applyPadding;
       }
       
-      .container-fluid {
-        padding-left: 1rem;
-        padding-right: 1rem;
-      }
-    }
-  </style>
+      // Executar quando a página carregar
+      setupFixedNavbar();
+    });
+  </script>
 </header>

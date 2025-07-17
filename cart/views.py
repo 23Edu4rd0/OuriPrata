@@ -42,7 +42,6 @@ def cart_view(request):
                 "failure": request.build_absolute_uri("/erro/"),
                 "pending": request.build_absolute_uri("/pendente/")
             },
-            "auto_return": "approved",
             "payment_methods": {
                 "excluded_payment_types": [
                     {"id": "ticket"}

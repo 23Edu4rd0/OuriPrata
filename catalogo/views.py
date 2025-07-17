@@ -15,26 +15,36 @@ def item_detail(request, slug):
     product = get_object_or_404(Joais, slug=slug)
     product.preco = round(float(product.preco),2)
 
-    # Produtos relacionados (exemplo: destaque=True, exclui o atual)
-    related_products = Joais.objects.filter(destaque=True).exclude(id=product.id)[:4]
+    # Produtos relacionados: mesma categoria primeiro, depois outros
+    related_products = []
+    
+    # Buscar produtos da mesma categoria (excluindo o produto atual)
+    if hasattr(product, 'categoria') and product.categoria:
+        same_category = list(Joais.objects.filter(categoria=product.categoria).exclude(id=product.id)[:4])
+        related_products.extend(same_category)
+    
+    # Se não tiver produtos suficientes da mesma categoria, completar com outros
+    if len(related_products) < 4:
+        additional_needed = 4 - len(related_products)
+        other_products = list(Joais.objects.exclude(id=product.id).exclude(id__in=[p.id for p in related_products])[:additional_needed])
+        related_products.extend(other_products)
 
     try:
         sdk = mercadopago.SDK(settings.MERCADO_PAGO_ACCESS_TOKEN)
-        base_url = "https://9d8ce638b45f.ngrok-free.app"
+        base_url = "http://127.0.0.1:8000"
         preference_data = {
             "items": [
                 {
                     "title": product.nome,
                     "quantity": 1,
-                    "unit_price": product.preco,
+                    "unit_price": float(product.preco),
                 }
             ],
             "back_urls": {
                 "success": f"{base_url}/sucesso/",
                 "failure": f"{base_url}/erro/",
                 "pending": f"{base_url}/pendente/"
-            },
-            "auto_return": "approved"
+            }
         }
         preference_response = sdk.preference().create(preference_data)
         if preference_response["status"] == 201:
@@ -95,3 +105,57 @@ def pagamento_erro(request):
 
 def pagamento_pendente(request):
     return render(request, 'landing_page/pagamento_pendente.html')
+
+def products_by_category(request, categoria_slug):
+    """
+    View para mostrar produtos filtrados por categoria
+    """
+    # Buscar a categoria pelo slug
+    try:
+        categoria = get_object_or_404(Categorias, slug=categoria_slug)
+    except:
+        # Se não encontrar, redirecionar para home
+        from django.shortcuts import redirect
+        return redirect('home')
+    
+    # Filtrar produtos da categoria
+    products = Joais.objects.filter(categoria=categoria)
+    
+    # Contar total de produtos
+    total_products = products.count()
+    
+    # Buscar todas as categorias para o filtro lateral
+    all_categories = Categorias.objects.all()
+    
+    return render(request, 'landing_page/products_by_category.html', {
+        'products': products,
+        'categoria': categoria,
+        'total_products': total_products,
+        'all_categories': all_categories
+    })
+
+def all_products(request):
+    """
+    View para mostrar todos os produtos do catálogo
+    """
+    # Buscar todos os produtos
+    products = Joais.objects.all()
+    
+    # Verificar se deve filtrar apenas promoções
+    show_only_promotions = request.GET.get('promocoes', '').lower() == 'true'
+    
+    if show_only_promotions:
+        products = products.filter(em_promocao=True)
+    
+    # Contar total de produtos
+    total_products = products.count()
+    
+    # Buscar todas as categorias para o filtro lateral
+    all_categories = Categorias.objects.all()
+    
+    return render(request, 'landing_page/all_products.html', {
+        'products': products,
+        'total_products': total_products,
+        'all_categories': all_categories,
+        'show_only_promotions': show_only_promotions
+    })
