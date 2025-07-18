@@ -1,0 +1,233 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Completar Perfil - OuriPrata{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-warning text-dark text-center py-4">
+          <h3 class="mb-0">
+            <i class="bi bi-person-plus me-2"></i>
+            Complete seu Perfil
+          </h3>
+          <p class="mb-0 mt-2">Precisamos do seu endereço para calcular o frete</p>
+        </div>
+        
+        <div class="card-body p-4">
+          <!-- Aviso sobre frete grátis -->
+          <div class="alert alert-info d-flex align-items-center mb-4">
+            <i class="bi bi-info-circle me-3 fs-4"></i>
+            <div>
+              <strong>Boa notícia!</strong><br>
+              Se você mora em <strong>Divinópolis/MG</strong>, sua entrega será <strong>GRATUITA</strong>! 🎉
+            </div>
+          </div>
+
+          <form method="post" id="profile-form">
+            {% csrf_token %}
+            
+            <!-- CEP com busca automática -->
+            <div class="row mb-3">
+              <div class="col-8">
+                <label for="{{ form.cep.id_for_label }}" class="form-label">
+                  {{ form.cep.label }} <span class="text-danger">*</span>
+                </label>
+                {{ form.cep }}
+                {% if form.cep.errors %}
+                  <div class="text-danger small mt-1">{{ form.cep.errors.0 }}</div>
+                {% endif %}
+              </div>
+              <div class="col-4">
+                <label class="form-label">&nbsp;</label>
+                <button type="button" class="btn btn-outline-secondary w-100" id="btn-buscar-cep">
+                  <i class="bi bi-search me-1"></i>Buscar
+                </button>
+              </div>
+            </div>
+
+            <!-- Endereço -->
+            <div class="row mb-3">
+              <div class="col-8">
+                <label for="{{ form.endereco.id_for_label }}" class="form-label">
+                  {{ form.endereco.label }} <span class="text-danger">*</span>
+                </label>
+                {{ form.endereco }}
+                {% if form.endereco.errors %}
+                  <div class="text-danger small mt-1">{{ form.endereco.errors.0 }}</div>
+                {% endif %}
+              </div>
+              <div class="col-4">
+                <label for="{{ form.numero.id_for_label }}" class="form-label">
+                  {{ form.numero.label }} <span class="text-danger">*</span>
+                </label>
+                {{ form.numero }}
+                {% if form.numero.errors %}
+                  <div class="text-danger small mt-1">{{ form.numero.errors.0 }}</div>
+                {% endif %}
+              </div>
+            </div>
+
+            <!-- Complemento -->
+            <div class="mb-3">
+              <label for="{{ form.complemento.id_for_label }}" class="form-label">
+                {{ form.complemento.label }}
+              </label>
+              {{ form.complemento }}
+              {% if form.complemento.errors %}
+                <div class="text-danger small mt-1">{{ form.complemento.errors.0 }}</div>
+              {% endif %}
+            </div>
+
+            <!-- Bairro -->
+            <div class="mb-3">
+              <label for="{{ form.bairro.id_for_label }}" class="form-label">
+                {{ form.bairro.label }} <span class="text-danger">*</span>
+              </label>
+              {{ form.bairro }}
+              {% if form.bairro.errors %}
+                <div class="text-danger small mt-1">{{ form.bairro.errors.0 }}</div>
+              {% endif %}
+            </div>
+
+            <!-- Cidade e Estado -->
+            <div class="row mb-3">
+              <div class="col-8">
+                <label for="{{ form.cidade.id_for_label }}" class="form-label">
+                  {{ form.cidade.label }} <span class="text-danger">*</span>
+                </label>
+                {{ form.cidade }}
+                {% if form.cidade.errors %}
+                  <div class="text-danger small mt-1">{{ form.cidade.errors.0 }}</div>
+                {% endif %}
+              </div>
+              <div class="col-4">
+                <label for="{{ form.estado.id_for_label }}" class="form-label">
+                  {{ form.estado.label }} <span class="text-danger">*</span>
+                </label>
+                {{ form.estado }}
+                {% if form.estado.errors %}
+                  <div class="text-danger small mt-1">{{ form.estado.errors.0 }}</div>
+                {% endif %}
+              </div>
+            </div>
+
+            <!-- Aviso sobre Divinópolis -->
+            <div id="divinopolis-alert" class="alert alert-success d-none">
+              <i class="bi bi-check-circle me-2"></i>
+              <strong>Ótimo!</strong> Você tem direito a <strong>frete GRÁTIS</strong>! 🎉
+            </div>
+
+            <!-- Botões -->
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-warning">
+                <i class="bi bi-check-lg me-2"></i>Salvar Endereço
+              </button>
+              <a href="{% url 'settings' %}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i>Voltar
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const btnBuscarCep = document.getElementById('btn-buscar-cep');
+    const cepInput = document.getElementById('cep');
+    const enderecoInput = document.getElementById('endereco');
+    const bairroInput = document.getElementById('bairro');
+    const cidadeInput = document.getElementById('cidade');
+    const estadoInput = document.getElementById('estado');
+    const divinopolisAlert = document.getElementById('divinopolis-alert');
+
+    // Máscara para CEP
+    cepInput.addEventListener('input', function() {
+        let value = this.value.replace(/\D/g, '');
+        if (value.length >= 5) {
+            value = value.substring(0, 5) + '-' + value.substring(5, 8);
+        }
+        this.value = value;
+    });
+
+    // Buscar CEP
+    btnBuscarCep.addEventListener('click', function() {
+        const cep = cepInput.value.replace(/\D/g, '');
+        
+        if (cep.length !== 8) {
+            alert('Digite um CEP válido com 8 dígitos.');
+            return;
+        }
+
+        // Loading state
+        btnBuscarCep.disabled = true;
+        btnBuscarCep.innerHTML = '<i class="spinner-border spinner-border-sm me-1"></i>Buscando...';
+
+        fetch(`/accounts/api/lookup-cep/?cep=${cep}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    // Preencher campos
+                    enderecoInput.value = data.endereco || '';
+                    bairroInput.value = data.bairro || '';
+                    cidadeInput.value = data.cidade || '';
+                    estadoInput.value = data.estado || '';
+                    
+                    // Mostrar alerta se for Divinópolis
+                    if (data.eh_divinopolis) {
+                        divinopolisAlert.classList.remove('d-none');
+                    } else {
+                        divinopolisAlert.classList.add('d-none');
+                    }
+                    
+                    // Focar no próximo campo vazio
+                    if (!enderecoInput.value) {
+                        enderecoInput.focus();
+                    } else {
+                        document.getElementById('numero').focus();
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('Erro ao buscar CEP. Tente novamente.');
+            })
+            .finally(() => {
+                // Reset button
+                btnBuscarCep.disabled = false;
+                btnBuscarCep.innerHTML = '<i class="bi bi-search me-1"></i>Buscar';
+            });
+    });
+
+    // Verificar Divinópolis ao digitar cidade
+    cidadeInput.addEventListener('input', function() {
+        const cidade = this.value.toUpperCase();
+        const estado = estadoInput.value.toUpperCase();
+        
+        if ((cidade.includes('DIVINOPOLIS') || cidade.includes('DIVINÓPOLIS')) && estado === 'MG') {
+            divinopolisAlert.classList.remove('d-none');
+        } else {
+            divinopolisAlert.classList.add('d-none');
+        }
+    });
+
+    estadoInput.addEventListener('input', function() {
+        const cidade = cidadeInput.value.toUpperCase();
+        const estado = this.value.toUpperCase();
+        
+        if ((cidade.includes('DIVINOPOLIS') || cidade.includes('DIVINÓPOLIS')) && estado === 'MG') {
+            divinopolisAlert.classList.remove('d-none');
+        } else {
+            divinopolisAlert.classList.add('d-none');
+        }
+    });
+});
+</script>
+{% endblock %}

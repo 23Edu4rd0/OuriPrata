@@ -2,10 +2,10 @@
 {% load static %}
 
 {% block title %}
-  {% if show_only_promotions %}
-    Promoções - OuriPrata
+  {% if query %}
+    Resultados para "{{ query }}" - OuriPrata
   {% else %}
-    Catálogo Completo - OuriPrata
+    Busca - OuriPrata
   {% endif %}
 {% endblock %}
 
@@ -30,10 +30,10 @@
           </div>
         {% else %}
           <!-- Nenhum produto encontrado -->
-          {% if show_only_promotions %}
-            {% include 'landing_page/partials/empty_state.html' with icon_name='percent' empty_title='Nenhuma promoção ativa' empty_message='No momento não temos produtos em promoção. Explore nosso catálogo completo ou cadastre-se para receber notificações de ofertas.' empty_button_url='/catalogo/' empty_button_icon='grid' empty_button_text='Ver Todos os Produtos' %}
+          {% if query %}
+            {% include 'landing_page/partials/empty_state.html' with icon_name='search' empty_title='Nenhum resultado encontrado' empty_message='Não encontramos produtos que correspondem à sua busca. Tente usar termos diferentes ou explore nossas categorias.' empty_button_url='/catalogo/' empty_button_icon='grid' empty_button_text='Ver Todos os Produtos' %}
           {% else %}
-            {% include 'landing_page/partials/empty_state.html' with icon_name='gem' empty_title='Nenhum produto encontrado' empty_message='Ainda não temos produtos em nosso catálogo. Volte em breve para conferir nossas novidades!' empty_button_url='/' empty_button_icon='house' empty_button_text='Voltar ao Início' %}
+            {% include 'landing_page/partials/empty_state.html' with icon_name='search' empty_title='Digite algo para buscar' empty_message='Use a barra de pesquisa para encontrar produtos específicos.' empty_button_url='/catalogo/' empty_button_icon='grid' empty_button_text='Ver Todos os Produtos' %}
           {% endif %}
         {% endif %}
       </div>

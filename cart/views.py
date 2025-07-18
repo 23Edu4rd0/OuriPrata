@@ -15,13 +15,52 @@ def cart_view(request):
     """Exibe o carrinho do usuário"""
     cart_items = Cart.objects.filter(user=request.user).select_related('produto')
     
+    # Verificar se o usuário tem perfil completo
+    show_checkout = False
+    frete_info = None
+    
+    if cart_items.exists():
+        try:
+            from accounts.models import UserProfile
+            profile = request.user.userprofile
+            
+            if profile.endereco_completo:
+                show_checkout = True
+                # Calcular frete para o carrinho
+                if profile.eh_divinopolis:
+                    frete_info = {
+                        'valor': 0.00,
+                        'tipo': 'Entrega local gratuita',
+                        'prazo': '1-2 dias úteis',
+                        'gratuito': True,
+                        'descricao': 'Frete GRÁTIS - Divinópolis'
+                    }
+                else:
+                    frete_info = {
+                        'valor': 35.00,
+                        'tipo': 'Correios',
+                        'prazo': '5-10 dias úteis',
+                        'gratuito': False,
+                        'descricao': 'Frete: R$ 35,00'
+                    }
+        except:
+            # Usuário não tem perfil completo
+            frete_info = {
+                'valor': 35.00,
+                'tipo': 'Correios',
+                'prazo': '5-10 dias úteis',
+                'gratuito': False,
+                'descricao': 'Complete seu perfil para calcular frete'
+            }
+    
     # Calcular totais
     subtotal = sum(item.total_item for item in cart_items)
-    total = subtotal  # Pode adicionar taxas aqui se necessário
+    frete_valor = Decimal(str(frete_info['valor'])) if frete_info and not frete_info['gratuito'] else Decimal('0.00')
+    total_com_frete = subtotal + frete_valor
     
-    # Configurar Mercado Pago
+    # Configurar Mercado Pago apenas se o usuário pode fazer checkout
     preference_id = None
-    if cart_items.exists():
+    if cart_items.exists() and show_checkout:
         sdk = mercadopago.SDK(settings.MERCADO_PAGO_ACCESS_TOKEN)
         
         # Criar itens para o Mercado Pago
@@ -32,6 +71,15 @@ def cart_view(request):
                 "title": item.produto.nome,
                 "quantity": item.quantidade,
                 "unit_price": float(preco),
+                "currency_id": "BRL"
+            })
+        
+        # Adicionar frete como item separado se não for gratuito
+        if frete_info and not frete_info['gratuito']:
+            items.append({
+                "title": f"Frete - {frete_info['tipo']}",
+                "quantity": 1,
+                "unit_price": float(frete_info['valor']),
                 "currency_id": "BRL"
             })
         
@@ -56,7 +104,10 @@ def cart_view(request):
     context = {
         'cart_items': cart_items,
         'subtotal': subtotal,
-        'total': total,
+        'frete_info': frete_info,
+        'frete_valor': frete_valor,
+        'total': total_com_frete,
+        'show_checkout': show_checkout,
         'preference_id': preference_id,
         'mercado_pago_public_key': settings.MERCADO_PAGO_PUBLIC_KEY,
     }
@@ -126,3 +177,30 @@ def cart_count(request):
         total=Sum('quantidade')
     )['total'] or 0
     return JsonResponse({'count': count})
+
+@login_required
+def checkout_cart(request):
+    """
+    View para iniciar o checkout do carrinho - verifica se o usuário tem perfil completo
+    """
+    # Verificar se há itens no carrinho
+    cart_items = Cart.objects.filter(user=request.user)
+    if not cart_items.exists():
+        messages.warning(request, 'Seu carrinho está vazio.')
+        return redirect('cart:cart')
+    
+    try:
+        from accounts.models import UserProfile
+        profile = request.user.userprofile
+        
+        # Verificar se o perfil está completo
+        if not profile.endereco_completo:
+            # Redirecionar para completar perfil com parâmetro next
+            return redirect(f'/accounts/complete-profile/?next=/cart/')
+        
+        # Perfil completo, processar checkout do carrinho
+        return cart_view(request)
+        
+    except UserProfile.DoesNotExist:
+        # Usuário não tem perfil, redirecionar para completar
+        return redirect(f'/accounts/complete-profile/?next=/cart/')

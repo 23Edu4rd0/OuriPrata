@@ -98,20 +98,24 @@
                             <div class="card-body">
                                 <div class="d-flex justify-content-between mb-2">
                                     <span>Subtotal:</span>
-                                    <span id="subtotal">R$ {{ subtotal }}</span>
+                                    <span id="subtotal">R$ {{ subtotal|floatformat:2 }}</span>
                                 </div>
                                 <div class="d-flex justify-content-between mb-2">
                                     <span>Frete:</span>
-                                    <span class="text-success">Grátis</span>
+                                    {% if frete_info.gratuito %}
+                                        <span class="text-success">{{ frete_info.descricao }}</span>
+                                    {% else %}
+                                        <span>R$ {{ frete_valor|floatformat:2 }}</span>
+                                    {% endif %}
                                 </div>
                                 <hr>
                                 <div class="d-flex justify-content-between mb-3">
                                     <strong>Total:</strong>
-                                    <strong class="text-success fs-5" id="total">R$ {{ total }}</strong>
+                                    <strong class="text-success fs-5" id="total">R$ {{ total|floatformat:2 }}</strong>
                                 </div>
                                 
-                                <!-- Mercado Pago -->
-                                {% if preference_id %}
+                                <!-- Mercado Pago ou Aviso de Perfil -->
+                                {% if show_checkout and preference_id %}
                                     <div class="mb-3">
                                         <div class="card border-primary">
                                             <div class="card-header bg-primary text-white text-center">
@@ -123,11 +127,26 @@
                                             </div>
                                         </div>
                                     </div>
-                                {% else %}
-                                    <div class="alert alert-info text-center">
-                                        <i class="bi bi-info-circle me-2"></i>
-                                        Adicione produtos ao carrinho para prosseguir com o pagamento
+                                {% elif not show_checkout %}
+                                    <div class="alert alert-warning text-center">
+                                        <i class="bi bi-exclamation-triangle me-2"></i>
+                                        <strong>Complete seu perfil para finalizar a compra</strong>
+                                        <p class="mb-3 small">Precisamos do seu endereço para calcular o frete</p>
+                                        <a href="{% url 'accounts:complete_profile' %}?next=/cart/" class="btn btn-warning">
+                                            <i class="bi bi-person-check me-1"></i>Completar Perfil
+                                        </a>
                                     </div>
+                                {% else %}
+                                    <!-- Botão para iniciar checkout -->
+                                    <form method="POST" action="{% url 'cart:checkout' %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-success w-100 py-2 mb-3">
+                                            <i class="bi bi-credit-card me-2"></i>Finalizar Compra
+                                            {% if frete_info %}
+                                                <small class="d-block">{{ frete_info.descricao }}</small>
+                                            {% endif %}
+                                        </button>
+                                    </form>
                                 {% endif %}
                                 
                                 <div class="d-grid gap-2">

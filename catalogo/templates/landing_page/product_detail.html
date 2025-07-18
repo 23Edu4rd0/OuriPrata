@@ -122,7 +122,7 @@
               <span id="wishlist-text" class="ms-2">Lista de Desejos</span>
             </button>
           {% else %}
-            <a href="{% url 'login' %}" 
+            <a href="{% url 'accounts:login' %}" 
                class="btn btn-outline-danger px-4 py-2 flex-fill">
               <i class="bi bi-heart me-2"></i>
               Lista de Desejos
@@ -134,10 +134,24 @@
           </button>
         </div>
 
-        <div class="alert alert-warning d-flex align-items-center gap-2 py-2 mb-4">
-          <i class="bi bi-truck"></i>
-          <small>FRETE GRÁTIS para todo Brasil em compras acima de R$ 300,00</small>
-        </div>
+        <!-- Informações de Frete -->
+        {% if frete_info %}
+          <div class="alert alert-{{ frete_info.gratuito|yesno:'success,warning' }} d-flex align-items-center gap-2 py-2 mb-4">
+            <i class="bi bi-{% if frete_info.gratuito %}check-circle{% else %}truck{% endif %}"></i>
+            <small>
+              {% if frete_info.gratuito %}
+                <strong>🎉 FRETE GRÁTIS</strong> - Entrega local em {{ frete_info.prazo }}
+              {% else %}
+                Frete: <strong>R$ {{ frete_info.valor|floatformat:2 }}</strong> - {{ frete_info.prazo }}
+              {% endif %}
+            </small>
+          </div>
+        {% else %}
+          <div class="alert alert-info d-flex align-items-center gap-2 py-2 mb-4">
+            <i class="bi bi-info-circle"></i>
+            <small>Faça login e complete seu perfil para ver as opções de frete</small>
+          </div>
+        {% endif %}
 
         <div class="row g-2 mb-3">
           <div class="col-md-6">
@@ -173,24 +187,147 @@
         </div>
       </div>
 
-      <div id="wallet_container" class="mt-4">
-        <div id="walletBrick_container"></div>
-        <script src="https://sdk.mercadopago.com/js/v2"></script>
-        <script>
-          const publicKey = "{{ mercado_pago_public_key }}";
-          const preferenceId = "{{ preference_id }}";
-          const mp = new MercadoPago(publicKey);
-          const bricksBuilder = mp.bricks();
-          const renderWalletBrick = async (bricksBuilder) => {
-            await bricksBuilder.create("wallet", "walletBrick_container", {
-              initialization: {
-                preferenceId: preferenceId,
-              }
-            });
-          };
-          renderWalletBrick(bricksBuilder);
-        </script>
-      </div>
+      <!-- Seção de Compra -->
+      {% if user.is_authenticated %}
+        {% if show_buy_button %}
+          <!-- Usuário logado com perfil completo - mostrar Mercado Pago -->
+          <div id="wallet_container" class="mt-4">
+            <h5 class="mb-3">Finalizar Compra</h5>
+            
+            <!-- Resumo da compra -->
+            <div class="card border-0 bg-light mb-3">
+              <div class="card-body py-2">
+                <div class="d-flex justify-content-between align-items-center">
+                  <small class="text-muted">Produto:</small>
+                  <small class="fw-medium">
+                    {% if product.em_promocao and product.preco_promocional %}
+                      R$ {{ product.preco_promocional|floatformat:2 }}
+                    {% else %}
+                      R$ {{ product.preco|floatformat:2 }}
+                    {% endif %}
+                  </small>
+                </div>
+                {% if frete_info and not frete_info.gratuito %}
+                  <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-muted">Frete:</small>
+                    <small class="fw-medium">R$ {{ frete_info.valor|floatformat:2 }}</small>
+                  </div>
+                {% endif %}
+                <hr class="my-2">
+                <div class="d-flex justify-content-between align-items-center">
+                  <small class="fw-bold">Total:</small>
+                  <small class="fw-bold text-success">
+                    {% if product.em_promocao and product.preco_promocional %}
+                      {% if frete_info.gratuito %}
+                        R$ {{ product.preco_promocional|floatformat:2 }}
+                      {% else %}
+                        R$ {{ product.preco_promocional|add:frete_info.valor|floatformat:2 }}
+                      {% endif %}
+                    {% else %}
+                      {% if frete_info.gratuito %}
+                        R$ {{ product.preco|floatformat:2 }}
+                      {% else %}
+                        R$ {{ product.preco|add:frete_info.valor|floatformat:2 }}
+                      {% endif %}
+                    {% endif %}
+                  </small>
+                </div>
+              </div>
+            </div>
+            
+                      {% if user.is_authenticated and show_buy_button %}
+            <div id="walletBrick_container"></div>
+            
+            <!-- Botão para iniciar checkout -->
+            <form method="POST" action="{% url 'checkout' product.slug %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-success w-100 py-3 mb-3">
+                <i class="bi bi-credit-card me-2"></i>Comprar Agora
+                {% if frete_info.valor_frete > 0 %}
+                  <small class="d-block">{{ frete_info.descricao }}</small>
+                {% else %}
+                  <small class="d-block">{{ frete_info.descricao }}</small>
+                {% endif %}
+              </button>
+            </form>
+            
+            {% if preference_id %}
+            <script src="https://sdk.mercadopago.com/js/v2"></script>
+            <script>
+              const publicKey = "{{ mercado_pago_public_key }}";
+              const preferenceId = "{{ preference_id }}";
+              const mp = new MercadoPago(publicKey);
+              const bricksBuilder = mp.bricks();
+              const renderWalletBrick = async (bricksBuilder) => {
+                await bricksBuilder.create("wallet", "walletBrick_container", {
+                  initialization: {
+                    preferenceId: preferenceId,
+                  }
+                });
+              };
+              renderWalletBrick(bricksBuilder);
+            </script>
+            {% endif %}
+          {% elif not user.is_authenticated %}
+            <div class="alert alert-info text-center">
+              <i class="bi bi-info-circle me-2"></i>
+              <strong>Faça login para comprar</strong>
+              <div class="mt-2">
+                <a href="{% url 'accounts:login' %}?next={{ request.get_full_path|urlencode }}" class="btn btn-primary me-2">
+                  <i class="bi bi-box-arrow-in-right me-1"></i>Entrar
+                </a>
+                <a href="{% url 'accounts:register' %}?next={{ request.get_full_path|urlencode }}" class="btn btn-outline-primary">
+                  <i class="bi bi-person-plus me-1"></i>Cadastrar
+                </a>
+              </div>
+            </div>
+          {% else %}
+            <div class="alert alert-warning text-center">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              <strong>Complete seu perfil para comprar</strong>
+              <p class="mb-3 small">Precisamos do seu endereço para calcular o frete {{ frete_info.descricao }}</p>
+              <a href="{% url 'accounts:complete_profile' %}?next={{ request.get_full_path|urlencode }}" class="btn btn-warning">
+                <i class="bi bi-person-check me-1"></i>Completar Perfil
+              </a>
+            </div>
+          {% endif %}
+          </div>
+        {% else %}
+          <!-- Usuário logado mas sem perfil completo -->
+          <div class="mt-4">
+            <div class="alert alert-warning">
+              <h6 class="alert-heading">
+                <i class="bi bi-exclamation-triangle me-2"></i>Complete seu perfil
+              </h6>
+              <p class="mb-3">Para comprar, precisamos do seu endereço para calcular o frete.</p>
+              <a href="{% url 'accounts:complete_profile' %}?next={% url 'product_detail' product.slug %}" 
+                 class="btn btn-warning">
+                <i class="bi bi-person-plus me-2"></i>Completar Perfil
+              </a>
+            </div>
+          </div>
+        {% endif %}
+      {% else %}
+        <!-- Usuário não logado -->
+        <div class="mt-4">
+          <div class="alert alert-info">
+            <h6 class="alert-heading">
+              <i class="bi bi-info-circle me-2"></i>Faça login para comprar
+            </h6>
+            <p class="mb-3">Entre na sua conta ou crie uma nova para finalizar sua compra.</p>
+            <div class="d-flex gap-2">
+              <a href="{% url 'accounts:login' %}?next={% url 'product_detail' product.slug %}" 
+                 class="btn btn-warning">
+                <i class="bi bi-box-arrow-in-right me-2"></i>Entrar
+              </a>
+              <a href="{% url 'accounts:register' %}?next={% url 'product_detail' product.slug %}" 
+                 class="btn btn-outline-warning">
+                <i class="bi bi-person-plus me-2"></i>Criar Conta
+              </a>
+            </div>
+          </div>
+        </div>
+      {% endif %}
     </div>
   </div>
   <section class="py-5">

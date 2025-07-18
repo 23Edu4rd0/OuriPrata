@@ -1,0 +1,290 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Editar Perfil - OuriPrata{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="mb-0">
+                    <i class="bi bi-pencil-square text-warning me-2"></i>
+                    Editar Endereço
+                </h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-decoration-none">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:profile' %}" class="text-decoration-none">Perfil</a></li>
+                        <li class="breadcrumb-item active">Editar</li>
+                    </ol>
+                </nav>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-warning text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-geo-alt me-2"></i>
+                        Atualizar Informações de Endereço
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" id="profileForm">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.cep.id_for_label }}" class="form-label">
+                                    <i class="bi bi-mailbox me-1"></i>CEP <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group">
+                                    {{ form.cep }}
+                                    <button type="button" class="btn btn-outline-secondary" id="buscar-cep-btn">
+                                        <i class="bi bi-search"></i>
+                                    </button>
+                                </div>
+                                {% if form.cep.errors %}
+                                    <div class="text-danger small mt-1">{{ form.cep.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-8 mb-3">
+                                <label for="{{ form.endereco.id_for_label }}" class="form-label">
+                                    <i class="bi bi-geo-alt me-1"></i>Endereço <span class="text-danger">*</span>
+                                </label>
+                                {{ form.endereco }}
+                                {% if form.endereco.errors %}
+                                    <div class="text-danger small mt-1">{{ form.endereco.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="{{ form.numero.id_for_label }}" class="form-label">
+                                    <i class="bi bi-123 me-1"></i>Número <span class="text-danger">*</span>
+                                </label>
+                                {{ form.numero }}
+                                {% if form.numero.errors %}
+                                    <div class="text-danger small mt-1">{{ form.numero.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-9 mb-3">
+                                <label for="{{ form.complemento.id_for_label }}" class="form-label">
+                                    <i class="bi bi-building me-1"></i>Complemento
+                                </label>
+                                {{ form.complemento }}
+                                {% if form.complemento.errors %}
+                                    <div class="text-danger small mt-1">{{ form.complemento.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.bairro.id_for_label }}" class="form-label">
+                                    <i class="bi bi-map me-1"></i>Bairro <span class="text-danger">*</span>
+                                </label>
+                                {{ form.bairro }}
+                                {% if form.bairro.errors %}
+                                    <div class="text-danger small mt-1">{{ form.bairro.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.cidade.id_for_label }}" class="form-label">
+                                    <i class="bi bi-pin-map me-1"></i>Cidade <span class="text-danger">*</span>
+                                </label>
+                                {{ form.cidade }}
+                                {% if form.cidade.errors %}
+                                    <div class="text-danger small mt-1">{{ form.cidade.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label for="{{ form.estado.id_for_label }}" class="form-label">
+                                    <i class="bi bi-flag me-1"></i>Estado <span class="text-danger">*</span>
+                                </label>
+                                {{ form.estado }}
+                                {% if form.estado.errors %}
+                                    <div class="text-danger small mt-1">{{ form.estado.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'accounts:profile' %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left"></i> Voltar
+                            </a>
+                            <button type="submit" class="btn btn-warning text-white">
+                                <i class="bi bi-check-circle"></i> Salvar Alterações
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Informação sobre Frete -->
+            <div class="card mt-4 shadow-sm">
+                <div class="card-body">
+                    <h6 class="card-title">
+                        <i class="bi bi-info-circle text-info"></i> 
+                        Informações sobre Entrega
+                    </h6>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="alert alert-success">
+                                <strong><i class="bi bi-gift"></i> Divinópolis - MG:</strong><br>
+                                Frete GRÁTIS<br>
+                                <small>Entrega em 1-2 dias úteis</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="alert alert-info">
+                                <strong><i class="bi bi-truck"></i> Outras cidades:</strong><br>
+                                Frete: R$ 35,00<br>
+                                <small>Entrega via Correios em 5-10 dias úteis</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Aplicar a funcionalidade de CEP existente
+document.addEventListener('DOMContentLoaded', function() {
+    const cepField = document.getElementById('{{ form.cep.id_for_label }}');
+    const buscarBtn = document.getElementById('buscar-cep-btn');
+    
+    function buscarCEP() {
+        const cep = cepField.value.replace(/\D/g, '');
+        if (cep.length === 8) {
+            // Mostrar loading
+            buscarBtn.innerHTML = '<i class="bi bi-arrow-clockwise"></i>';
+            buscarBtn.disabled = true;
+            
+            fetch(`/accounts/api/lookup-cep/?cep=${cep}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.endereco) {
+                        document.getElementById('{{ form.endereco.id_for_label }}').value = data.endereco || '';
+                        document.getElementById('{{ form.bairro.id_for_label }}').value = data.bairro || '';
+                        document.getElementById('{{ form.cidade.id_for_label }}').value = data.cidade || '';
+                        document.getElementById('{{ form.estado.id_for_label }}').value = data.estado || '';
+                        
+                        // Mostrar toast de sucesso
+                        if (data.eh_divinopolis) {
+                            showToast('CEP encontrado! Você tem frete GRÁTIS!', 'success');
+                        } else {
+                            showToast('CEP encontrado com sucesso!', 'success');
+                        }
+                    } else {
+                        showToast('CEP não encontrado', 'warning');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar CEP:', error);
+                    showToast('Erro ao buscar CEP', 'danger');
+                })
+                .finally(() => {
+                    // Restaurar botão
+                    buscarBtn.innerHTML = '<i class="bi bi-search"></i>';
+                    buscarBtn.disabled = false;
+                });
+        } else {
+            showToast('CEP deve ter 8 dígitos', 'warning');
+        }
+    }
+    
+    if (cepField) {
+        cepField.addEventListener('blur', buscarCEP);
+    }
+    
+    if (buscarBtn) {
+        buscarBtn.addEventListener('click', buscarCEP);
+    }
+    
+    // Função para mostrar toast
+    function showToast(message, type) {
+        // Criar toast dinamicamente
+        const toastHtml = `
+            <div class="toast align-items-center text-white bg-${type} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        `;
+        
+        // Adicionar ao DOM
+        let toastContainer = document.getElementById('toast-container');
+        if (!toastContainer) {
+            toastContainer = document.createElement('div');
+            toastContainer.id = 'toast-container';
+            toastContainer.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+            document.body.appendChild(toastContainer);
+        }
+        
+        toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+        
+        // Inicializar e mostrar toast
+        const toastElement = toastContainer.lastElementChild;
+        const toast = new bootstrap.Toast(toastElement);
+        toast.show();
+        
+        // Remover do DOM após esconder
+        toastElement.addEventListener('hidden.bs.toast', () => {
+            toastElement.remove();
+        });
+    }
+});
+</script>
+
+<style>
+.card {
+    border: none;
+    border-radius: 12px;
+}
+
+.card-header {
+    border-radius: 12px 12px 0 0 !important;
+}
+
+.form-control:focus {
+    border-color: #ffc107;
+    box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+}
+
+.alert {
+    border-radius: 8px;
+    border: none;
+}
+
+.breadcrumb-item a {
+    color: #6c757d;
+}
+
+.breadcrumb-item a:hover {
+    color: #ffc107;
+}
+
+#buscar-cep-btn {
+    border-left: none;
+}
+
+.input-group .form-control:focus + #buscar-cep-btn {
+    border-color: #ffc107;
+}
+</style>
+{% endblock %}

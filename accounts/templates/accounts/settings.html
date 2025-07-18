@@ -30,20 +30,22 @@
           <div class="col-lg-8 col-xl-9">
 
             <!-- Informações do Usuário -->
-            <div class="card border-0 shadow-sm mb-4">
+            <div class="card border-0 shadow-sm mb-4" id="profile-section">
               <div class="card-header bg-white border-0 pb-0">
-                <div class="d-flex align-items-center">
-                  <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3 flex-shrink-0" style="width: 40px; height: 40px;">
-                    <i class="bi bi-person-circle text-primary fs-5"></i>
-                  </div>
-                  <div>
-                    <h5 class="mb-0 fw-semibold">Informações Pessoais</h5>
-                    <small class="text-muted">Atualize seus dados básicos</small>
+                <div class="d-flex align-items-center justify-content-between flex-wrap">
+                  <div class="d-flex align-items-center">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center me-3 flex-shrink-0" style="width: 40px; height: 40px; background-color: #f8f9fa;">
+                      <i class="bi bi-person-circle text-secondary fs-5"></i>
+                    </div>
+                    <div>
+                      <h5 class="mb-0 fw-semibold">Informações Pessoais</h5>
+                      <small class="text-muted">Atualize seus dados básicos</small>
+                    </div>
                   </div>
                 </div>
               </div>
               <div class="card-body">
-                <form method="post" action="{% url 'change_profile' %}">
+                <form method="post" action="{% url 'accounts:change_profile' %}">
                   {% csrf_token %}
                   <div class="row g-3">
                     <div class="col-md-6">
@@ -88,6 +90,8 @@
                       </div>
                     </div>
                   </div>
+
+                  <!-- Seção removida - endereço será uma seção separada -->
                   
                   <div class="d-flex justify-content-end mt-4">
                     <button type="submit" class="btn btn-success btn-lg px-4">
@@ -98,8 +102,150 @@
               </div>
             </div>
 
+            <!-- Seção de Endereço -->
+            <div class="card border-0 shadow-sm mb-4" id="address-section">
+              <div class="card-header bg-white border-0 pb-0">
+                <div class="d-flex align-items-center justify-content-between flex-wrap" style="gap: 0.5rem;">
+                  <div class="d-flex align-items-center mb-2 mb-md-0" style="gap: 0.75rem;">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 40px; height: 40px; background-color: #e3f2fd;">
+                      <i class="bi bi-geo-alt text-primary fs-5"></i>
+                    </div>
+                    <div>
+                      <h5 class="mb-0 fw-semibold">Endereço de Entrega</h5>
+                      <small class="text-muted">Gerencie seu endereço para cálculo de frete</small>
+                    </div>
+                  </div>
+                  <div class="d-flex align-items-center flex-shrink-0" style="height: 40px;">
+                    {% if user.userprofile.endereco_completo %}
+                      <a href="{% url 'accounts:edit_profile' %}" class="btn btn-outline-primary btn-xs px-2 py-1 d-flex align-items-center" style="font-size:0.95rem; height:32px; line-height:1.1; min-width:unset;">
+                        <i class="bi bi-pencil-square"></i> <span class="d-none d-sm-inline">Editar</span>
+                      </a>
+                    {% else %}
+                      <a href="{% url 'accounts:complete_profile' %}" class="btn btn-primary btn-xs px-2 py-1 d-flex align-items-center" style="font-size:0.95rem; height:32px; line-height:1.1; min-width:unset;">
+                        <i class="bi bi-plus-circle"></i> <span class="d-none d-sm-inline">Adicionar</span>
+                      </a>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                {% if user.userprofile.endereco_completo %}
+                  <div class="row">
+                    <div class="col-md-8">
+                      <div class="row g-3">
+                        <div class="col-md-6">
+                          <div class="bg-light rounded-3 p-3">
+                            <div class="d-flex align-items-center mb-2">
+                              <i class="bi bi-mailbox text-muted me-2"></i>
+                              <strong class="text-muted">CEP</strong>
+                            </div>
+                            <p class="mb-0 fs-6">{{ user.userprofile.cep }}</p>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="bg-light rounded-3 p-3">
+                            <div class="d-flex align-items-center mb-2">
+                              <i class="bi bi-house text-muted me-2"></i>
+                              <strong class="text-muted">Endereço</strong>
+                            </div>
+                            <p class="mb-0 fs-6">{{ user.userprofile.endereco }}, {{ user.userprofile.numero }}</p>
+                          </div>
+                        </div>
+                        {% if user.userprofile.complemento %}
+                        <div class="col-md-6">
+                          <div class="bg-light rounded-3 p-3">
+                            <div class="d-flex align-items-center mb-2">
+                              <i class="bi bi-building text-muted me-2"></i>
+                              <strong class="text-muted">Complemento</strong>
+                            </div>
+                            <p class="mb-0 fs-6">{{ user.userprofile.complemento }}</p>
+                          </div>
+                        </div>
+                        {% endif %}
+                        <div class="col-md-6">
+                          <div class="bg-light rounded-3 p-3">
+                            <div class="d-flex align-items-center mb-2">
+                              <i class="bi bi-map text-muted me-2"></i>
+                              <strong class="text-muted">Bairro</strong>
+                            </div>
+                            <p class="mb-0 fs-6">{{ user.userprofile.bairro }}</p>
+                          </div>
+                        </div>
+                        <div class="col-12">
+                          <div class="bg-light rounded-3 p-3">
+                            <div class="d-flex align-items-center mb-2">
+                              <i class="bi bi-pin-map text-muted me-2"></i>
+                              <strong class="text-muted">Cidade / Estado</strong>
+                            </div>
+                            <p class="mb-0 fs-6">{{ user.userprofile.cidade }} - {{ user.userprofile.estado }}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 d-flex flex-column h-100 justify-content-between align-items-stretch">
+                      <div class="flex-grow-1 d-flex flex-column align-items-center justify-content-center">
+                        {% if user.userprofile.eh_divinopolis %}
+                          <div class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="bi bi-gift-fill text-success fs-2"></i>
+                          </div>
+                          <h6 class="text-success fw-bold">Frete GRÁTIS!</h6>
+                          <p class="text-muted small mb-3 text-center">Você mora em Divinópolis e tem direito ao frete gratuito em todas as compras.</p>
+                        {% else %}
+                          <div class="bg-info bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                            <i class="bi bi-truck text-info fs-2"></i>
+                          </div>
+                          <h6 class="text-info fw-bold">Frete: R$ 35,00</h6>
+                          <p class="text-muted small mb-3 text-center">Entrega via Correios para sua região.</p>
+                        {% endif %}
+                      </div>
+                      <div class="d-flex justify-content-center justify-content-md-end w-100 mt-2 mt-md-0">
+                        {% if user.userprofile.eh_divinopolis %}
+                          <span class="badge bg-success badge-frete align-middle">
+                            <i class="bi bi-truck"></i> Entrega: 1-2 dias úteis
+                          </span>
+                        {% else %}
+                          <span class="badge bg-info badge-frete align-middle">
+                            <i class="bi bi-clock"></i> Entrega: 5-10 dias úteis
+                          </span>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                {% else %}
+                  <div class="text-center py-5">
+                    <div class="bg-warning bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 100px; height: 100px;">
+                      <i class="bi bi-geo-alt text-warning" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5 class="text-warning fw-bold mb-3">Endereço não cadastrado</h5>
+                    <p class="text-muted mb-4">Complete seu endereço para finalizar compras e descobrir se você tem direito ao frete grátis!</p>
+                    <div class="row justify-content-center">
+                      <div class="col-md-6">
+                        <div class="alert alert-info">
+                          <div class="row text-start">
+                            <div class="col-6">
+                              <strong>Divinópolis - MG:</strong><br>
+                              <span class="text-success">Frete GRÁTIS</span>
+                            </div>
+                            <div class="col-6">
+                              <strong>Outras cidades:</strong><br>
+                              <span class="text-info">Frete: R$ 35,00</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                      <a href="{% url 'accounts:complete_profile' %}" class="btn btn-warning btn-lg text-white px-4">
+                        <i class="bi bi-plus-circle me-2"></i>Cadastrar Endereço
+                      </a>
+                    </div>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+
             <!-- Alterar Senha -->
-            <div class="card border-0 shadow-sm mb-4">
+            <div class="card border-0 shadow-sm mb-4" id="security-section">
               <div class="card-header bg-white border-0 pb-0">
                 <div class="d-flex align-items-center">
                   <div class="bg-warning bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
@@ -112,7 +258,7 @@
                 </div>
               </div>
               <div class="card-body">
-                <form method="post" action="{% url 'change_password' %}">
+                <form method="post" action="{% url 'accounts:change_password' %}">
                   {% csrf_token %}
                   <div class="row g-3">
                     <div class="col-12">
@@ -158,7 +304,7 @@
             </div>
 
             <!-- Alterar E-mail -->
-            <div class="card border-0 shadow-sm mb-4">
+            <div class="card border-0 shadow-sm mb-4" id="email-section">
               <div class="card-header bg-white border-0 pb-0">
                 <div class="d-flex align-items-center">
                   <div class="bg-info bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
@@ -171,7 +317,7 @@
                 </div>
               </div>
               <div class="card-body">
-                <form method="post" action="{% url 'change_email' %}">
+                <form method="post" action="{% url 'accounts:change_email' %}">
                   {% csrf_token %}
                   <div class="row g-3">
                     <div class="col-md-6">
@@ -235,8 +381,12 @@
                 </div>
                 <div class="list-group list-group-flush">
                   <a href="#profile-section" class="list-group-item list-group-item-action border-0 d-flex align-items-center">
-                    <i class="bi bi-person-circle text-primary me-3"></i>
+                    <i class="bi bi-person-circle text-secondary me-3"></i>
                     <span>Informações Pessoais</span>
+                  </a>
+                  <a href="#address-section" class="list-group-item list-group-item-action border-0 d-flex align-items-center">
+                    <i class="bi bi-geo-alt text-primary me-3"></i>
+                    <span>Endereço</span>
                   </a>
                   <a href="#security-section" class="list-group-item list-group-item-action border-0 d-flex align-items-center">
                     <i class="bi bi-shield-lock text-warning me-3"></i>
@@ -265,12 +415,14 @@
             <div class="card border-danger shadow-sm" id="danger-section">
               <div class="card-header bg-danger text-white border-0">
                 <div class="d-flex align-items-center">
-                  <div class="bg-white bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
-                    <i class="bi bi-exclamation-triangle text-white fs-5"></i>
-                  </div>
-                  <div>
-                    <h5 class="mb-0 fw-semibold">Zona de Perigo</h5>
-                    <small class="text-white-50">Ações irreversíveis</small>
+                  <div class="d-flex align-items-center w-100" style="gap: 0.75rem;">
+                    <div class="bg-white bg-opacity-20 rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 40px; height: 40px;">
+                      <i class="bi bi-exclamation-circle-fill text-warning" style="font-size:1.5rem; display: flex; align-items: center; justify-content: center;"></i>
+                    </div>
+                    <div class="d-flex flex-column justify-content-center flex-grow-1" style="min-width:0;">
+                      <h5 class="mb-0 fw-semibold d-flex align-items-center" style="line-height: 1.2;">Zona de Perigo</h5>
+                      <small class="text-white-50">Ações irreversíveis</small>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -285,7 +437,10 @@
                 
                 <div class="row">
                   <div class="col-md-8">
-                    <h6 class="text-danger fw-semibold mb-2">Excluir Conta Permanentemente</h6>
+                    <h6 class="text-danger fw-semibold mb-2 d-flex align-items-center">
+                      <i class="bi bi-exclamation-octagon-fill me-2 text-danger" style="font-size:1.2rem;"></i>
+                      Excluir Conta Permanentemente
+                    </h6>
                     <p class="text-muted mb-3">
                       Ao excluir sua conta, você perderá permanentemente:
                     </p>
@@ -348,7 +503,7 @@
         </div>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <form method="post" action="{% url 'delete_account' %}">
+      <form method="post" action="{% url 'accounts:delete_account' %}">
         {% csrf_token %}
         <div class="modal-body p-4">
           <div class="alert alert-danger border-0 d-flex align-items-start">
@@ -402,5 +557,175 @@
     </div>
   </div>
 </div>
+
+<style>
+/* Remover hover azul e criar estilo mais clean */
+.nav-link {
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.nav-link:hover {
+    background-color: #f8f9fa !important;
+    border-color: #e9ecef;
+    transform: translateX(2px);
+}
+
+.nav-link.active {
+    background-color: #fff3cd !important;
+    border-color: #ffc107;
+    color: #856404 !important;
+}
+
+.nav-link.active .text-muted {
+    color: #856404 !important;
+}
+
+.card {
+    border-radius: 12px;
+}
+
+.btn-outline-primary:hover {
+    transform: translateY(-1px);
+}
+
+/* Prevenir quebra de layout em telas pequenas */
+@media (max-width: 576px) {
+    .d-flex.justify-content-between {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .card-header .d-flex.justify-content-between {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .text-nowrap {
+        white-space: nowrap;
+        min-width: auto;
+    }
+}
+
+/* Garantir que botões não quebrem o container */
+.flex-shrink-0 {
+    flex-shrink: 0 !important;
+}
+
+.btn-xs {
+    font-size: 0.95rem;
+    padding: 0.25rem 0.5rem;
+    height: 32px;
+    line-height: 1.1;
+    min-width: unset;
+    border-radius: 6px;
+}
+
+.card-header .btn {
+    border-radius: 6px;
+}
+/* Badge de frete menor e mais discreto */
+.badge-frete {
+  font-size: 0.95rem;
+  padding: 0.35em 0.8em;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  letter-spacing: 0.01em;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Navegação suave entre seções
+    const navLinks = document.querySelectorAll('a[href^="#"]');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetSection = document.querySelector(targetId);
+            
+            if (targetSection) {
+                // Remover classe ativa de todos os links
+                navLinks.forEach(nav => nav.classList.remove('active', 'bg-primary', 'text-white'));
+                
+                // Adicionar classe ativa ao link clicado
+                this.classList.add('active', 'bg-primary', 'text-white');
+                
+                // Scroll suave para a seção
+                targetSection.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                
+                // Destacar temporariamente a seção
+                targetSection.classList.add('border-primary');
+                setTimeout(() => {
+                    targetSection.classList.remove('border-primary');
+                }, 2000);
+            }
+        });
+    });
+    
+    // Validação do campo de confirmação de exclusão
+    const confirmDeleteInput = document.getElementById('confirm_delete');
+    const deleteForm = document.querySelector('form[action*="delete_account"]');
+    
+    if (confirmDeleteInput && deleteForm) {
+        confirmDeleteInput.addEventListener('input', function() {
+            const value = this.value.toUpperCase();
+            const submitBtn = deleteForm.querySelector('button[type="submit"]');
+            
+            if (value === 'EXCLUIR') {
+                this.classList.remove('is-invalid');
+                this.classList.add('is-valid');
+                submitBtn.disabled = false;
+            } else {
+                this.classList.remove('is-valid');
+                this.classList.add('is-invalid');
+                submitBtn.disabled = true;
+            }
+        });
+        
+        // Inicialmente desabilitar o botão
+        const submitBtn = deleteForm.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+        }
+    }
+    
+    // Destacar seção atual baseada no scroll
+    const sections = document.querySelectorAll('[id$="-section"]');
+    const navItems = document.querySelectorAll('a[href^="#"]');
+    
+    function highlightCurrentSection() {
+        let current = '';
+        sections.forEach(section => {
+            const rect = section.getBoundingClientRect();
+            if (rect.top <= 100 && rect.bottom >= 100) {
+                current = section.id;
+            }
+        });
+        
+        navItems.forEach(item => {
+            item.classList.remove('active');
+            if (item.getAttribute('href') === '#' + current.replace('-section', '')) {
+                item.classList.add('active');
+            }
+        });
+    }
+    
+    // Highlight inicial e no scroll
+    window.addEventListener('scroll', highlightCurrentSection);
+    highlightCurrentSection();
+});
+</script>
 
 {% endblock %}
