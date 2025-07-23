@@ -1,43 +1,44 @@
 {% load static %}
+
 <!-- Linha divisória dourada -->
 <div class="container">
   <hr class="my-4" style="border: none; height: 2px; background: linear-gradient(90deg, transparent, #d4af37, transparent); width: 60%; margin: 0 auto;">
 </div>
 
-<section class="py-3 bg-light">
+<section class="py-3 bg-light" aria-labelledby="categorias-titulo" itemscope itemtype="https://schema.org/CollectionPage">
   <div class="container">
     <!-- Título da seção -->
-    <div class="text-center mb-3">
-      <h2 style="font-family: 'Montserrat', sans-serif; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #6c757d; font-size: 1.1rem;">
+    <header class="text-center mb-3">
+      <h2 id="categorias-titulo" itemprop="name" style="font-family: 'Montserrat', sans-serif; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #6c757d; font-size: 1.1rem;">
         PARA TODOS OS MOMENTOS
       </h2>
-    </div>
+    </header>
 
     <!-- Grid de Categorias -->
-    <div class="row g-4 justify-content-center">
+    <nav class="row g-4 justify-content-center" aria-label="Categorias" itemscope itemtype="https://schema.org/ItemList">
       {% for category in categories %}
         {% if category.slug %}
-        <div class="col-6 col-md-3">
+        <div class="col-6 col-md-3" itemprop="itemListElement" itemscope itemtype="https://schema.org/CategoryCode">
           <div class="text-center category-card">
-            <a href="{% url 'products_by_category' category.slug %}" class="text-decoration-none text-dark">
+            <a href="{% url 'products_by_category' category.slug %}" class="text-decoration-none text-dark" itemprop="url">
               <div class="category-image-container mb-3 position-relative">
                 {% if category.imagem %}
                   <!-- Imagem da categoria -->
-                  <div class="bg-white rounded-circle d-flex align-items-center justify-content-center mx-auto shadow-sm overflow-hidden" 
+                  <div class="bg-white rounded-circle d-flex align-items-center justify-content-center mx-auto shadow-sm overflow-hidden"
                        style="width: 120px; height: 120px; transition: all 0.3s ease;">
-                    <img src="{{ category.imagem.url }}" alt="{{ category.nome }}" class="w-100 h-100" style="object-fit: cover;">
+                    <img src="{{ category.imagem.url }}" alt="{{ category.nome }}" class="w-100 h-100" style="object-fit: cover;" itemprop="image">
                   </div>
                 {% else %}
                   <!-- Fallback quando não tem imagem -->
-                  <div class="bg-white rounded-circle d-flex align-items-center justify-content-center mx-auto shadow-sm" 
+                  <div class="bg-white rounded-circle d-flex align-items-center justify-content-center mx-auto shadow-sm"
                        style="width: 120px; height: 120px; transition: all 0.3s ease;">
                     <i class="bi bi-gem text-warning" style="font-size: 2.5rem;"></i>
                   </div>
                 {% endif %}
               </div>
-              <h6 class="fw-semibold text-muted mb-0" style="font-size: 0.9rem;">
+              <h3 class="fw-semibold text-muted mb-0" style="font-size: 0.9rem;" itemprop="name">
                 {{ category.nome }}
-              </h6>
+              </h3>
             </a>
           </div>
         </div>
@@ -47,7 +48,7 @@
           <p class="text-muted">Nenhuma categoria disponível no momento.</p>
         </div>
       {% endfor %}
-    </div>
+    </nav>
   </div>
   
   <!-- Linha divisória dourada -->

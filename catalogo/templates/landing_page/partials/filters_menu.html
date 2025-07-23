@@ -1,0 +1,109 @@
+{% comment %} Partial para o menu de filtros do catálogo, reutilizável em várias páginas {% endcomment %}
+<div class="card border-0 shadow-sm mb-4">
+  <div class="card-header bg-warning text-dark text-center py-3">
+    <h5 class="mb-0 fw-semibold">
+      <i class="bi bi-funnel me-2"></i>Filtros
+    </h5>
+  </div>
+  <div class="card-body">
+    <!-- Filtro por Categoria -->
+    <div class="mb-4">
+      <h6 class="fw-semibold mb-3 text-dark">
+        <i class="bi bi-grid me-2 text-warning"></i>Categorias
+      </h6>
+      <div class="d-grid gap-2">
+        <a href="{% url 'catalogo' %}" 
+           class="btn btn-outline-primary btn-sm text-start">
+          <div class="d-flex justify-content-between align-items-center">
+            <span><i class="bi bi-grid-3x3-gap me-2"></i>Todas as Categorias</span>
+          </div>
+        </a>
+        {% for cat in all_categories %}
+        <a href="{% url 'products_by_category' cat.slug %}" 
+           class="btn {% if cat == categoria %}btn-warning{% else %}btn-outline-secondary{% endif %} btn-sm text-start">
+          <div class="d-flex justify-content-between align-items-center">
+            <span>{{ cat.nome }}</span>
+            {% if cat == categoria %}
+              <i class="bi bi-check-circle-fill"></i>
+            {% endif %}
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- Filtro por Promoção -->
+    <div class="mb-4">
+      <h6 class="fw-semibold mb-3 text-dark">
+        <i class="bi bi-lightning me-2 text-warning"></i>Ofertas
+      </h6>
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" id="promocao" onchange="filterByPromotion()">
+        <label class="form-check-label" for="promocao">
+          Apenas produtos em promoção
+        </label>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- Filtro por Preço -->
+    <div class="mb-4">
+      <h6 class="fw-semibold mb-3 text-dark">
+        <i class="bi bi-currency-dollar me-2 text-warning"></i>Faixa de Preço
+      </h6>
+      <div class="row g-2 mb-3">
+        <div class="col-6">
+          <input type="number" class="form-control form-control-sm" placeholder="Min" id="preco-min">
+        </div>
+        <div class="col-6">
+          <input type="number" class="form-control form-control-sm" placeholder="Max" id="preco-max">
+        </div>
+      </div>
+      <button class="btn btn-outline-warning btn-sm w-100" onclick="applyFilters()">
+        <i class="bi bi-search me-2"></i>Aplicar Filtro
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Card Informativo -->
+<div class="card border-0 shadow-sm bg-light">
+  <div class="card-body text-center">
+    <i class="bi bi-shield-check text-warning mb-3 fs-1"></i>
+    <h6 class="fw-semibold text-dark mb-2">Garantia de Qualidade</h6>
+    <p class="text-muted small mb-0">
+      Todos os produtos são certificados e vêm com garantia de 1 ano
+    </p>
+  </div>
+</div>
+
+<script>
+  function parsePrice(val) {
+    if (!val) return 0;
+    // Aceita vírgula ou ponto
+    return parseFloat(val.replace(',', '.')) || 0;
+  }
+
+  function applyFilters() {
+    const checkbox = document.getElementById('promocao');
+    const minPrice = parsePrice(document.getElementById('preco-min').value);
+    const maxPrice = parsePrice(document.getElementById('preco-max').value) || Infinity;
+    const products = document.querySelectorAll('.product-item');
+    products.forEach(product => {
+      const isPromotion = product.dataset.promotion === 'true';
+      const price = parsePrice(product.dataset.price);
+      let show = true;
+      if (checkbox.checked && !isPromotion) show = false;
+      if (price < minPrice || price > maxPrice) show = false;
+      product.style.display = show ? 'block' : 'none';
+    });
+  }
+
+  document.getElementById('promocao').addEventListener('change', applyFilters);
+  document.getElementById('preco-min').addEventListener('input', applyFilters);
+  document.getElementById('preco-max').addEventListener('input', applyFilters);
+</script>
+</script>

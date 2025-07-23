@@ -8,38 +8,40 @@
     Busca - OuriPrata
   {% endif %}
 {% endblock %}
+{% block meta_description %}<meta name="description" content="Veja os resultados da busca por '{{ query }}' na OuriPrata.">{% endblock %}
+{% block og_title %}{% if query %}Resultados para '{{ query }}' - OuriPrata{% else %}Busca - OuriPrata{% endif %}{% endblock %}
+{% block og_description %}Veja os resultados da busca por '{{ query }}' na OuriPrata.{% endblock %}
+{% block og_image %}{% static 'assets/landing_page/logo.png' %}{% endblock %}
 
 {% block content %}
-<div class="container-fluid px-0">
-  <!-- Header Section -->
-  {% include 'landing_page/partials/page_header.html' %}
-
+<main class="container-fluid px-0">
+  <header>
+    {% include 'landing_page/partials/page_header.html' %}
+  </header>
   <div class="container my-5">
-    <div class="row">
-      <!-- Sidebar com filtros -->
-      {% include 'landing_page/partials/sidebar_filters.html' %}
-
-      <!-- Área principal com produtos -->
-      <div class="col-lg-9">
+    <div class="row g-4">
+      <aside class="col-lg-3 col-md-4">
+        <div class="sticky-top" style="top: 2rem;">
+          {% include 'landing_page/partials/filters_menu.html' %}
+        </div>
+      </aside>
+      <section class="col-lg-9 col-md-8">
         {% if products %}
-          <!-- Grid de produtos -->
           <div class="row g-4">
             {% for product in products %}
               {% include 'landing_page/partials/product_card.html' %}
             {% endfor %}
           </div>
         {% else %}
-          <!-- Nenhum produto encontrado -->
           {% if query %}
             {% include 'landing_page/partials/empty_state.html' with icon_name='search' empty_title='Nenhum resultado encontrado' empty_message='Não encontramos produtos que correspondem à sua busca. Tente usar termos diferentes ou explore nossas categorias.' empty_button_url='/catalogo/' empty_button_icon='grid' empty_button_text='Ver Todos os Produtos' %}
           {% else %}
             {% include 'landing_page/partials/empty_state.html' with icon_name='search' empty_title='Digite algo para buscar' empty_message='Use a barra de pesquisa para encontrar produtos específicos.' empty_button_url='/catalogo/' empty_button_icon='grid' empty_button_text='Ver Todos os Produtos' %}
           {% endif %}
         {% endif %}
-      </div>
+      </section>
     </div>
   </div>
-</div>
-
+</main>
 {% include 'landing_page/partials/shared_styles.html' %}
 {% endblock %}

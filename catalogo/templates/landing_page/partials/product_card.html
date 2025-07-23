@@ -1,5 +1,7 @@
 <!-- Card de produto -->
-<div class="col-md-6 col-xl-4">
+<div class="col-md-6 col-xl-4 product-item"
+     data-price="{% if product.em_promocao and product.preco_promocional %}{{ product.preco_promocional|floatformat:2 }}{% else %}{{ product.preco|floatformat:2 }}{% endif %}"
+     data-promotion="{% if product.em_promocao %}true{% else %}false{% endif %}">
   <div class="card border-0 shadow-sm h-100 product-card">
     <div class="position-relative overflow-hidden">
       {% if product.imagem %}

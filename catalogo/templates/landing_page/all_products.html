@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %}
 {% load static %}
 
@@ -8,38 +9,40 @@
     Catálogo Completo - OuriPrata
   {% endif %}
 {% endblock %}
+{% block meta_description %}<meta name="description" content="Veja todos os produtos e promoções da OuriPrata.">{% endblock %}
+{% block og_title %}{% if show_only_promotions %}Promoções - OuriPrata{% else %}Catálogo Completo - OuriPrata{% endif %}{% endblock %}
+{% block og_description %}Veja todos os produtos e promoções da OuriPrata.{% endblock %}
+{% block og_image %}{% static 'assets/landing_page/logo.png' %}{% endblock %}
 
 {% block content %}
-<div class="container-fluid px-0">
-  <!-- Header Section -->
-  {% include 'landing_page/partials/page_header.html' %}
-
-  <div class="container my-5">
+<main class="container-fluid px-0">
+  <header>
+    {% include 'landing_page/partials/page_header.html' %}
+  </header>
+  <section class="container my-5">
     <div class="row">
-      <!-- Sidebar com filtros -->
-      {% include 'landing_page/partials/sidebar_filters.html' %}
-
-      <!-- Área principal com produtos -->
-      <div class="col-lg-9">
+      <aside class="col-lg-3 col-md-4">
+        <div class="sticky-top" style="top: 2rem;">
+          {% include 'landing_page/partials/filters_menu.html' %}
+        </div>
+      </aside>
+      <section class="col-lg-9">
         {% if products %}
-          <!-- Grid de produtos -->
           <div class="row g-4">
             {% for product in products %}
               {% include 'landing_page/partials/product_card.html' %}
             {% endfor %}
           </div>
         {% else %}
-          <!-- Nenhum produto encontrado -->
           {% if show_only_promotions %}
             {% include 'landing_page/partials/empty_state.html' with icon_name='percent' empty_title='Nenhuma promoção ativa' empty_message='No momento não temos produtos em promoção. Explore nosso catálogo completo ou cadastre-se para receber notificações de ofertas.' empty_button_url='/catalogo/' empty_button_icon='grid' empty_button_text='Ver Todos os Produtos' %}
           {% else %}
             {% include 'landing_page/partials/empty_state.html' with icon_name='gem' empty_title='Nenhum produto encontrado' empty_message='Ainda não temos produtos em nosso catálogo. Volte em breve para conferir nossas novidades!' empty_button_url='/' empty_button_icon='house' empty_button_text='Voltar ao Início' %}
           {% endif %}
         {% endif %}
-      </div>
+      </section>
     </div>
-  </div>
-</div>
-
+  </section>
+</main>
 {% include 'landing_page/partials/shared_styles.html' %}
 {% endblock %}

@@ -1,10 +1,25 @@
-{% extends 'base.html' %} 
 
-{% block title %}OuriPrata{% endblock %} 
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Home - OuriPrata{% endblock %}
+{% block meta_description %}<meta name="description" content="Bem-vindo à OuriPrata. Descubra joias exclusivas e ofertas especiais.">{% endblock %}
+{% block og_title %}Home - OuriPrata{% endblock %}
+{% block og_description %}Bem-vindo à OuriPrata. Descubra joias exclusivas e ofertas especiais.{% endblock %}
+{% block og_image %}{% static 'assets/landing_page/logo.png' %}{% endblock %}
 
-{% block content %} 
-  {% include 'landing_page/partials/carrosel.html' %} 
-  {% include 'landing_page/partials/categories.html' %}
-  {% include 'landing_page/partials/featured_products.html' %} 
-  {% include 'landing_page/partials/promocional_products.html' %}
+{% block content %}
+<main>
+  <header>
+    {% include 'landing_page/partials/carrosel.html' %}
+  </header>
+  <section>
+    {% include 'landing_page/partials/categories.html' %}
+  </section>
+  <section>
+    {% include 'landing_page/partials/featured_products.html' %}
+  </section>
+  <section>
+    {% include 'landing_page/partials/promocional_products.html' %}
+  </section>
+</main>
 {% endblock %}

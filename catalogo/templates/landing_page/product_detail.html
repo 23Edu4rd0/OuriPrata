@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 {% block title %}{{ product.nome }} - OuriPrata{% endblock %}
+{% block meta_description %}<meta name="description" content="{{ product.descricao|truncatewords:20 }}">{% endblock %}
+{% block og_title %}{{ product.nome }} - OuriPrata{% endblock %}
+{% block og_description %}{{ product.descricao|truncatewords:20 }}{% endblock %}
+{% block og_image %}{{ product.imagem.url }}{% endblock %}
 {% block content %}
 {% load static %}
 {% csrf_token %}

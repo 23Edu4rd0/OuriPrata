@@ -2,33 +2,35 @@
 {% load static %}
 
 {% block title %}Completar Perfil - OuriPrata{% endblock %}
+{% block meta_description %}<meta name="description" content="Complete seu perfil para calcular o frete e aproveitar benefícios.">{% endblock %}
+{% block og_title %}Completar Perfil - OuriPrata{% endblock %}
+{% block og_description %}Complete seu perfil para calcular o frete e aproveitar benefícios.{% endblock %}
+{% block og_image %}{% static 'assets/landing_page/logo.png' %}{% endblock %}
 
 {% block content %}
-<div class="container my-5">
-  <div class="row justify-content-center">
+<main class="container my-5">
+  <section class="row justify-content-center">
     <div class="col-md-8 col-lg-6">
-      <div class="card border-0 shadow-sm">
-        <div class="card-header bg-warning text-dark text-center py-4">
-          <h3 class="mb-0">
+      <article class="card border-0 shadow-sm">
+        <header class="card-header bg-warning text-dark text-center py-4">
+          <h1 class="mb-0 h3">
             <i class="bi bi-person-plus me-2"></i>
             Complete seu Perfil
-          </h3>
+          </h1>
           <p class="mb-0 mt-2">Precisamos do seu endereço para calcular o frete</p>
-        </div>
-        
-        <div class="card-body p-4">
+        </header>
+        <section class="card-body p-4">
           <!-- Aviso sobre frete grátis -->
-          <div class="alert alert-info d-flex align-items-center mb-4">
+          <aside class="alert alert-info d-flex align-items-center mb-4">
             <i class="bi bi-info-circle me-3 fs-4"></i>
             <div>
               <strong>Boa notícia!</strong><br>
               Se você mora em <strong>Divinópolis/MG</strong>, sua entrega será <strong>GRATUITA</strong>! 🎉
             </div>
-          </div>
+          </aside>
 
           <form method="post" id="profile-form">
             {% csrf_token %}
-            
             <!-- CEP com busca automática -->
             <div class="row mb-3">
               <div class="col-8">
@@ -125,7 +127,7 @@
               <button type="submit" class="btn btn-warning">
                 <i class="bi bi-check-lg me-2"></i>Salvar Endereço
               </button>
-              <a href="{% url 'settings' %}" class="btn btn-outline-secondary">
+              <a href="{% url 'accounts:settings' %}" class="btn btn-outline-secondary">
                 <i class="bi bi-arrow-left me-2"></i>Voltar
               </a>
             </div>
