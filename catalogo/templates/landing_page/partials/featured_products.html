@@ -1,9 +1,41 @@
-<section class="py-4">
+<section class="pt-0 pb-4">
+<style>
+  @media (max-width: 768px) {
+    .card-img-top {
+      height: 110px !important;
+      object-fit: cover !important;
+      image-rendering: auto !important;
+    }
+    h2.fw-semibold {
+      font-size: 0.85rem !important;
+    }
+    p.text-muted.small {
+      font-size: 0.75rem !important;
+    }
+    h5.card-title span {
+      font-size: 0.75rem !important;
+    }
+    .card-body {
+      padding: 0.5rem !important;
+    }
+    .btn {
+      font-size: 0.7rem !important;
+      padding: 0.25rem 0.5rem !important;
+    }
+    .mb-2 {
+      min-height: 1.2rem !important;
+    }
+    .badge {
+      font-size: 0.65rem !important;
+      padding: 0.15rem 0.4rem !important;
+    }
+  }
+</style>
   <div class="container">
     <!-- Título da seção -->
     <div class="text-center mb-4">
-      <h2 class="h3 fw-bold text-dark mb-2">Produtos em Destaque</h2>
-      <p class="text-muted small">Descubra nossas peças mais exclusivas</p>
+      <h2 class="fw-semibold mb-2" style="font-family: 'Montserrat', sans-serif; font-weight: 500; color: #bfa14a; font-size: 1.05rem; letter-spacing: 0.5px; background: none; border: none; box-shadow: none; padding: 0; margin: 0;">Produtos em Destaque</h2>
+      <p class="text-muted small mb-2" style="font-family: 'Montserrat', sans-serif; font-weight: 400; font-size: 0.92rem; letter-spacing: 0.3px; background: none; border: none; box-shadow: none; padding: 0; margin: 0;">Descubra nossas peças mais exclusivas</p>
       <div class="mx-auto bg-warning rounded-pill" style="height: 3px; width: 60px;"></div>
     </div>
     
@@ -50,7 +82,7 @@
           <!-- Conteúdo do card -->
           <div class="card-body text-center p-2">
             <h5 class="card-title fw-bold mb-2" style="font-size: 0.9rem; min-height: 2.5rem; display: flex; align-items: center; justify-content: center;">
-              {{ product.nome }}
+              <span style="font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 0.95rem; letter-spacing: 0.5px; padding: 0; margin: 0; background: none; border: none; box-shadow: none;">{{ product.nome }}</span>
             </h5>
             
             <!-- Preços -->

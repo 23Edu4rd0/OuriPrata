@@ -1,11 +1,12 @@
+
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}{{ categoria.nome }} - OuriPrata{% endblock %}
 {% block meta_description %}<meta name="description" content="Explore joias da categoria {{ categoria.nome }} na OuriPrata.">{% endblock %}
 {% block og_title %}{{ categoria.nome }} - OuriPrata{% endblock %}
 {% block og_description %}Explore joias da categoria {{ categoria.nome }} na OuriPrata.{% endblock %}
 {% block og_image %}{% static 'assets/landing_page/logo.png' %}{% endblock %}
 {% block content %}
-{% load static %}
 
 <main class="container-fluid px-0">
   <!-- Hero Section da Categoria -->

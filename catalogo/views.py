@@ -115,6 +115,7 @@ def item_detail(request, slug):
                     'frete_info': frete_info
                 })
         except Exception as e:
+            print("Mercado Pago erro:", e)  
             return render(request, 'landing_page/product_detail.html', {
                 'product': product,
                 'error': 'Serviço de pagamento temporariamente indisponível.',

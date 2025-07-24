@@ -242,18 +242,7 @@
                       {% if user.is_authenticated and show_buy_button %}
             <div id="walletBrick_container"></div>
             
-            <!-- Botão para iniciar checkout -->
-            <form method="POST" action="{% url 'checkout' product.slug %}">
-              {% csrf_token %}
-              <button type="submit" class="btn btn-success w-100 py-3 mb-3">
-                <i class="bi bi-credit-card me-2"></i>Comprar Agora
-                {% if frete_info.valor_frete > 0 %}
-                  <small class="d-block">{{ frete_info.descricao }}</small>
-                {% else %}
-                  <small class="d-block">{{ frete_info.descricao }}</small>
-                {% endif %}
-              </button>
-            </form>
+
             
             {% if preference_id %}
             <script src="https://sdk.mercadopago.com/js/v2"></script>

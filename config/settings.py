@@ -44,6 +44,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -54,8 +55,19 @@ INSTALLED_APPS = [
     'social_django',
     'accounts.apps.AccountsConfig',
     'wishlist.apps.WishlistConfig',
-    'cart.apps.CartConfig'
+    'cart.apps.CartConfig',
+    "colorfield",
 ]
+
+JAZZMIN_SETTINGS = {
+    "theme": "cyborg",
+    "site_title": "Administração do OuriPrata",
+    "site_header": "OuriPrata Admin",
+    "welcome_sign": "Bem-vindo ao Painel do OuriPrata",
+    "copyright": "OuriPrata © 2025",
+    "show_sidebar": True,
+    "navigation_expanded": True,
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -161,7 +173,9 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://3ac6987d2b92.ngrok-free.app',
+    'https://f89014fd2d43.ngrok-free.app',
     'http://localhost',
     'http://127.0.0.1',
 ]
+
+
