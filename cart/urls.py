@@ -10,4 +10,5 @@ urlpatterns = [
     path('update/<int:produto_id>/', views.update_cart, name='update_cart'),
     path('remove/<int:produto_id>/', views.remove_from_cart, name='remove_from_cart'),
     path('count/', views.cart_count, name='cart_count'),
+    path('webhook/', views.webhook_cart, name='webhook_cart'),
 ]

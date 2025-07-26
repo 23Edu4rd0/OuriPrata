@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-7 col-md-9">
+      <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-body p-5 text-center">
+          <i class="bi bi-clock-history display-3 text-warning mb-4"></i>
+          <h2 class="fw-bold mb-3">Pagamento via PIX em processamento</h2>
+          <p class="lead mb-4">Seu pedido foi registrado e está aguardando confirmação do pagamento PIX.<br>Após o pagamento no app do banco ou Mercado Pago, aguarde alguns minutos.<br>Assim que o Mercado Pago confirmar, o status mudará para <span class="fw-bold text-success">Aprovado</span> em <a href="{% url 'meus_pedidos' %}">Meus Pedidos</a> e o carrinho será limpo automaticamente.</p>
+          <div class="mb-4">
+            <span class="badge bg-warning text-dark px-3 py-2 fs-6">Status: Pendente</span>
+          </div>
+          <h5 class="mb-2">Resumo do Pedido</h5>
+          <div class="mb-2">
+            <strong>Produto:</strong> {{ product.nome }}<br>
+            <strong>Valor:</strong> R$ {{ product.preco_promocional|default:product.preco|floatformat:2 }}<br>
+            <strong>Frete:</strong> {% if frete_info.gratuito %}Grátis{% else %}R$ {{ frete_info.valor|floatformat:2 }}{% endif %}<br>
+            <strong>Total:</strong> R$ {{ product.preco_promocional|add:frete_info.valor|floatformat:2 }}
+          </div>
+          <p class="mb-4 text-muted">Você pode acompanhar o status do seu pedido e detalhes do produto na página <a href="{% url 'meus_pedidos' %}">Meus Pedidos</a>.<br>O carrinho será limpo automaticamente após a confirmação do Mercado Pago.</p>
+          <p class="text-muted small">Não há redirecionamento automático após o pagamento PIX.<br>Assim que o pagamento for aprovado, você receberá uma confirmação por e-mail.</p>
+          <a href="{% url 'meus_pedidos' %}" class="btn btn-outline-primary rounded-pill px-4 py-2">
+            <i class="bi bi-box-seam me-2"></i> Ir para Meus Pedidos
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

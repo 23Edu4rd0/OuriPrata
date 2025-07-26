@@ -1,3 +1,39 @@
+from django.views.decorators.csrf import csrf_exempt
+from cart.utils import pos_pagamento_usuario
+
+@csrf_exempt
+def webhook_cart(request):
+    """
+    Endpoint para receber notificações do Mercado Pago e processar pós-pagamento.
+    """
+    if request.method == 'POST':
+        try:
+            import json
+            data = json.loads(request.body)
+            print('Webhook do Mercado Pago recebido (cart):', data)
+            mp_id = None
+            new_status = None
+            if 'data' in data and 'id' in data['data']:
+                mp_id = data['data']['id']
+            elif 'id' in data:
+                mp_id = data['id']
+            if 'type' in data and data['type'] == 'payment':
+                payment_info = data.get('payment', {})
+                new_status = payment_info.get('status')
+            if not new_status and 'status' in data:
+                new_status = data['status']
+            try:
+                pedido = pos_pagamento_usuario(mp_id, new_status)
+            except Exception as err:
+                print(f"Erro no pós-processamento do pedido: {err}")
+            return JsonResponse({'status': 'success', 'message': 'Webhook received and order updated'})
+        except json.JSONDecodeError:
+            print('Erro ao decodificar JSON do webhook')
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+        except Exception as e:
+            print(f'Erro no webhook: {str(e)}')
+            return JsonResponse({'error': 'Internal server error'}, status=500)
+    return JsonResponse({'error': 'Método não permitido'}, status=405)
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -120,20 +156,64 @@ def add_to_cart(request, produto_id):
     """Adiciona produto ao carrinho"""
     produto = get_object_or_404(Joais, id=produto_id)
     quantidade = int(request.POST.get('quantidade', 1))
+    ring_size = request.POST.get('ring_size', '').strip()
     
-    cart_item, created = Cart.objects.get_or_create(
-        user=request.user,
-        produto=produto,
-        defaults={'quantidade': quantidade}
-    )
+    # Verificar se é um produto que precisa de tamanho
+    categoria_nome = produto.categoria.nome.lower() if produto.categoria else ""
+    precisa_tamanho = any(palavra in categoria_nome for palavra in ['anel', 'anéis', 'alargador', 'alargadores', 'aliança', 'alianças'])
     
-    if not created:
+    if precisa_tamanho and not ring_size:
+        return JsonResponse({
+            'status': 'error', 
+            'message': 'Por favor, selecione o tamanho do dedo para este produto.'
+        })
+    
+    # Buscar item existente com mesmo produto e tamanho (se aplicável)
+    cart_filter = {'user': request.user, 'produto': produto}
+    if ring_size:
+        cart_filter['ring_size'] = ring_size
+    else:
+        cart_filter['ring_size__isnull'] = True
+    
+    try:
+        cart_item = Cart.objects.get(**cart_filter)
         cart_item.quantidade += quantidade
         cart_item.save()
-        messages.success(request, f'{produto.nome} - quantidade atualizada no carrinho!')
-    else:
-        messages.success(request, f'{produto.nome} foi adicionado ao carrinho!')
+        size_info = f" (Tamanho {ring_size})" if ring_size else ""
+        message = f'{produto.nome}{size_info} - quantidade atualizada no carrinho!'
+        
+        # Para requisições AJAX, retornar JSON sem adicionar à sessão
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or request.content_type == 'application/json':
+            return JsonResponse({
+                'status': 'success', 
+                'message': message,
+                'action': 'updated'
+            })
+        else:
+            messages.success(request, message)
+            
+    except Cart.DoesNotExist:
+        # Criar novo item no carrinho
+        cart_item = Cart.objects.create(
+            user=request.user,
+            produto=produto,
+            quantidade=quantidade,
+            ring_size=ring_size if ring_size else None
+        )
+        size_info = f" (Tamanho {ring_size})" if ring_size else ""
+        message = f'{produto.nome}{size_info} foi adicionado ao carrinho!'
+        
+        # Para requisições AJAX, retornar JSON sem adicionar à sessão
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or request.content_type == 'application/json':
+            return JsonResponse({
+                'status': 'success', 
+                'message': message,
+                'action': 'added'
+            })
+        else:
+            messages.success(request, message)
     
+    # Para requisições normais (não AJAX), redirecionar
     return JsonResponse({'status': 'success', 'message': 'Produto adicionado ao carrinho!'})
 
 @login_required
@@ -142,9 +222,17 @@ def update_cart(request, produto_id):
     """Atualiza quantidade do produto no carrinho"""
     produto = get_object_or_404(Joais, id=produto_id)
     quantidade = int(request.POST.get('quantidade', 1))
+    ring_size = request.POST.get('ring_size', '').strip()
+    
+    # Buscar item no carrinho considerando o tamanho
+    cart_filter = {'user': request.user, 'produto': produto}
+    if ring_size:
+        cart_filter['ring_size'] = ring_size
+    else:
+        cart_filter['ring_size__isnull'] = True
     
     try:
-        cart_item = Cart.objects.get(user=request.user, produto=produto)
+        cart_item = Cart.objects.get(**cart_filter)
         if quantidade > 0:
             cart_item.quantidade = quantidade
             cart_item.save()
@@ -160,15 +248,37 @@ def update_cart(request, produto_id):
 def remove_from_cart(request, produto_id):
     """Remove produto do carrinho"""
     produto = get_object_or_404(Joais, id=produto_id)
+    ring_size = request.POST.get('ring_size', '').strip()
+    
+    # Buscar item no carrinho considerando o tamanho
+    cart_filter = {'user': request.user, 'produto': produto}
+    if ring_size:
+        cart_filter['ring_size'] = ring_size
+    else:
+        cart_filter['ring_size__isnull'] = True
     
     try:
-        cart_item = Cart.objects.get(user=request.user, produto=produto)
+        cart_item = Cart.objects.get(**cart_filter)
+        size_info = f" (Tamanho {ring_size})" if ring_size else ""
         cart_item.delete()
-        messages.success(request, f'{produto.nome} foi removido do carrinho!')
-        return JsonResponse({'status': 'removed', 'message': 'Produto removido do carrinho!'})
+        message = f'{produto.nome}{size_info} foi removido do carrinho!'
+        
+        # Para requisições AJAX, retornar JSON sem adicionar à sessão
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or request.content_type == 'application/json':
+            return JsonResponse({'status': 'removed', 'message': message})
+        else:
+            messages.success(request, message)
+            
     except Cart.DoesNotExist:
-        messages.error(request, 'Produto não encontrado no carrinho!')
-        return JsonResponse({'status': 'not_found', 'message': 'Produto não encontrado no carrinho!'})
+        error_message = 'Produto não encontrado no carrinho!'
+        
+        # Para requisições AJAX, retornar JSON sem adicionar à sessão
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or request.content_type == 'application/json':
+            return JsonResponse({'status': 'not_found', 'message': error_message})
+        else:
+            messages.error(request, error_message)
+    
+    return JsonResponse({'status': 'not_found', 'message': 'Produto não encontrado no carrinho!'})
 
 @login_required
 def cart_count(request):

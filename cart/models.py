@@ -6,16 +6,18 @@ class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     produto = models.ForeignKey(Joais, on_delete=models.CASCADE)
     quantidade = models.PositiveIntegerField(default=1)
+    ring_size = models.CharField(max_length=5, blank=True, null=True, verbose_name="Tamanho do Anel")
     data_adicionado = models.DateTimeField(auto_now_add=True)
     data_atualizado = models.DateTimeField(auto_now=True)
     
     class Meta:
-        unique_together = ('user', 'produto')
+        unique_together = ('user', 'produto', 'ring_size')  # Permite mesmo produto com tamanhos diferentes
         verbose_name = "Carrinho"
         verbose_name_plural = "Carrinhos"
     
     def __str__(self):
-        return f"{self.user.username} - {self.produto.nome} ({self.quantidade})"
+        size_info = f" (Tam. {self.ring_size})" if self.ring_size else ""
+        return f"{self.user.username} - {self.produto.nome}{size_info} ({self.quantidade})"
     
     @property
     def total_item(self):

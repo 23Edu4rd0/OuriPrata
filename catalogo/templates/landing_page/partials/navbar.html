@@ -1,12 +1,12 @@
 {% load static %}
 <header class="fixed-top">
-  <nav class="bg-white shadow-sm border-bottom">
-    <div class="container-fluid px-4">
-      <div class="d-flex align-items-center justify-content-between py-3" style="min-height: 70px;">
+  <nav class="bg-white shadow-sm">
+    <div class="container-fluid px-2 px-md-4">
+      <div class="d-flex align-items-center justify-content-between py-2 py-md-3" style="min-height: 60px;">
         
         <!-- Logo -->
         <a href="{% url 'home' %}" class="text-decoration-none">
-          <h3 class="mb-0 fw-bold">
+          <h3 class="mb-0 fw-bold" style="font-size: 1.2rem;">
             <span class="text-warning">Ouri</span><span class="text-secondary">Prata</span>
           </h3>
         </a>
@@ -43,7 +43,7 @@
           
           <!-- Carrinho -->
           {% if user.is_authenticated %}
-            <a href="{% url 'cart:cart' %}" class="btn btn-light position-relative rounded-pill px-4 py-2 d-flex align-items-center gap-2 text-decoration-none" id="cart-link">
+            <a href="{% url 'cart:cart' %}" class="btn btn-light position-relative rounded-pill px-3 px-lg-4 py-2 d-flex align-items-center gap-2 text-decoration-none" id="cart-link">
               <i class="bi bi-cart3 fs-5"></i>
               <span class="d-none d-lg-inline">Carrinho</span>
               <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;">
@@ -59,7 +59,7 @@
           
           <!-- Menu Usuário -->
           <div class="dropdown">
-            <button class="btn btn-light dropdown-toggle rounded-pill px-4 py-2 d-flex align-items-center gap-2" 
+            <button class="btn btn-light dropdown-toggle rounded-pill px-3 px-lg-4 py-2 d-flex align-items-center gap-2" 
                     type="button" id="userMenuBtn" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="bi bi-person-circle fs-5"></i>
               <span class="d-none d-lg-inline">
@@ -88,7 +88,7 @@
                     <i class="bi bi-person text-muted"></i>
                     <span>Meu Perfil</span>
                   </a>
-                  <a href="#" class="dropdown-item py-3 px-4 d-flex align-items-center gap-3">
+                  <a href="{% url 'meus_pedidos' %}" class="dropdown-item py-3 px-4 d-flex align-items-center gap-3">
                     <i class="bi bi-box-seam text-muted"></i>
                     <span>Meus Pedidos</span>
                   </a>
@@ -144,17 +144,17 @@
         </div>
         
         <!-- Botão Menu Mobile -->
-        <button id="menu-toggle" class="d-md-none btn btn-light rounded-circle p-2">
-          <i class="bi bi-list fs-5"></i>
+        <button id="menu-toggle" class="d-md-none btn btn-light rounded-circle p-2" style="width: 40px; height: 40px;">
+          <i class="bi bi-list fs-6"></i>
         </button>
       </div>
     </div>
   </nav>
   
   <!-- Search Bar Mobile -->
-  <div class="d-md-none bg-light border-bottom px-3 py-2">
+  <div class="d-md-none bg-light border-bottom px-2 py-2">
     <form class="position-relative" method="get" action="{% url 'search_products' %}">
-      <div class="input-group">
+      <div class="input-group input-group-sm">
         <input
           type="text"
           name="q"
@@ -163,9 +163,10 @@
           id="search-input-mobile"
           autocomplete="off"
           value="{{ request.GET.q }}"
+          style="font-size: 0.85rem;"
         />
         <button type="submit" class="btn btn-white border-0 rounded-end-pill px-3">
-          <i class="bi bi-search text-muted"></i>
+          <i class="bi bi-search text-muted" style="font-size: 0.9rem;"></i>
         </button>
       </div>
       

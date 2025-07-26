@@ -18,26 +18,26 @@
     <nav class="row g-4 justify-content-center" aria-label="Categorias" itemscope itemtype="https://schema.org/ItemList">
       {% for category in categories %}
         {% if category.slug %}
-        <div class="col-3 col-md-3" itemprop="itemListElement" itemscope itemtype="https://schema.org/CategoryCode">
+        <div class="col-4 col-md-2" itemprop="itemListElement" itemscope itemtype="https://schema.org/CategoryCode">
           <div class="text-center category-card">
             <a href="{% url 'products_by_category' category.slug %}" class="text-decoration-none text-dark" itemprop="url">
               <div class="category-image-container mb-3 position-relative">
                 {% if category.imagem %}
                   <!-- Imagem da categoria -->
                   <div class="bg-white rounded-circle d-flex align-items-center justify-content-center mx-auto shadow-sm overflow-hidden"
-                       style="width: 120px; height: 120px; transition: all 0.3s ease;">
+                       style="width: 80px; height: 80px; transition: all 0.3s ease;">
                     <img src="{{ category.imagem.url }}" alt="{{ category.nome }}" class="w-100 h-100" style="object-fit: cover;" itemprop="image">
                   </div>
                 {% else %}
                   <!-- Fallback quando não tem imagem -->
                   <div class="bg-white rounded-circle d-flex align-items-center justify-content-center mx-auto shadow-sm"
-                       style="width: 120px; height: 120px; transition: all 0.3s ease;">
-                    <i class="bi bi-gem text-warning" style="font-size: 2.5rem;"></i>
+                       style="width: 80px; height: 80px; transition: all 0.3s ease;">
+                    <i class="bi bi-gem text-warning" style="font-size: 2rem;"></i>
                   </div>
                 {% endif %}
               </div>
-              <h3 class="fw-semibold text-muted mb-0" style="font-size: 0.9rem;" itemprop="name">
-                <span style="font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 0.95rem; letter-spacing: 0.5px; padding: 0; margin: 0; background: none; border: none; box-shadow: none;">{{ category.nome }}</span>
+              <h3 class="fw-semibold text-muted mb-0" style="font-size: 0.75rem;" itemprop="name">
+                <span style="font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 0.75rem; letter-spacing: 0.5px; padding: 0; margin: 0; background: none; border: none; box-shadow: none;">{{ category.nome }}</span>
               </h3>
             </a>
           </div>

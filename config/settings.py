@@ -57,8 +57,8 @@ INSTALLED_APPS = [
     'wishlist.apps.WishlistConfig',
     'cart.apps.CartConfig',
     "colorfield",
+    'pagamentos.apps.PagamentosConfig',
 ]
-
 JAZZMIN_SETTINGS = {
     "theme": "cyborg",
     "site_title": "Administração do OuriPrata",
@@ -173,7 +173,7 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://f89014fd2d43.ngrok-free.app',
+    'https://d5115c320581.ngrok-free.app',
     'http://localhost',
     'http://127.0.0.1',
 ]

@@ -8,17 +8,295 @@
 {% load static %}
 {% csrf_token %}
 
-<main class="container py-4">
+<style>
+/* Breadcrumb moderno */
+.breadcrumb {
+  background: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  content: "›";
+  color: #6c757d;
+  font-size: 1.1rem;
+  font-weight: 300;
+  margin: 0 8px;
+}
+
+.breadcrumb-item a {
+  color: #6c757d;
+  text-decoration: none;
+  font-weight: 400;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.breadcrumb-item a:hover {
+  color: #ffc107;
+  transform: translateY(-1px);
+}
+
+.breadcrumb-item a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 1px;
+  bottom: -2px;
+  left: 0;
+  background-color: #ffc107;
+  transition: width 0.3s ease;
+}
+
+.breadcrumb-item a:hover::after {
+  width: 100%;
+}
+
+.breadcrumb-item.active {
+  color: #343a40;
+  font-weight: 500;
+}
+
+@media (max-width: 576px) {
+  .breadcrumb {
+    font-size: 0.8rem !important;
+  }
+  .breadcrumb-item + .breadcrumb-item::before {
+    font-size: 0.9rem !important;
+    margin: 0 6px !important;
+  }
+}
+  
+  /* Responsividade para seletor de tamanho */
+  #ring-size {
+    font-size: 0.8rem !important;
+    min-width: 80px !important;
+  }
+  
+  .table-responsive {
+    font-size: 0.75rem !important;
+  }
+  
+  .modal-body .row .col-md-4,
+  .modal-body .row .col-md-6 {
+    margin-bottom: 1rem;
+  }
+}
+
+@media (min-width: 577px) and (max-width: 768px) {
+  #main-product-image {
+    height: 300px !important;
+  }
+  
+  #ring-size {
+    min-width: 90px !important;
+  }
+}
+
+/* Estilos para validação */
+.is-invalid {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+/* Animação suave para alertas */
+.alert {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animação para o badge do carrinho */
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0) translateX(-50%);
+  }
+  40% {
+    transform: translateY(-10px) translateX(-50%);
+  }
+  60% {
+    transform: translateY(-5px) translateX(-50%);
+  }
+}
+
+/* Efeitos de hover para botões */
+.btn-warning:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+  transition: all 0.2s ease;
+}
+
+.btn-outline-danger:hover {
+  transform: translateY(-1px);
+  transition: all 0.2s ease;
+}
+
+/* Efeito minimalista para botão de finalizar compra */
+.btn-outline-dark:hover, .btn-outline-dark:focus {
+  background: #212529;
+  color: #fff;
+  border-color: #212529;
+  transition: all 0.2s;
+}
+
+/* Efeito minimalista para botão de continuar comprando */
+.btn-outline-secondary:hover, .btn-outline-secondary:focus {
+  background: #6c757d;
+  color: #fff;
+  border-color: #6c757d;
+  transition: all 0.2s;
+}
+
+/* Destaque para passos de compra */
+.bg-warning .rounded-circle {
+  transition: all 0.3s ease;
+}
+
+.bg-warning .rounded-circle:hover {
+  transform: scale(1.1);
+}
+
+/* Animação de loading */
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Animação para o modal */
+.modal-content {
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Forçar texto branco no botão de wishlist quando ativo */
+#wishlist-btn.btn-danger,
+#wishlist-btn.btn-danger:hover,
+#wishlist-btn.btn-danger:focus,
+#wishlist-btn.btn-danger:active {
+  color: white !important;
+  background-color: #dc3545 !important;
+  border-color: #dc3545 !important;
+}
+
+#wishlist-btn.btn-danger:hover {
+  background-color: #c82333 !important;
+  border-color: #bd2130 !important;
+}
+
+/* Auto-hide para alertas */
+.alert.auto-hide {
+  animation: alertAutoHide 3.5s ease-out forwards;
+}
+
+@keyframes alertAutoHide {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+  }
+  85.7% {  /* 3s de 3.5s = 85.7% */
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+    visibility: hidden;
+  }
+}
+
+/* Sobrescrevendo transições do Bootstrap para alertas auto-hide */
+.alert.auto-hide.fade {
+  transition: none !important;
+}
+
+.alert.auto-hide.show {
+  opacity: 1 !important;
+}
+
+/* Alertas modernos responsivos */
+@media (max-width: 576px) {
+  #alert-container {
+    top: 10px !important;
+    right: 10px !important;
+    left: 10px !important;
+    max-width: none !important;
+  }
+}
+
+/* Animação suave para alertas modernos */
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutToRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+</style>
+
+<main class="container py-3 py-md-4">
+  <!-- ===== BREADCRUMB ===== -->
   <nav aria-label="breadcrumb" class="mb-4">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-decoration-none text-muted">Início</a></li>
-      <li class="breadcrumb-item"><a href="#" class="text-decoration-none text-muted">Produtos</a></li>
-      <li class="breadcrumb-item active" aria-current="page">{{ product.nome }}</li>
+      <li class="breadcrumb-item">
+        <a href="{% url 'home' %}">Início</a>
+      </li>
+      <li class="breadcrumb-item">
+        <a href="{% url 'products_by_category' product.categoria.slug %}">{{ product.categoria.nome }}</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">
+        {{ product.nome|truncatewords:3 }}
+      </li>
     </ol>
   </nav>
 
-  <div class="row g-4">
-    <div class="col-lg-6">
+  <!-- ===== GALERIA DE IMAGENS ===== -->
+  <div class="row g-3 g-md-4">
+    <div class="col-12 col-lg-6">
       <div class="position-sticky" style="top: 2rem;">
         <div class="card border-0 shadow-sm">
           <div class="position-relative overflow-hidden">
@@ -26,55 +304,45 @@
                  src="{{ product.imagem.url }}" 
                  class="card-img-top" 
                  alt="{{ product.nome }}" 
-                 style="height: 400px; object-fit: cover; cursor: zoom-in;">
+                 style="height: 350px; object-fit: cover; cursor: zoom-in;">
             
             {% if product.em_promocao and product.preco_promocional %}
-            <span class="position-absolute top-0 end-0 m-3 badge bg-danger px-3 py-2 rounded-pill">
+            <span class="position-absolute top-0 end-0 m-2 m-md-3 badge bg-danger px-2 px-md-3 py-1 py-md-2 rounded-pill">
               <i class="bi bi-lightning-fill me-1"></i>Oferta
             </span>
             {% endif %}
           </div>
           
-          <div class="card-body p-3">
-            <div class="d-flex gap-2 justify-content-center">
+          <div class="card-body p-2 p-md-3">
+            <div class="d-flex gap-1 gap-md-2 justify-content-center">
+              <!-- Imagem principal -->
               <img src="{{ product.imagem.url }}" 
                    class="rounded border product-thumb" 
-                   style="width: 60px; height: 60px; object-fit: cover; cursor: pointer; opacity: 0.7;"
-                   onclick="changeMainImage(this.src)">
-              <img src="{{ product.imagem.url }}" 
-                   class="rounded border product-thumb" 
-                   style="width: 60px; height: 60px; object-fit: cover; cursor: pointer; opacity: 0.7;"
-                   onclick="changeMainImage(this.src)">
-              <img src="{{ product.imagem.url }}" 
-                   class="rounded border product-thumb" 
-                   style="width: 60px; height: 60px; object-fit: cover; cursor: pointer; opacity: 0.7;"
-                   onclick="changeMainImage(this.src)">
+                   style="width: 50px; height: 50px; object-fit: cover; cursor: pointer; opacity: 0.7;"
+                   onclick="changeMainImage(this.src, event)">
+              <!-- Imagens extras -->
+              {% for img in product.imagens_extra.all %}
+                <img src="{{ img.imagem.url }}"
+                     class="rounded border product-thumb"
+                     style="width: 50px; height: 50px; object-fit: cover; cursor: pointer; opacity: 0.7;"
+                     onclick="changeMainImage(this.src, event)">
+              {% endfor %}
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="col-lg-6">
-      <div class="mb-4">
-        <h1 class="h3 fw-bold text-dark mb-3">{{ product.nome }}</h1>
+    <!-- ===== DETALHES DO PRODUTO ===== -->
+    <div class="col-12 col-lg-6">
+      <div class="mb-3 mb-md-4">
+        <h1 class="h4 h3-md fw-bold text-dark mb-3">{{ product.nome }}</h1>
         
-        <div class="d-flex align-items-center gap-3 mb-3">
-          <div class="text-warning fs-5">
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-            <i class="bi bi-star-fill"></i>
-          </div>
-          <span class="text-muted small">(42 avaliações)</span>
-        </div>
-        
-        <div class="mb-4">
+        <div class="mb-3 mb-md-4">
           {% if product.em_promocao and product.preco_promocional %}
-            <div class="d-flex align-items-center gap-3 mb-2">
-              <span class="text-muted text-decoration-line-through h5">R$ {{ product.preco }}</span>
-              <span class="text-danger h3 fw-bold mb-0">R$ {{ product.preco_promocional }}</span>
+            <div class="d-flex align-items-center gap-2 gap-md-3 mb-1 mb-md-2">
+              <span class="text-muted text-decoration-line-through h6 h5-md">R$ {{ product.preco }}</span>
+              <span class="text-danger h4 h3-md fw-bold mb-0">R$ {{ product.preco_promocional }}</span>
             </div>
             <small class="text-danger fw-semibold">
               <i class="bi bi-arrow-down me-1"></i>
@@ -82,247 +350,150 @@
               {{ discount|floatformat:0 }}% OFF
             </small>
           {% else %}
-            <span class="text-dark h3 fw-bold">R$ {{ product.preco }}</span>
+            <span class="text-dark h4 h3-md fw-bold">R$ {{ product.preco }}</span>
           {% endif %}
         </div>
 
-        <div class="mb-4">
-          <h5 class="fw-semibold mb-2">Descrição</h5>
-          <p class="text-muted">
+        <div class="mb-3 mb-md-4">
+          <h5 class="fw-semibold mb-2" style="font-size: 1rem;">Descrição</h5>
+          <p class="text-muted" style="font-size: 0.9rem; line-height: 1.5;">
             {{ product.descricao|default:"Este produto não possui descrição." }}
           </p>
         </div>
 
-        <div class="row g-3 mb-4">
-          <div class="col-auto">
-            <div class="input-group">
-              <span class="input-group-text">Qtd</span>
-              <input type="number" 
-                     value="1" 
-                     min="1" 
-                     max="5" 
-                     class="form-control text-center" 
-                     id="quantity-input" 
-                     style="width: 80px;">
+        <!-- ===== SELETOR DE TAMANHO (ANÉIS/ALARGADORES) ===== -->
+        {% if product.categoria.nome|lower in "anéis,anel,alargador,alargadores,aliança,alianças" or "anel" in product.categoria.nome|lower or "alargador" in product.categoria.nome|lower %}
+        <div class="mb-4">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <h5 class="fw-semibold mb-0" style="font-size: 1rem;">Tamanho do Dedo</h5>
+            <button type="button" class="btn btn-link p-0 text-decoration-none" data-bs-toggle="modal" data-bs-target="#sizeGuideModal">
+              <small class="text-primary">
+                <i class="bi bi-info-circle me-1"></i>Como medir?
+              </small>
+            </button>
+          </div>
+          
+          <div class="row g-2">
+            <div class="col-auto">
+              <select class="form-select form-select-sm" id="ring-size" name="ring_size" style="min-width: 100px;" required>
+                <option value="">Selecione</option>
+                <option value="12">12 (52mm)</option>
+                <option value="13">13 (53mm)</option>
+                <option value="14">14 (54mm)</option>
+                <option value="15">15 (55mm)</option>
+                <option value="16">16 (56mm)</option>
+                <option value="17">17 (57mm)</option>
+                <option value="18">18 (58mm)</option>
+                <option value="19">19 (59mm)</option>
+                <option value="20">20 (60mm)</option>
+                <option value="21">21 (61mm)</option>
+                <option value="22">22 (62mm)</option>
+                <option value="23">23 (63mm)</option>
+                <option value="24">24 (64mm)</option>
+                <option value="25">25 (65mm)</option>
+                <option value="26">26 (66mm)</option>
+                <option value="27">27 (67mm)</option>
+                <option value="28">28 (68mm)</option>
+              </select>
+            </div>
+            <div class="col-auto">
+              <small class="text-muted">Tamanho brasileiro</small>
             </div>
           </div>
           
-          <div class="col">
-            <button id="add-to-cart-btn" 
-                    class="btn btn-warning text-white fw-semibold px-4 py-2 w-100" 
-                    data-produto-id="{{ product.id }}">
-              <i class="bi bi-cart3 me-2"></i>
-              Adicionar ao Carrinho
-            </button>
+          <div class="mt-2">
+            <small class="text-muted">
+              <i class="bi bi-exclamation-circle me-1"></i>
+              Não sabe seu tamanho? Use nosso guia para medir corretamente.
+            </small>
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- ===== BOTÕES DE AÇÃO (CARRINHO/WISHLIST/COMPARTILHAR) ===== -->
+        <div class="mb-4">
+          <div class="row g-3 align-items-end">
+            <div class="col-auto">
+              <div class="d-flex align-items-center border rounded">
+                <button class="btn btn-sm border-0" type="button" onclick="decreaseQuantity()">
+                  <i class="bi bi-dash"></i>
+                </button>
+                <input type="number" 
+                       value="1" 
+                       min="1" 
+                       max="5" 
+                       class="form-control border-0 text-center" 
+                       id="quantity-input" 
+                       style="width: 50px; box-shadow: none;">
+                <button class="btn btn-sm border-0" type="button" onclick="increaseQuantity()">
+                  <i class="bi bi-plus"></i>
+                </button>
+              </div>
+            </div>
+            
+            <div class="col">
+              <button id="add-to-cart-btn" 
+                      class="btn btn-dark text-white fw-medium py-3 w-100 border-0" 
+                      data-produto-id="{{ product.id }}"
+                      style="letter-spacing: 0.5px;">
+                <i class="bi bi-bag me-2"></i>
+                Adicionar ao Carrinho
+              </button>
+            </div>
           </div>
         </div>
 
-        <div class="d-flex gap-2 mb-4">
+        <!-- Ações Secundárias -->
+        <div class="d-flex gap-3 mb-5">
           {% if user.is_authenticated %}
             <button id="wishlist-btn" 
-                    class="btn btn-outline-danger px-4 py-2 flex-fill" 
-                    data-produto-id="{{ product.id }}">
+                    class="btn btn-outline-secondary flex-fill py-2" 
+                    data-produto-id="{{ product.id }}"
+                    style="border-color: #e9ecef;">
               <i class="bi bi-heart" id="wishlist-icon"></i>
-              <span id="wishlist-text" class="ms-2">Lista de Desejos</span>
+              <span id="wishlist-text" class="ms-2 d-none d-md-inline">Lista de Desejos</span>
             </button>
           {% else %}
             <a href="{% url 'accounts:login' %}" 
-               class="btn btn-outline-danger px-4 py-2 flex-fill">
+               class="btn btn-outline-secondary flex-fill py-2"
+               style="border-color: #e9ecef;">
               <i class="bi bi-heart me-2"></i>
-              Lista de Desejos
+              <span class="d-none d-md-inline">Lista de Desejos</span>
             </a>
           {% endif %}
           
-          <button class="btn btn-outline-primary px-4 py-2">
+          <button class="btn btn-outline-secondary px-4 py-2" 
+                  onclick="shareProduct()"
+                  style="border-color: #e9ecef;">
             <i class="bi bi-share"></i>
           </button>
         </div>
 
-        <!-- Informações de Frete -->
-        {% if frete_info %}
-          <div class="alert alert-{{ frete_info.gratuito|yesno:'success,warning' }} d-flex align-items-center gap-2 py-2 mb-4">
-            <i class="bi bi-{% if frete_info.gratuito %}check-circle{% else %}truck{% endif %}"></i>
-            <small>
-              {% if frete_info.gratuito %}
-                <strong>🎉 FRETE GRÁTIS</strong> - Entrega local em {{ frete_info.prazo }}
-              {% else %}
-                Frete: <strong>R$ {{ frete_info.valor|floatformat:2 }}</strong> - {{ frete_info.prazo }}
-              {% endif %}
-            </small>
-          </div>
-        {% else %}
-          <div class="alert alert-info d-flex align-items-center gap-2 py-2 mb-4">
-            <i class="bi bi-info-circle"></i>
-            <small>Faça login e complete seu perfil para ver as opções de frete</small>
-          </div>
-        {% endif %}
-
-        <div class="row g-2 mb-3">
-          <div class="col-md-6">
-            <div class="d-flex align-items-center gap-2 text-success">
-              <i class="bi bi-check-circle"></i>
-              <small>Entrega garantida</small>
+        <!-- ===== INFORMAÇÕES ESSENCIAIS ===== -->
+        <div class="border-top pt-4">
+          <div class="row g-4 text-center">
+            <div class="col-6 col-md-3">
+              <i class="bi bi-truck text-muted mb-2 d-block" style="font-size: 1.2rem;"></i>
+              <small class="text-muted">Frete Grátis</small>
+            </div>
+            <div class="col-6 col-md-3">
+              <i class="bi bi-shield-check text-muted mb-2 d-block" style="font-size: 1.2rem;"></i>
+              <small class="text-muted">Garantia</small>
+            </div>
+            <div class="col-6 col-md-3">
+              <i class="bi bi-arrow-repeat text-muted mb-2 d-block" style="font-size: 1.2rem;"></i>
+              <small class="text-muted">Troca Grátis</small>
+            </div>
+            <div class="col-6 col-md-3">
+              <i class="bi bi-credit-card text-muted mb-2 d-block" style="font-size: 1.2rem;"></i>
+              <small class="text-muted">Pix/Cartão</small>
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="d-flex align-items-center gap-2 text-success">
-              <i class="bi bi-check-circle"></i>
-              <small>Certificado de autenticidade</small>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="d-flex align-items-center gap-2 text-success">
-              <i class="bi bi-check-circle"></i>
-              <small>Garantia de 1 ano</small>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="d-flex align-items-center gap-2 text-success">
-              <i class="bi bi-check-circle"></i>
-              <small>Troca em 30 dias</small>
-            </div>
-          </div>
-        </div>
-
-        <div class="text-muted text-end">
-          <small>
-            Entrega estimada: <strong class="text-dark">3 dias úteis</strong>
-          </small>
         </div>
       </div>
-
-      <!-- Seção de Compra -->
-      {% if user.is_authenticated %}
-        {% if show_buy_button %}
-          <!-- Usuário logado com perfil completo - mostrar Mercado Pago -->
-          <div id="wallet_container" class="mt-4">
-            <h5 class="mb-3">Finalizar Compra</h5>
-            
-            <!-- Resumo da compra -->
-            <div class="card border-0 bg-light mb-3">
-              <div class="card-body py-2">
-                <div class="d-flex justify-content-between align-items-center">
-                  <small class="text-muted">Produto:</small>
-                  <small class="fw-medium">
-                    {% if product.em_promocao and product.preco_promocional %}
-                      R$ {{ product.preco_promocional|floatformat:2 }}
-                    {% else %}
-                      R$ {{ product.preco|floatformat:2 }}
-                    {% endif %}
-                  </small>
-                </div>
-                {% if frete_info and not frete_info.gratuito %}
-                  <div class="d-flex justify-content-between align-items-center">
-                    <small class="text-muted">Frete:</small>
-                    <small class="fw-medium">R$ {{ frete_info.valor|floatformat:2 }}</small>
-                  </div>
-                {% endif %}
-                <hr class="my-2">
-                <div class="d-flex justify-content-between align-items-center">
-                  <small class="fw-bold">Total:</small>
-                  <small class="fw-bold text-success">
-                    {% if product.em_promocao and product.preco_promocional %}
-                      {% if frete_info.gratuito %}
-                        R$ {{ product.preco_promocional|floatformat:2 }}
-                      {% else %}
-                        R$ {{ product.preco_promocional|add:frete_info.valor|floatformat:2 }}
-                      {% endif %}
-                    {% else %}
-                      {% if frete_info.gratuito %}
-                        R$ {{ product.preco|floatformat:2 }}
-                      {% else %}
-                        R$ {{ product.preco|add:frete_info.valor|floatformat:2 }}
-                      {% endif %}
-                    {% endif %}
-                  </small>
-                </div>
-              </div>
-            </div>
-            
-                      {% if user.is_authenticated and show_buy_button %}
-            <div id="walletBrick_container"></div>
-            
-
-            
-            {% if preference_id %}
-            <script src="https://sdk.mercadopago.com/js/v2"></script>
-            <script>
-              const publicKey = "{{ mercado_pago_public_key }}";
-              const preferenceId = "{{ preference_id }}";
-              const mp = new MercadoPago(publicKey);
-              const bricksBuilder = mp.bricks();
-              const renderWalletBrick = async (bricksBuilder) => {
-                await bricksBuilder.create("wallet", "walletBrick_container", {
-                  initialization: {
-                    preferenceId: preferenceId,
-                  }
-                });
-              };
-              renderWalletBrick(bricksBuilder);
-            </script>
-            {% endif %}
-          {% elif not user.is_authenticated %}
-            <div class="alert alert-info text-center">
-              <i class="bi bi-info-circle me-2"></i>
-              <strong>Faça login para comprar</strong>
-              <div class="mt-2">
-                <a href="{% url 'accounts:login' %}?next={{ request.get_full_path|urlencode }}" class="btn btn-primary me-2">
-                  <i class="bi bi-box-arrow-in-right me-1"></i>Entrar
-                </a>
-                <a href="{% url 'accounts:register' %}?next={{ request.get_full_path|urlencode }}" class="btn btn-outline-primary">
-                  <i class="bi bi-person-plus me-1"></i>Cadastrar
-                </a>
-              </div>
-            </div>
-          {% else %}
-            <div class="alert alert-warning text-center">
-              <i class="bi bi-exclamation-triangle me-2"></i>
-              <strong>Complete seu perfil para comprar</strong>
-              <p class="mb-3 small">Precisamos do seu endereço para calcular o frete {{ frete_info.descricao }}</p>
-              <a href="{% url 'accounts:complete_profile' %}?next={{ request.get_full_path|urlencode }}" class="btn btn-warning">
-                <i class="bi bi-person-check me-1"></i>Completar Perfil
-              </a>
-            </div>
-          {% endif %}
-          </div>
-        {% else %}
-          <!-- Usuário logado mas sem perfil completo -->
-          <div class="mt-4">
-            <div class="alert alert-warning">
-              <h6 class="alert-heading">
-                <i class="bi bi-exclamation-triangle me-2"></i>Complete seu perfil
-              </h6>
-              <p class="mb-3">Para comprar, precisamos do seu endereço para calcular o frete.</p>
-              <a href="{% url 'accounts:complete_profile' %}?next={% url 'product_detail' product.slug %}" 
-                 class="btn btn-warning">
-                <i class="bi bi-person-plus me-2"></i>Completar Perfil
-              </a>
-            </div>
-          </div>
-        {% endif %}
-      {% else %}
-        <!-- Usuário não logado -->
-        <div class="mt-4">
-          <div class="alert alert-info">
-            <h6 class="alert-heading">
-              <i class="bi bi-info-circle me-2"></i>Faça login para comprar
-            </h6>
-            <p class="mb-3">Entre na sua conta ou crie uma nova para finalizar sua compra.</p>
-            <div class="d-flex gap-2">
-              <a href="{% url 'accounts:login' %}?next={% url 'product_detail' product.slug %}" 
-                 class="btn btn-warning">
-                <i class="bi bi-box-arrow-in-right me-2"></i>Entrar
-              </a>
-              <a href="{% url 'accounts:register' %}?next={% url 'product_detail' product.slug %}" 
-                 class="btn btn-outline-warning">
-                <i class="bi bi-person-plus me-2"></i>Criar Conta
-              </a>
-            </div>
-          </div>
-        </div>
-      {% endif %}
     </div>
   </div>
+  <!-- ===== PRODUTOS RELACIONADOS ===== -->
   <section class="py-5">
     <div class="container">
       <div class="text-center mb-4">
@@ -337,23 +508,14 @@
           <div class="card border-0 h-100 shadow-sm">
             <div class="position-relative overflow-hidden">
               <img class="card-img-top" 
-                   src="{{ product.imagem.url }}" 
+                   src="{% if product.imagem %}{{ product.imagem.url }}{% else %}{% static 'assets/landing_page/logo.png' %}{% endif %}" 
                    alt="{{ product.nome }}" 
-                   style="height: 150px; object-fit: cover;">
-              
-              {% if product.em_promocao and product.preco_promocional %}
-              <span class="position-absolute top-0 end-0 m-2 badge bg-danger px-2 py-1 rounded-pill small">
-                <i class="bi bi-lightning-fill me-1"></i>Oferta
-              </span>
-              {% endif %}
-              
-              <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center overlay-hover" 
-                   style="background: rgba(0,0,0,0.4); opacity: 0; transition: opacity 0.3s;">
-                <a href="{% url 'product_detail' product.slug %}" 
-                   class="btn btn-warning px-2 py-1 rounded-pill fw-semibold" 
-                   style="font-size: 0.8rem;">
-                  <i class="bi bi-eye me-1"></i>Ver
-                </a>
+                   style="height: 250px; object-fit: cover;">
+              <!-- Aqui as subimagens -->
+              <div class="d-flex justify-content-center gap-2 mt-2">
+                {% for subimg in product.joaisimagem_set.all %}
+                  <img src="{{ subimg.imagem.url }}" alt="Subimagem de {{ product.nome }}" style="width: 48px; height: 48px; object-fit: cover; border-radius: 6px; border: 1px solid #eee;">
+                {% endfor %}
               </div>
             </div>
             
@@ -397,33 +559,488 @@
     </div>
   </section>
 
+  <!-- ===== MODAL DE PRODUTO ADICIONADO ===== -->
+  <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg">
+        <div class="modal-header bg-success text-white border-0">
+          <h5 class="modal-title fw-bold" id="cartModalLabel">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            Adicionado ao Carrinho
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center py-4">
+          <div class="mb-3">
+            <i class="bi bi-cart-check-fill text-success" style="font-size: 3.5rem;"></i>
+          </div>
+          <h6 class="fw-bold mb-4" id="productAddedName">{{ product.nome }}</h6>
+          
+          <div class="row g-2 mb-4">
+            <div class="col-12">
+              <button type="button" class="btn btn-outline-dark w-100 py-2 fw-semibold rounded-pill" onclick="goToCart()" style="font-size: 1rem;">
+                Finalizar Compra
+              </button>
+            </div>
+            <div class="col-12">
+              <button type="button" class="btn btn-outline-secondary w-100 py-2 fw-semibold rounded-pill" data-bs-dismiss="modal" style="font-size: 1rem;">
+                Continuar Comprando
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MODAL - GUIA DE TAMANHOS ===== -->
+  <div class="modal fade" id="sizeGuideModal" tabindex="-1" aria-labelledby="sizeGuideModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-warning text-dark">
+          <h5 class="modal-title fw-bold" id="sizeGuideModalLabel">
+            <i class="bi bi-ruler me-2"></i>Como Medir o Tamanho do Dedo
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-4">
+            <!-- Método 1 -->
+            <div class="col-md-6">
+              <div class="card border-0 bg-light h-100">
+                <div class="card-body">
+                  <h6 class="card-title text-warning fw-bold">
+                    <i class="bi bi-1-circle me-2"></i>Método da Fita
+                  </h6>
+                  <ol class="small">
+                    <li class="mb-2">Corte uma tira de papel ou use uma fita métrica</li>
+                    <li class="mb-2">Enrole ao redor do dedo onde ficará o anel</li>
+                    <li class="mb-2">Marque onde a fita se encontra</li>
+                    <li class="mb-2">Meça o comprimento com uma régua (em mm)</li>
+                    <li>Compare com a tabela abaixo</li>
+                  </ol>
+                  <div class="alert alert-info p-2">
+                    <small>
+                      <i class="bi bi-info-circle me-1"></i>
+                      <strong>Dica:</strong> Meça no final do dia quando o dedo está mais inchado
+                    </small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Método 2 -->
+            <div class="col-md-6">
+              <div class="card border-0 bg-light h-100">
+                <div class="card-body">
+                  <h6 class="card-title text-warning fw-bold">
+                    <i class="bi bi-2-circle me-2"></i>Método do Anel
+                  </h6>
+                  <ol class="small">
+                    <li class="mb-2">Pegue um anel que já serve no dedo</li>
+                    <li class="mb-2">Meça o diâmetro interno com uma régua</li>
+                    <li class="mb-2">Multiplique por 3,14 para obter a circunferência</li>
+                    <li class="mb-2">Compare com a tabela abaixo</li>
+                  </ol>
+                  <div class="alert alert-warning p-2">
+                    <small>
+                      <i class="bi bi-exclamation-triangle me-1"></i>
+                      <strong>Atenção:</strong> Use um anel que sirva perfeitamente, nem apertado nem folgado
+                    </small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tabela de Tamanhos -->
+          <div class="mt-4">
+            <h6 class="fw-bold text-center mb-3">Tabela de Tamanhos Brasileiros</h6>
+            <div class="table-responsive">
+              <table class="table table-sm table-striped text-center">
+                <thead class="table-warning">
+                  <tr>
+                    <th>Tamanho BR</th>
+                    <th>Circunferência (mm)</th>
+                    <th>Diâmetro (mm)</th>
+                    <th>Tamanho US</th>
+                  </tr>
+                </thead>
+                <tbody style="font-size: 0.85rem;">
+                  <tr><td>12</td><td>52</td><td>16.5</td><td>6</td></tr>
+                  <tr><td>13</td><td>53</td><td>16.9</td><td>6.25</td></tr>
+                  <tr><td>14</td><td>54</td><td>17.2</td><td>6.5</td></tr>
+                  <tr><td>15</td><td>55</td><td>17.5</td><td>7</td></tr>
+                  <tr><td>16</td><td>56</td><td>17.8</td><td>7.25</td></tr>
+                  <tr><td>17</td><td>57</td><td>18.1</td><td>7.5</td></tr>
+                  <tr><td>18</td><td>58</td><td>18.5</td><td>8</td></tr>
+                  <tr><td>19</td><td>59</td><td>18.8</td><td>8.5</td></tr>
+                  <tr><td>20</td><td>60</td><td>19.1</td><td>9</td></tr>
+                  <tr><td>21</td><td>61</td><td>19.4</td><td>9.25</td></tr>
+                  <tr><td>22</td><td>62</td><td>19.7</td><td>9.5</td></tr>
+                  <tr><td>23</td><td>63</td><td>20.1</td><td>10</td></tr>
+                  <tr><td>24</td><td>64</td><td>20.4</td><td>10.5</td></tr>
+                  <tr><td>25</td><td>65</td><td>20.7</td><td>11</td></tr>
+                  <tr><td>26</td><td>66</td><td>21.0</td><td>11.5</td></tr>
+                  <tr><td>27</td><td>67</td><td>21.3</td><td>12</td></tr>
+                  <tr><td>28</td><td>68</td><td>21.6</td><td>12.5</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Dicas Importantes -->
+          <div class="row g-3 mt-3">
+            <div class="col-md-4">
+              <div class="text-center">
+                <i class="bi bi-thermometer-sun text-warning fs-4 mb-2"></i>
+                <h6 class="small fw-bold">Melhor Horário</h6>
+                <small class="text-muted">Meça no final do dia quando o dedo está ligeiramente inchado</small>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="text-center">
+                <i class="bi bi-snow text-primary fs-4 mb-2"></i>
+                <h6 class="small fw-bold">Evite o Frio</h6>
+                <small class="text-muted">Não meça quando estiver com frio, pois os dedos ficam menores</small>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="text-center">
+                <i class="bi bi-hand-index text-success fs-4 mb-2"></i>
+                <h6 class="small fw-bold">Dedo Correto</h6>
+                <small class="text-muted">Cada dedo tem um tamanho diferente, meça o dedo correto</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contato para Dúvidas -->
+          <div class="alert alert-success mt-4">
+            <div class="d-flex align-items-center">
+              <i class="bi bi-whatsapp text-success fs-4 me-3"></i>
+              <div>
+                <h6 class="mb-1">Ainda tem dúvidas?</h6>
+                <small>Entre em contato conosco pelo WhatsApp e te ajudaremos a encontrar o tamanho perfeito!</small>
+                <div class="mt-2">
+                  <a href="https://wa.me/5537998623061?text=Olá! Preciso de ajuda para medir o tamanho do meu dedo para um anel." 
+                     class="btn btn-success btn-sm" target="_blank">
+                    <i class="bi bi-whatsapp me-1"></i>Falar no WhatsApp
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SCRIPTS JS DO PRODUTO ===== -->
   <script>
-    function changeMainImage(src) {
+    // Função para mostrar alertas dinâmicos
+    function showAlert(type, message) {
+      // Mapear tipos para classes Bootstrap e cores
+      const alertConfig = {
+        'success': {
+          class: 'alert-success',
+          icon: 'bi-check-circle-fill',
+          color: '#198754',
+          bgColor: 'rgba(25, 135, 84, 0.1)',
+          borderColor: '#198754'
+        },
+        'danger': {
+          class: 'alert-danger', 
+          icon: 'bi-exclamation-triangle-fill',
+          color: '#dc3545',
+          bgColor: 'rgba(220, 53, 69, 0.1)',
+          borderColor: '#dc3545'
+        },
+        'warning': {
+          class: 'alert-warning',
+          icon: 'bi-exclamation-circle-fill', 
+          color: '#fd7e14',
+          bgColor: 'rgba(253, 126, 20, 0.1)',
+          borderColor: '#fd7e14'
+        },
+        'info': {
+          class: 'alert-info',
+          icon: 'bi-info-circle-fill',
+          color: '#0dcaf0',
+          bgColor: 'rgba(13, 202, 240, 0.1)', 
+          borderColor: '#0dcaf0'
+        }
+      };
+
+      const config = alertConfig[type] || alertConfig['info'];
+      
+      // Criar container de alertas se não existir
+      let alertContainer = document.getElementById('alert-container');
+      if (!alertContainer) {
+        alertContainer = document.createElement('div');
+        alertContainer.id = 'alert-container';
+        alertContainer.style.cssText = `
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          z-index: 10000;
+          max-width: 400px;
+          width: auto;
+          pointer-events: none;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        `;
+        
+        // Responsividade para mobile
+        if (window.innerWidth <= 576) {
+          alertContainer.style.cssText = `
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            left: 10px;
+            z-index: 10000;
+            max-width: none;
+            width: auto;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+          `;
+        }
+        
+        document.body.appendChild(alertContainer);
+      }
+      
+      // Criar o alerta
+      const alertId = 'alert-' + Date.now();
+      const alert = document.createElement('div');
+      alert.id = alertId;
+      alert.style.cssText = `
+        background: ${config.bgColor};
+        border: 1px solid ${config.borderColor};
+        border-radius: 12px;
+        padding: 16px 20px;
+        margin-bottom: 0;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+        backdrop-filter: blur(10px);
+        border-left: 4px solid ${config.color};
+        pointer-events: auto;
+        transform: translateX(100%);
+        opacity: 0;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        font-family: 'Montserrat', sans-serif;
+        position: relative;
+        overflow: hidden;
+        min-width: 300px;
+        max-width: 100%;
+        width: 100%;
+      `;
+      
+      alert.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: ${config.bgColor};
+            border: 2px solid ${config.color};
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+          ">
+            <i class="bi ${config.icon}" style="color: ${config.color}; font-size: 18px;"></i>
+          </div>
+          <div style="flex: 1; min-width: 0;">
+            <div style="
+              color: ${config.color};
+              font-weight: 600;
+              font-size: 14px;
+              line-height: 1.4;
+              margin: 0;
+            ">${message}</div>
+          </div>
+          <button onclick="removeAlert('${alertId}')" style="
+            background: none;
+            border: none;
+            color: ${config.color};
+            font-size: 18px;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.7;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+          " onmouseover="this.style.opacity='1'; this.style.background='rgba(0,0,0,0.1)'" onmouseout="this.style.opacity='0.7'; this.style.background='none'">
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
+        <div style="
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          height: 3px;
+          background: ${config.color};
+          width: 0%;
+          transition: width 3.5s linear;
+        " class="progress-bar"></div>
+      `;
+      
+      // Adicionar ao container
+      alertContainer.appendChild(alert);
+      
+      // Animar entrada
+      setTimeout(() => {
+        alert.style.transform = 'translateX(0)';
+        alert.style.opacity = '1';
+        
+        // Iniciar barra de progresso
+        const progressBar = alert.querySelector('.progress-bar');
+        if (progressBar) {
+          setTimeout(() => {
+            progressBar.style.width = '100%';
+          }, 100);
+        }
+      }, 50);
+      
+      // Remover automaticamente após 3.5 segundos
+      setTimeout(() => {
+        removeAlert(alertId);
+      }, 3500);
+    }
+
+    // Função para remover alerta específico
+    function removeAlert(alertId) {
+      const alert = document.getElementById(alertId);
+      if (alert) {
+        alert.style.transform = 'translateX(100%)';
+        alert.style.opacity = '0';
+        setTimeout(() => {
+          if (alert.parentNode) {
+            alert.remove();
+          }
+        }, 400);
+      }
+    }
+
+    // Função para ir ao carrinho
+    function goToCart() {
+      window.location.href = '/cart/';
+    }
+
+    // Funções para controle de quantidade
+    function increaseQuantity() {
+      const input = document.getElementById('quantity-input');
+      const currentValue = parseInt(input.value);
+      if (currentValue < parseInt(input.max)) {
+        input.value = currentValue + 1;
+      }
+    }
+
+    function decreaseQuantity() {
+      const input = document.getElementById('quantity-input');
+      const currentValue = parseInt(input.value);
+      if (currentValue > parseInt(input.min)) {
+        input.value = currentValue - 1;
+      }
+    }
+
+    // Função para compartilhar produto
+    function shareProduct() {
+      if (navigator.share) {
+        navigator.share({
+          title: '{{ product.nome }} - OuriPrata',
+          text: 'Confira este produto incrível!',
+          url: window.location.href
+        });
+      } else {
+        navigator.clipboard.writeText(window.location.href).then(() => {
+          alert('Link copiado para a área de transferência!');
+        });
+      }
+    }
+
+    function changeMainImage(src, event) {
       const mainImage = document.getElementById('main-product-image');
       mainImage.src = src;
-      
+
       document.querySelectorAll('.product-thumb').forEach(thumb => {
         thumb.style.opacity = '0.7';
         thumb.style.border = '1px solid #dee2e6';
       });
-      
-      event.target.style.opacity = '1';
-      event.target.style.border = '2px solid #ffc107';
+
+      if (event && event.target) {
+        event.target.style.opacity = '1';
+        event.target.style.border = '2px solid #ffc107';
+      }
     }
-    
+
     document.addEventListener('DOMContentLoaded', function() {
+      // Auto-hide para alertas Django existentes
+      const existingAlerts = document.querySelectorAll('.alert:not(.auto-hide)');
+      existingAlerts.forEach(alert => {
+        // Verificar se é um alerta Django (geralmente tem mensagens específicas)
+        if (alert.textContent.includes('foi removido') || 
+            alert.textContent.includes('foi adicionado') || 
+            alert.textContent.includes('sucesso') ||
+            alert.textContent.includes('erro') ||
+            alert.classList.contains('messages')) {
+          alert.classList.add('auto-hide');
+          
+          // Remover elemento após a animação
+          setTimeout(() => {
+            if (alert.parentNode) {
+              alert.remove();
+            }
+          }, 3500);
+        }
+      });
+
+      // Observer para novos alertas que possam ser adicionados dinamicamente
+      const alertObserver = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          mutation.addedNodes.forEach(function(node) {
+            if (node.nodeType === 1 && node.classList && node.classList.contains('alert')) {
+              if (!node.classList.contains('auto-hide')) {
+                node.classList.add('auto-hide');
+                setTimeout(() => {
+                  if (node.parentNode) {
+                    node.remove();
+                  }
+                }, 3500);
+              }
+            }
+          });
+        });
+      });
+
+      // Observar mudanças no body
+      alertObserver.observe(document.body, {
+        childList: true,
+        subtree: true
+      });
+
       const wishlistBtn = document.getElementById('wishlist-btn');
       const wishlistIcon = document.getElementById('wishlist-icon');
       const wishlistText = document.getElementById('wishlist-text');
       const addToCartBtn = document.getElementById('add-to-cart-btn');
       const quantityInput = document.getElementById('quantity-input');
-      
+      const cartBadge = document.getElementById('cart-badge');
+
       const firstThumb = document.querySelector('.product-thumb');
       if (firstThumb) {
         firstThumb.style.opacity = '1';
         firstThumb.style.border = '2px solid #ffc107';
       }
-      
+
       const productCards = document.querySelectorAll('.card .overlay-hover');
       productCards.forEach(overlay => {
         const card = overlay.closest('.card');
@@ -434,48 +1051,127 @@
           overlay.style.opacity = '0';
         });
       });
-      
+
       if (addToCartBtn) {
         addToCartBtn.addEventListener('click', function() {
           const produtoId = this.getAttribute('data-produto-id');
           const quantidade = quantityInput.value;
+          const ringSizeSelect = document.getElementById('ring-size');
           
+          // Verificar se é produto que precisa de tamanho e se foi selecionado
+          if (ringSizeSelect && ringSizeSelect.required && !ringSizeSelect.value) {
+            // Destacar o campo de tamanho
+            ringSizeSelect.classList.add('is-invalid');
+            ringSizeSelect.focus();
+            
+            // Mostrar alerta
+            const alert = document.createElement('div');
+            alert.className = 'alert alert-warning alert-dismissible fade show mt-2 auto-hide';
+            alert.innerHTML = `
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              Selecione o tamanho antes de adicionar ao carrinho.
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            ringSizeSelect.closest('.mb-3').appendChild(alert);
+            
+            // Remover alerta após 3.5 segundos (3s de animação + 0.5s de fade)
+            setTimeout(() => {
+              if (alert.parentNode) {
+                alert.remove();
+              }
+              ringSizeSelect.classList.remove('is-invalid');
+            }, 3500);
+            
+            return;
+          }
+          
+          // Remover classe de erro se havia
+          if (ringSizeSelect) {
+            ringSizeSelect.classList.remove('is-invalid');
+          }
+          
+          // Preparar dados para envio
+          let bodyData = `quantidade=${quantidade}`;
+          if (ringSizeSelect && ringSizeSelect.value) {
+            bodyData += `&ring_size=${ringSizeSelect.value}`;
+          }
+
+          // Animação do botão
+          const originalText = this.innerHTML;
+          this.disabled = true;
+          this.innerHTML = '<i class="bi bi-arrow-repeat spin me-2"></i>Adicionando...';
+
           fetch(`/cart/add/${produtoId}/`, {
             method: 'POST',
             headers: {
               'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
               'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: `quantidade=${quantidade}`
+            body: bodyData
           })
           .then(response => response.json())
           .then(data => {
             if (data.status === 'success') {
-              const originalText = this.innerHTML;
-              this.innerHTML = '<i class="bi bi-check-circle me-2"></i>Adicionado!';
-              this.classList.add('btn-success');
-              this.classList.remove('btn-warning');
-              
+              // Restaurar botão
+              this.innerHTML = originalText;
+              this.disabled = false;
+
+              // Mostrar o modal
+              const cartModal = new bootstrap.Modal(document.getElementById('cartModal'));
+              cartModal.show();
+
+              // Mostrar badge com animação
+              if (cartBadge) {
+                cartBadge.style.display = 'block';
+                cartBadge.style.animation = 'bounce 0.6s';
+                setTimeout(() => {
+                  cartBadge.style.display = 'none';
+                }, 2000);
+              }
+
+              // Mostrar alerta de sucesso imediatamente
+              if (data.message) {
+                showAlert('success', data.message);
+              }
+
+              // Atualizar contador do carrinho no header se existir
               if (window.updateCartCount) {
                 window.updateCartCount();
               }
+            } else if (data.status === 'error') {
+              // Mostrar mensagem de erro
+              showAlert('danger', data.message || 'Erro ao adicionar produto ao carrinho');
               
-              setTimeout(() => {
-                this.innerHTML = originalText;
-                this.classList.remove('btn-success');
-                this.classList.add('btn-warning');
-              }, 2000);
+              this.innerHTML = originalText;
+              this.disabled = false;
             }
           })
           .catch(error => {
             console.error('Erro:', error);
+            showAlert('danger', 'Erro de conexão. Tente novamente.');
+            
+            this.innerHTML = originalText;
+            this.disabled = false;
           });
         });
       }
-      
+
+      // Event listener para o seletor de tamanho
+      const ringSizeSelect = document.getElementById('ring-size');
+      if (ringSizeSelect) {
+        ringSizeSelect.addEventListener('change', function() {
+          // Remover classe de erro quando usuário selecionar tamanho
+          this.classList.remove('is-invalid');
+          
+          // Remover alertas existentes
+          const alerts = this.closest('.mb-3').querySelectorAll('.alert');
+          alerts.forEach(alert => alert.remove());
+        });
+      }
+
       if (wishlistBtn) {
         const produtoId = wishlistBtn.getAttribute('data-produto-id');
-        
+
         fetch(`/wishlist/check/${produtoId}/`)
           .then(response => response.json())
           .then(data => {
@@ -488,11 +1184,11 @@
             }
           })
           .catch(error => console.error('Erro:', error));
-        
+
         wishlistBtn.addEventListener('click', function() {
           const isInWishlist = wishlistIcon.classList.contains('bi-heart-fill');
           const url = isInWishlist ? `/wishlist/remove/${produtoId}/` : `/wishlist/add/${produtoId}/`;
-          
+
           fetch(url, {
             method: 'POST',
             headers: {
@@ -508,16 +1204,32 @@
               wishlistBtn.classList.remove('btn-outline-danger');
               wishlistBtn.classList.add('btn-danger');
               wishlistText.textContent = 'Na Lista';
+              
+              // Mostrar alerta de sucesso imediatamente
+              if (data.message) {
+                showAlert('success', data.message);
+              }
             } else if (data.status === 'removed') {
               wishlistIcon.classList.remove('bi-heart-fill');
               wishlistIcon.classList.add('bi-heart');
               wishlistBtn.classList.remove('btn-danger');
               wishlistBtn.classList.add('btn-outline-danger');
               wishlistText.textContent = 'Lista de Desejos';
+              
+              // Mostrar alerta de aviso imediatamente
+              if (data.message) {
+                showAlert('warning', data.message);
+              }
+            } else if (data.status === 'exists') {
+              // Produto já está na lista
+              if (data.message) {
+                showAlert('info', data.message);
+              }
             }
           })
           .catch(error => {
             console.error('Erro:', error);
+            showAlert('danger', 'Erro de conexão. Tente novamente.');
           });
         });
       }

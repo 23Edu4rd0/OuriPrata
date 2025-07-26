@@ -1,19 +1,20 @@
-<section class="pt-0 pb-4">
+<section class="pt-0 pb-3 pb-md-4">
 <style>
-  @media (max-width: 768px) {
+  @media (max-width: 576px) {
     .card-img-top {
-      height: 110px !important;
+      height: 120px !important;
       object-fit: cover !important;
-      image-rendering: auto !important;
     }
     h2.fw-semibold {
-      font-size: 0.85rem !important;
+      font-size: 0.9rem !important;
     }
     p.text-muted.small {
       font-size: 0.75rem !important;
     }
-    h5.card-title span {
-      font-size: 0.75rem !important;
+    h5.card-title {
+      font-size: 0.8rem !important;
+      line-height: 1.2 !important;
+      margin-bottom: 0.5rem !important;
     }
     .card-body {
       padding: 0.5rem !important;
@@ -22,27 +23,66 @@
       font-size: 0.7rem !important;
       padding: 0.25rem 0.5rem !important;
     }
-    .mb-2 {
-      min-height: 1.2rem !important;
-    }
     .badge {
       font-size: 0.65rem !important;
       padding: 0.15rem 0.4rem !important;
+    }
+    .text-decoration-line-through {
+      font-size: 0.7rem !important;
+    }
+    .fw-bold {
+      font-size: 0.75rem !important;
+    }
+  }
+  
+  @media (min-width: 577px) and (max-width: 768px) {
+    .card-img-top {
+      height: 140px !important;
+    }
+    .card-title {
+      font-size: 0.85rem !important;
+    }
+  }
+  
+  /* Animação de loading */
+  .spin {
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  
+  /* Animação para o modal */
+  .modal-content {
+    animation: modalSlideIn 0.3s ease-out;
+  }
+  
+  @keyframes modalSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
 </style>
   <div class="container">
     <!-- Título da seção -->
-    <div class="text-center mb-4">
-      <h2 class="fw-semibold mb-2" style="font-family: 'Montserrat', sans-serif; font-weight: 500; color: #bfa14a; font-size: 1.05rem; letter-spacing: 0.5px; background: none; border: none; box-shadow: none; padding: 0; margin: 0;">Produtos em Destaque</h2>
-      <p class="text-muted small mb-2" style="font-family: 'Montserrat', sans-serif; font-weight: 400; font-size: 0.92rem; letter-spacing: 0.3px; background: none; border: none; box-shadow: none; padding: 0; margin: 0;">Descubra nossas peças mais exclusivas</p>
+    <div class="text-center mb-3 mb-md-4">
+      <h2 class="fw-semibold mb-2" style="font-family: 'Montserrat', sans-serif; font-weight: 500; color: #bfa14a; font-size: 1.05rem; letter-spacing: 0.5px;">Produtos em Destaque</h2>
+      <p class="text-muted small mb-2" style="font-family: 'Montserrat', sans-serif; font-weight: 400; font-size: 0.92rem; letter-spacing: 0.3px;">Descubra nossas peças mais exclusivas</p>
       <div class="mx-auto bg-warning rounded-pill" style="height: 3px; width: 60px;"></div>
     </div>
     
     <!-- Grid de produtos -->
-    <div class="row g-3">
-      {% for product in products|slice:":4" %}
-      <div class="col-lg-3 col-md-6 col-6">
+    {% if products %}
+    <div class="row g-2 g-md-3">
+      {% for product in products|slice:":6" %}
+      <div class="col-6 col-md-4 col-lg-2">
         <div class="card border-0 h-100 shadow-sm">
           <!-- Imagem do produto -->
           <div class="position-relative overflow-hidden">
@@ -129,6 +169,13 @@
       </div>
       {% endfor %}
     </div>
+    {% else %}
+    <div class="text-center py-5">
+      <i class="bi bi-gem text-muted mb-3" style="font-size: 3rem;"></i>
+      <h5 class="text-muted">Nenhum produto encontrado</h5>
+      <p class="text-muted">Em breve teremos novos produtos para você!</p>
+    </div>
+    {% endif %}
     
     <!-- Botão para ver mais produtos -->
     <div class="text-center mt-4">
@@ -138,6 +185,29 @@
     </div>
   </div>
 </section>
+
+<!-- Modal de Produto Adicionado -->
+<div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-body text-center py-5">
+        <div class="mb-4">
+          <i class="bi bi-check-circle-fill text-success" style="font-size: 3rem;"></i>
+        </div>
+        <h6 class="fw-medium mb-3" id="productAddedName">Produto adicionado</h6>
+        
+        <div class="d-grid gap-2">
+          <button type="button" class="btn btn-dark fw-medium py-2" onclick="goToCart()">
+            Finalizar Compra
+          </button>
+          <button type="button" class="btn btn-link text-muted" data-bs-dismiss="modal">
+            Continuar Navegando
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
 {% csrf_token %}
@@ -158,6 +228,14 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function addToCart(productId) {
+    // Encontrar o botão que foi clicado
+    const button = event.target.closest('button');
+    const originalHTML = button.innerHTML;
+    
+    // Feedback visual imediato
+    button.disabled = true;
+    button.innerHTML = '<i class="bi bi-arrow-repeat spin"></i>';
+    
     fetch(`/cart/add/${productId}/`, {
         method: 'POST',
         headers: {
@@ -169,28 +247,53 @@ function addToCart(productId) {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            // Feedback visual com classes Bootstrap
-            const button = event.target.closest('button');
-            const originalHTML = button.innerHTML;
-            button.innerHTML = '<i class="bi bi-check-circle"></i>';
-            button.classList.remove('btn-warning', 'btn-outline-light');
-            button.classList.add('btn-success');
+            // Obter nome do produto do card
+            const productCard = button.closest('.card');
+            const productName = productCard.querySelector('.card-title span').textContent.trim();
             
-            setTimeout(() => {
-                button.innerHTML = originalHTML;
-                button.classList.remove('btn-success');
-                button.classList.add('btn-warning');
-            }, 2000);
+            // Atualizar o modal com o nome do produto
+            document.getElementById('productAddedName').textContent = `"${productName}" foi adicionado ao seu carrinho`;
+            
+            // Mostrar o modal
+            const cartModal = new bootstrap.Modal(document.getElementById('cartModal'));
+            cartModal.show();
+            
+            // Restaurar botão
+            button.innerHTML = originalHTML;
+            button.disabled = false;
             
             // Atualizar contador do carrinho se existir
             if (window.updateCartCount) {
                 window.updateCartCount();
             }
+        } else {
+            // Em caso de erro
+            button.innerHTML = '<i class="bi bi-exclamation-triangle"></i>';
+            button.classList.add('btn-danger');
+            
+            setTimeout(() => {
+                button.innerHTML = originalHTML;
+                button.classList.remove('btn-danger');
+                button.disabled = false;
+            }, 2000);
         }
     })
     .catch(error => {
         console.error('Erro:', error);
+        button.innerHTML = '<i class="bi bi-exclamation-triangle"></i>';
+        button.classList.add('btn-danger');
+        
+        setTimeout(() => {
+            button.innerHTML = originalHTML;
+            button.classList.remove('btn-danger');
+            button.disabled = false;
+        }, 2000);
     });
+}
+
+// Função para ir ao carrinho
+function goToCart() {
+    window.location.href = '/cart/';
 }
 </script>
 

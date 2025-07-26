@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-7 col-md-9">
+      <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-body p-5 text-center">
+          <i class="bi bi-x-circle display-3 text-danger mb-4"></i>
+          <h2 class="fw-bold mb-3">Pagamento não aprovado</h2>
+          <p class="lead mb-4">Ocorreu um erro ou o pagamento foi recusado.<br>Você pode tentar novamente ou escolher outro método de pagamento.</p>
+          <a href="/cart/" class="btn btn-outline-danger rounded-pill px-4 py-2">
+            <i class="bi bi-cart3 me-2"></i> Voltar ao Carrinho
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

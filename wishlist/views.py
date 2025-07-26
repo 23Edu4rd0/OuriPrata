@@ -24,11 +24,23 @@ def add_to_wishlist(request, produto_id):
     )
     
     if created:
-        messages.success(request, f'{produto.nome} foi adicionado à sua lista de desejos!')
-        return JsonResponse({'status': 'added', 'message': 'Produto adicionado à lista de desejos!'})
+        message = f'{produto.nome} foi adicionado à sua lista de desejos!'
+        
+        # Para requisições AJAX, retornar JSON sem adicionar à sessão
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or request.content_type == 'application/json':
+            return JsonResponse({'status': 'added', 'message': message})
+        else:
+            messages.success(request, message)
     else:
-        messages.info(request, f'{produto.nome} já está na sua lista de desejos!')
-        return JsonResponse({'status': 'exists', 'message': 'Produto já está na lista de desejos!'})
+        message = f'{produto.nome} já está na sua lista de desejos!'
+        
+        # Para requisições AJAX, retornar JSON sem adicionar à sessão
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or request.content_type == 'application/json':
+            return JsonResponse({'status': 'exists', 'message': message})
+        else:
+            messages.info(request, message)
+            
+    return JsonResponse({'status': 'added', 'message': 'Produto adicionado à lista de desejos!'})
 
 @login_required
 @require_POST
@@ -39,11 +51,24 @@ def remove_from_wishlist(request, produto_id):
     try:
         wishlist_item = Wishlist.objects.get(user=request.user, produto=produto)
         wishlist_item.delete()
-        messages.success(request, f'{produto.nome} foi removido da sua lista de desejos!')
-        return JsonResponse({'status': 'removed', 'message': 'Produto removido da lista de desejos!'})
+        message = f'{produto.nome} foi removido da sua lista de desejos!'
+        
+        # Para requisições AJAX, retornar JSON sem adicionar à sessão
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or request.content_type == 'application/json':
+            return JsonResponse({'status': 'removed', 'message': message})
+        else:
+            messages.success(request, message)
+            
     except Wishlist.DoesNotExist:
-        messages.error(request, 'Produto não encontrado na sua lista de desejos!')
-        return JsonResponse({'status': 'not_found', 'message': 'Produto não encontrado na lista!'})
+        error_message = 'Produto não encontrado na sua lista de desejos!'
+        
+        # Para requisições AJAX, retornar JSON sem adicionar à sessão
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or request.content_type == 'application/json':
+            return JsonResponse({'status': 'not_found', 'message': error_message})
+        else:
+            messages.error(request, error_message)
+    
+    return JsonResponse({'status': 'not_found', 'message': 'Produto não encontrado na lista!'})
 
 @login_required
 def check_wishlist_status(request, produto_id):
