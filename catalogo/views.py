@@ -1,8 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
-from catalogo.models import Joais, Categorias
-from django.db.models import Q
+from catalogo.models import Joais, Categorias, Review, ReviewImage
+from django.db.models import Q, Avg, Count
+from django.contrib import messages
+from django.views.decorators.http import require_POST
+from django.core.paginator import Paginator
+import json
 
 def home(request):
     """
@@ -212,31 +216,61 @@ def all_products(request):
 
 def search_products(request):
     """
-    View para pesquisar produtos por nome ou descrição
+    View para pesquisar produtos por nome ou descrição com filtros avançados
     """
     query = request.GET.get('q', '').strip()
-    products = []
+    categoria_filter = request.GET.get('categoria', '').strip()
+    preco_filter = request.GET.get('preco', '').strip()
+    
+    products = Joais.objects.all()
     total_products = 0
+    
     if query:
-        products = Joais.objects.filter(
+        # Busca básica por nome ou descrição
+        products = products.filter(
             Q(nome__icontains=query) | 
             Q(descricao__icontains=query)
         ).distinct()
-        total_products = products.count()
+    
+    # Filtro por categoria
+    if categoria_filter:
+        try:
+            categoria = Categorias.objects.get(slug=categoria_filter)
+            products = products.filter(categoria=categoria)
+        except Categorias.DoesNotExist:
+            pass
+    
+    # Filtro por preço
+    if preco_filter:
+        if preco_filter == '0-100':
+            products = products.filter(preco__lte=100)
+        elif preco_filter == '100-300':
+            products = products.filter(preco__gte=100, preco__lte=300)
+        elif preco_filter == '300-500':
+            products = products.filter(preco__gte=300, preco__lte=500)
+        elif preco_filter == '500+':
+            products = products.filter(preco__gte=500)
+    
+    total_products = products.count()
     all_categories = Categorias.objects.all()
+    
     if query:
         page_title = "Resultados da Pesquisa"
         page_subtitle = f"{total_products} produto{'' if total_products == 1 else 's'} encontrado{'' if total_products == 1 else 's'} para \"{query}\""
     else:
         page_title = "Pesquisar Produtos"
         page_subtitle = "Digite algo para pesquisar nossos produtos"
+    
     breadcrumbs = [
         {'name': 'Pesquisa', 'url': None}
     ]
+    
     context = {
         'products': products,
         'total_products': total_products,
         'search_query': query,
+        'categoria_filter': categoria_filter,
+        'preco_filter': preco_filter,
         'all_categories': all_categories,
         'current_page': 'search',
         'page_title': page_title,
@@ -287,3 +321,165 @@ def checkout(request, product_slug):
         return redirect(f'/catalogo/{product_slug}/')
     except UserProfile.DoesNotExist:
         return redirect(f'/accounts/complete-profile/?next={request.get_full_path()}')
+
+@login_required
+def add_review(request, product_slug):
+    """
+    View para adicionar uma avaliação a um produto
+    """
+    if request.method == 'POST':
+        product = get_object_or_404(Joais, slug=product_slug)
+        
+        # Verificar se o usuário já avaliou este produto
+        existing_review = Review.objects.filter(produto=product, usuario=request.user).first()
+        if existing_review:
+            messages.error(request, 'Você já avaliou este produto.')
+            return redirect('item_detail', slug=product_slug)
+        
+        try:
+            rating = int(request.POST.get('rating', 0))
+            titulo = request.POST.get('titulo', '').strip()
+            comentario = request.POST.get('comentario', '').strip()
+            recomendado = request.POST.get('recomendado') == 'on'
+            
+            if rating < 1 or rating > 5:
+                messages.error(request, 'Avaliação deve ser entre 1 e 5 estrelas.')
+                return redirect('item_detail', slug=product_slug)
+            
+            if not comentario:
+                messages.error(request, 'Comentário é obrigatório.')
+                return redirect('item_detail', slug=product_slug)
+            
+            # Criar a avaliação
+            review = Review.objects.create(
+                produto=product,
+                usuario=request.user,
+                rating=rating,
+                titulo=titulo,
+                comentario=comentario,
+                recomendado=recomendado,
+                aprovado=True  # Auto-aprovar para usuários logados
+            )
+            
+            # Processar foto se fornecida
+            if 'foto' in request.FILES:
+                review.foto = request.FILES['foto']
+                review.save()
+            
+            messages.success(request, 'Avaliação enviada com sucesso!')
+            return redirect('item_detail', slug=product_slug)
+            
+        except (ValueError, TypeError):
+            messages.error(request, 'Dados inválidos fornecidos.')
+            return redirect('item_detail', slug=product_slug)
+    
+    return redirect('item_detail', slug=product_slug)
+
+@login_required
+def edit_review(request, review_id):
+    """
+    View para editar uma avaliação existente
+    """
+    review = get_object_or_404(Review, id=review_id, usuario=request.user)
+    
+    if request.method == 'POST':
+        try:
+            rating = int(request.POST.get('rating', 0))
+            titulo = request.POST.get('titulo', '').strip()
+            comentario = request.POST.get('comentario', '').strip()
+            recomendado = request.POST.get('recomendado') == 'on'
+            
+            if rating < 1 or rating > 5:
+                messages.error(request, 'Avaliação deve ser entre 1 e 5 estrelas.')
+                return redirect('item_detail', slug=review.produto.slug)
+            
+            if not comentario:
+                messages.error(request, 'Comentário é obrigatório.')
+                return redirect('item_detail', slug=review.produto.slug)
+            
+            # Atualizar a avaliação
+            review.rating = rating
+            review.titulo = titulo
+            review.comentario = comentario
+            review.recomendado = recomendado
+            
+            # Processar nova foto se fornecida
+            if 'foto' in request.FILES:
+                review.foto = request.FILES['foto']
+            
+            review.save()
+            
+            messages.success(request, 'Avaliação atualizada com sucesso!')
+            return redirect('item_detail', slug=review.produto.slug)
+            
+        except (ValueError, TypeError):
+            messages.error(request, 'Dados inválidos fornecidos.')
+            return redirect('item_detail', slug=review.produto.slug)
+    
+    return redirect('item_detail', slug=review.produto.slug)
+
+@login_required
+def delete_review(request, review_id):
+    """
+    View para deletar uma avaliação
+    """
+    review = get_object_or_404(Review, id=review_id, usuario=request.user)
+    product_slug = review.produto.slug
+    
+    if request.method == 'POST':
+        review.delete()
+        messages.success(request, 'Avaliação removida com sucesso!')
+    
+    return redirect('item_detail', slug=product_slug)
+
+def get_product_reviews(request, product_slug):
+    """
+    View para obter avaliações de um produto via AJAX
+    """
+    product = get_object_or_404(Joais, slug=product_slug)
+    rating_filter = request.GET.get('rating', '')
+    page = request.GET.get('page', 1)
+    
+    # Filtrar avaliações aprovadas
+    reviews = Review.objects.filter(produto=product, aprovado=True)
+    
+    # Aplicar filtro de rating se especificado
+    if rating_filter and rating_filter.isdigit():
+        rating = int(rating_filter)
+        if 1 <= rating <= 5:
+            reviews = reviews.filter(rating=rating)
+    
+    # Paginação
+    paginator = Paginator(reviews, 5)  # 5 avaliações por página
+    reviews_page = paginator.get_page(page)
+    
+    # Calcular estatísticas
+    total_reviews = reviews.count()
+    avg_rating = reviews.aggregate(Avg('rating'))['rating__avg'] or 0
+    rating_distribution = reviews.values('rating').annotate(count=Count('rating')).order_by('rating')
+    
+    # Converter para lista de dicionários para JSON
+    reviews_data = []
+    for review in reviews_page:
+        reviews_data.append({
+            'id': review.id,
+            'usuario': review.usuario.username,
+            'rating': review.rating,
+            'titulo': review.titulo,
+            'comentario': review.comentario,
+            'foto_url': review.foto.url if review.foto else None,
+            'recomendado': review.recomendado,
+            'data_criacao': review.data_criacao.strftime('%d/%m/%Y'),
+            'can_edit': request.user == review.usuario,
+        })
+    
+    return JsonResponse({
+        'reviews': reviews_data,
+        'total_reviews': total_reviews,
+        'avg_rating': round(avg_rating, 1),
+        'rating_distribution': list(rating_distribution),
+        'has_next': reviews_page.has_next(),
+        'has_previous': reviews_page.has_previous(),
+        'current_page': reviews_page.number,
+        'total_pages': reviews_page.paginator.num_pages,
+    })

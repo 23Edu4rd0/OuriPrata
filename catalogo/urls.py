@@ -16,4 +16,10 @@ urlpatterns = [
     path('sucesso/', pagamentos_views.pagamento_sucesso, name='pagamento_sucesso'),
     path('erro/', pagamentos_views.pagamento_erro, name='pagamento_erro'),
     path('pendente/', pagamentos_views.pagamento_pendente, name='pagamento_pendente'),
+    
+    # URLs para sistema de avaliações
+    path('avaliar/<slug:product_slug>/', views.add_review, name='add_review'),
+    path('editar-avaliacao/<int:review_id>/', views.edit_review, name='edit_review'),
+    path('deletar-avaliacao/<int:review_id>/', views.delete_review, name='delete_review'),
+    path('reviews/<slug:product_slug>/', views.get_product_reviews, name='get_product_reviews'),
 ]

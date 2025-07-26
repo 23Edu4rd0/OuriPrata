@@ -276,6 +276,177 @@
     opacity: 0;
   }
 }
+
+/* ===== ESTILOS PARA SISTEMA DE AVALIAÇÕES ===== */
+.reviews-section {
+  background: #f8f9fa;
+  padding: 3rem 0;
+  border-radius: 1rem;
+  margin: 2rem 0;
+}
+
+.rating-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.rating-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.rating-bar-label {
+  font-size: 0.9rem;
+  color: #666;
+  min-width: 60px;
+}
+
+.rating-bar-progress {
+  flex: 1;
+  height: 8px;
+  background: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.rating-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ffc107, #ffca2c);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.rating-bar-count {
+  font-size: 0.8rem;
+  color: #666;
+  min-width: 40px;
+  text-align: right;
+}
+
+.review-card {
+  background: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  border: 1px solid #f0f0f0;
+}
+
+.review-header {
+  display: flex;
+  justify-content: between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.review-user {
+  flex: 1;
+}
+
+.review-user-name {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.25rem;
+}
+
+.review-date {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.review-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.review-stars {
+  color: #ffc107;
+}
+
+.review-title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.review-comment {
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.review-photo {
+  max-width: 200px;
+  border-radius: 0.5rem;
+  margin-top: 1rem;
+}
+
+.review-recommended {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+  color: #28a745;
+  background: #d4edda;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.review-actions {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #f0f0f0;
+}
+
+/* Estilos para o modal de avaliação */
+.stars-container {
+  display: flex;
+  gap: 0.25rem;
+  font-size: 1.5rem;
+}
+
+.star-rating {
+  cursor: pointer;
+  color: #dee2e6;
+  transition: color 0.2s;
+}
+
+.star-rating:hover,
+.star-rating.active {
+  color: #ffc107;
+}
+
+.star-rating.filled {
+  color: #ffc107;
+}
+
+.rating-text {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .reviews-section {
+    padding: 2rem 0;
+  }
+  
+  .review-card {
+    padding: 1rem;
+  }
+  
+  .review-header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .stars-container {
+    font-size: 1.25rem;
+  }
+}
 </style>
 
 <main class="container py-3 py-md-4">
@@ -738,6 +909,175 @@
     </div>
   </div>
 
+  <!-- ===== AVALIAÇÕES ===== -->
+  <section class="reviews-section mt-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h3 class="mb-4">
+            <i class="bi bi-star-fill text-warning me-2"></i>
+            Avaliações dos Clientes
+          </h3>
+          
+          <!-- Resumo das avaliações -->
+          <div class="reviews-summary mb-4">
+            <div class="row align-items-center">
+              <div class="col-md-4">
+                <div class="text-center">
+                  <div class="display-4 fw-bold text-warning mb-2" id="avg-rating">0.0</div>
+                  <div class="stars mb-2" id="avg-stars">
+                    <i class="bi bi-star text-muted"></i>
+                    <i class="bi bi-star text-muted"></i>
+                    <i class="bi bi-star text-muted"></i>
+                    <i class="bi bi-star text-muted"></i>
+                    <i class="bi bi-star text-muted"></i>
+                  </div>
+                  <div class="text-muted" id="total-reviews">0 avaliações</div>
+                </div>
+              </div>
+              <div class="col-md-8">
+                <div class="rating-bars" id="rating-distribution">
+                  <!-- Barras de distribuição serão inseridas aqui -->
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Filtros de avaliação -->
+          <div class="reviews-filters mb-4">
+            <div class="d-flex flex-wrap gap-2">
+              <button class="btn btn-outline-secondary btn-sm rounded-pill active" data-rating="all">
+                Todas
+              </button>
+              <button class="btn btn-outline-warning btn-sm rounded-pill" data-rating="5">
+                5 <i class="bi bi-star-fill"></i>
+              </button>
+              <button class="btn btn-outline-warning btn-sm rounded-pill" data-rating="4">
+                4 <i class="bi bi-star-fill"></i>
+              </button>
+              <button class="btn btn-outline-warning btn-sm rounded-pill" data-rating="3">
+                3 <i class="bi bi-star-fill"></i>
+              </button>
+              <button class="btn btn-outline-warning btn-sm rounded-pill" data-rating="2">
+                2 <i class="bi bi-star-fill"></i>
+              </button>
+              <button class="btn btn-outline-warning btn-sm rounded-pill" data-rating="1">
+                1 <i class="bi bi-star-fill"></i>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Lista de avaliações -->
+          <div class="reviews-list" id="reviews-container">
+            <!-- Avaliações serão carregadas via AJAX -->
+          </div>
+          
+          <!-- Paginação -->
+          <div class="reviews-pagination text-center mt-4" id="reviews-pagination" style="display: none;">
+            <button class="btn btn-outline-secondary btn-sm me-2" id="prev-page">
+              <i class="bi bi-chevron-left"></i> Anterior
+            </button>
+            <span class="text-muted" id="page-info">Página 1</span>
+            <button class="btn btn-outline-secondary btn-sm ms-2" id="next-page">
+              Próxima <i class="bi bi-chevron-right"></i>
+            </button>
+          </div>
+          
+          <!-- Botão para adicionar avaliação -->
+          {% if user.is_authenticated %}
+            <div class="text-center mt-4">
+              <button class="btn btn-warning rounded-pill px-4" onclick="showReviewForm()">
+                <i class="bi bi-star me-2"></i>
+                Avaliar Produto
+              </button>
+            </div>
+          {% else %}
+            <div class="text-center mt-4">
+              <p class="text-muted mb-2">Faça login para avaliar este produto</p>
+              <a href="{% url 'accounts:login' %}" class="btn btn-outline-warning rounded-pill">
+                <i class="bi bi-box-arrow-in-right me-2"></i>
+                Entrar
+              </a>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal para adicionar/editar avaliação -->
+  <div class="modal fade" id="reviewModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="bi bi-star me-2"></i>
+            <span id="review-modal-title">Avaliar Produto</span>
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <form id="review-form" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="modal-body">
+            <!-- Rating -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Sua Avaliação</label>
+              <div class="rating-input">
+                <div class="stars-container">
+                  <i class="bi bi-star star-rating" data-rating="1"></i>
+                  <i class="bi bi-star star-rating" data-rating="2"></i>
+                  <i class="bi bi-star star-rating" data-rating="3"></i>
+                  <i class="bi bi-star star-rating" data-rating="4"></i>
+                  <i class="bi bi-star star-rating" data-rating="5"></i>
+                </div>
+                <input type="hidden" name="rating" id="rating-input" value="0" required>
+                <div class="rating-text mt-2">
+                  <small class="text-muted">Clique nas estrelas para avaliar</small>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Título -->
+            <div class="mb-3">
+              <label for="review-title" class="form-label">Título (opcional)</label>
+              <input type="text" class="form-control" id="review-title" name="titulo" placeholder="Ex: Produto excelente!">
+            </div>
+            
+            <!-- Comentário -->
+            <div class="mb-3">
+              <label for="review-comment" class="form-label fw-semibold">Comentário *</label>
+              <textarea class="form-control" id="review-comment" name="comentario" rows="4" placeholder="Conte sua experiência com este produto..." required></textarea>
+            </div>
+            
+            <!-- Foto -->
+            <div class="mb-3">
+              <label for="review-photo" class="form-label">Foto (opcional)</label>
+              <input type="file" class="form-control" id="review-photo" name="foto" accept="image/*">
+              <div class="form-text">Adicione uma foto sua usando o produto</div>
+            </div>
+            
+            <!-- Recomendado -->
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="review-recommended" name="recomendado" checked>
+                <label class="form-check-label" for="review-recommended">
+                  Recomendo este produto
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-warning">
+              <i class="bi bi-star me-2"></i>
+              Enviar Avaliação
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <!-- ===== SCRIPTS JS DO PRODUTO ===== -->
   <script>
     // Função para mostrar alertas dinâmicos
@@ -983,7 +1323,54 @@
       }
     }
 
+    // ===== SISTEMA DE AVALIAÇÕES =====
     document.addEventListener('DOMContentLoaded', function() {
+      const productSlug = '{{ product.slug }}';
+      let currentPage = 1;
+      let currentRatingFilter = 'all';
+      
+      // Carregar avaliações iniciais
+      loadReviews();
+      
+      // Configurar filtros de rating
+      document.querySelectorAll('.reviews-filters button').forEach(button => {
+        button.addEventListener('click', function() {
+          const rating = this.dataset.rating;
+          
+          // Atualizar botões ativos
+          document.querySelectorAll('.reviews-filters button').forEach(btn => {
+            btn.classList.remove('active', 'btn-warning');
+            btn.classList.add('btn-outline-secondary');
+          });
+          this.classList.add('active', 'btn-warning');
+          this.classList.remove('btn-outline-secondary');
+          
+          // Aplicar filtro
+          currentRatingFilter = rating;
+          currentPage = 1;
+          loadReviews();
+        });
+      });
+      
+      // Configurar paginação
+      document.getElementById('prev-page').addEventListener('click', function() {
+        if (currentPage > 1) {
+          currentPage--;
+          loadReviews();
+        }
+      });
+      
+      document.getElementById('next-page').addEventListener('click', function() {
+        currentPage++;
+        loadReviews();
+      });
+      
+      // Configurar sistema de rating no modal
+      setupRatingStars();
+      
+      // Configurar formulário de avaliação
+      setupReviewForm();
+
       // Auto-hide para alertas Django existentes
       const existingAlerts = document.querySelectorAll('.alert:not(.auto-hide)');
       existingAlerts.forEach(alert => {

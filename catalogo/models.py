@@ -1,6 +1,8 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils.text import slugify
-from django.utils.text import slugify
+import os
 
 class Joais(models.Model):
     nome = models.CharField(max_length=100, null=False, blank=False)
@@ -80,3 +82,74 @@ class Ocasiao(models.Model):
 
     def __str__(self):
         return self.nome
+
+class Review(models.Model):
+    """
+    Modelo para avaliações dos produtos pelos clientes
+    """
+    RATING_CHOICES = [
+        (1, '1 - Muito Ruim'),
+        (2, '2 - Ruim'),
+        (3, '3 - Regular'),
+        (4, '4 - Bom'),
+        (5, '5 - Excelente'),
+    ]
+    
+    produto = models.ForeignKey(Joais, on_delete=models.CASCADE, related_name='reviews')
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviews')
+    rating = models.IntegerField(
+        choices=RATING_CHOICES,
+        validators=[MinValueValidator(1), MaxValueValidator(5)],
+        help_text='Avaliação de 1 a 5 estrelas'
+    )
+    titulo = models.CharField(max_length=100, blank=True, help_text='Título opcional da avaliação')
+    comentario = models.TextField(help_text='Comentário detalhado sobre o produto')
+    foto = models.ImageField(
+        upload_to='reviews/',
+        blank=True,
+        null=True,
+        help_text='Foto do cliente usando o produto (opcional)'
+    )
+    recomendado = models.BooleanField(default=True, help_text='Recomenda este produto?')
+    data_criacao = models.DateTimeField(auto_now_add=True)
+    data_atualizacao = models.DateTimeField(auto_now=True)
+    aprovado = models.BooleanField(default=False, help_text='Avaliação aprovada pela moderação')
+    
+    class Meta:
+        ordering = ['-data_criacao']
+        unique_together = ['produto', 'usuario']  # Um usuário só pode avaliar um produto uma vez
+        verbose_name = 'Avaliação'
+        verbose_name_plural = 'Avaliações'
+    
+    def __str__(self):
+        return f'{self.usuario.username} - {self.produto.nome} ({self.rating}/5)'
+    
+    def get_rating_display_stars(self):
+        """Retorna HTML para exibir as estrelas"""
+        stars = ''
+        for i in range(1, 6):
+            if i <= self.rating:
+                stars += '<i class="bi bi-star-fill text-warning"></i>'
+            else:
+                stars += '<i class="bi bi-star text-muted"></i>'
+        return stars
+    
+    def get_rating_percentage(self):
+        """Retorna a porcentagem do rating (para barras de progresso)"""
+        return (self.rating / 5) * 100
+
+class ReviewImage(models.Model):
+    """
+    Modelo para múltiplas fotos em uma avaliação
+    """
+    review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='imagens')
+    imagem = models.ImageField(upload_to='reviews/imagens/')
+    legenda = models.CharField(max_length=200, blank=True)
+    data_upload = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        verbose_name = 'Imagem da Avaliação'
+        verbose_name_plural = 'Imagens das Avaliações'
+    
+    def __str__(self):
+        return f'Imagem de {self.review.usuario.username}'

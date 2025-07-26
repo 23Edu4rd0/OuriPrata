@@ -24,15 +24,71 @@
                 autocomplete="off"
                 value="{{ request.GET.q }}"
               />
+              <!-- Botão de busca por voz desktop -->
+              <button type="button" class="btn btn-light border-0 px-3" onclick="startVoiceSearch('desktop')" id="voice-btn">
+                <i class="bi bi-mic text-muted"></i>
+              </button>
               <button type="submit" class="btn btn-light border-0 rounded-end-pill px-4">
                 <i class="bi bi-search text-muted"></i>
               </button>
             </div>
             
-            <!-- Dropdown de sugestões -->
+            <!-- Dropdown de sugestões melhorado -->
             <div id="search-suggestions" class="position-absolute w-100 bg-white shadow-lg rounded-3 mt-1 d-none" style="z-index: 1050; max-height: 400px; overflow-y: auto;">
+              <!-- Histórico de buscas -->
+              <div id="search-history" class="p-3 border-bottom d-none">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <small class="text-muted fw-medium">Buscas recentes</small>
+                  <button type="button" class="btn btn-sm btn-link text-muted p-0" onclick="clearSearchHistory()">
+                    <small>Limpar</small>
+                  </button>
+                </div>
+                <div id="history-list" class="d-flex flex-wrap gap-1">
+                  <!-- Histórico será inserido aqui -->
+                </div>
+              </div>
+              
+              <!-- Categorias populares -->
+              <div id="popular-categories" class="p-3 border-bottom d-none">
+                <small class="text-muted fw-medium mb-2 d-block">Categorias populares</small>
+                <div class="d-flex flex-wrap gap-1">
+                  <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill" onclick="searchCategory('aneis')">Anéis</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill" onclick="searchCategory('aliancas')">Alianças</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill" onclick="searchCategory('brincos')">Brincos</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill" onclick="searchCategory('promocoes')">Promoções</button>
+                </div>
+              </div>
+              
+              <!-- Resultados da busca -->
               <div id="suggestions-list">
                 <!-- Sugestões serão inseridas aqui via JavaScript -->
+              </div>
+              
+              <!-- Busca avançada -->
+              <div id="advanced-search" class="p-3 border-top d-none">
+                <small class="text-muted fw-medium mb-2 d-block">Busca avançada</small>
+                <div class="row g-2">
+                  <div class="col-6">
+                    <select class="form-select form-select-sm" id="category-filter">
+                      <option value="">Todas categorias</option>
+                      <option value="aneis">Anéis</option>
+                      <option value="aliancas">Alianças</option>
+                      <option value="brincos">Brincos</option>
+                    </select>
+                  </div>
+                  <div class="col-6">
+                    <select class="form-select form-select-sm" id="price-filter">
+                      <option value="">Qualquer preço</option>
+                      <option value="0-100">Até R$ 100</option>
+                      <option value="100-300">R$ 100 - R$ 300</option>
+                      <option value="300-500">R$ 300 - R$ 500</option>
+                      <option value="500+">Acima de R$ 500</option>
+                    </select>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-warning btn-sm w-100 mt-2" onclick="applyAdvancedSearch()">
+                  Aplicar Filtros
+                </button>
               </div>
             </div>
           </form>
@@ -165,13 +221,41 @@
           value="{{ request.GET.q }}"
           style="font-size: 0.85rem;"
         />
+        <!-- Botão de busca por voz -->
+        <button type="button" class="btn btn-white border-0 px-2" onclick="startVoiceSearch('mobile')" id="voice-btn-mobile">
+          <i class="bi bi-mic text-muted" style="font-size: 0.9rem;"></i>
+        </button>
         <button type="submit" class="btn btn-white border-0 rounded-end-pill px-3">
           <i class="bi bi-search text-muted" style="font-size: 0.9rem;"></i>
         </button>
       </div>
       
-      <!-- Dropdown de sugestões mobile -->
+      <!-- Dropdown de sugestões mobile melhorado -->
       <div id="search-suggestions-mobile" class="position-absolute w-100 bg-white shadow-lg rounded-3 mt-1 d-none" style="z-index: 1050; max-height: 300px; overflow-y: auto;">
+        <!-- Histórico de buscas mobile -->
+        <div id="search-history-mobile" class="p-3 border-bottom d-none">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <small class="text-muted fw-medium">Buscas recentes</small>
+            <button type="button" class="btn btn-sm btn-link text-muted p-0" onclick="clearSearchHistory('mobile')">
+              <small>Limpar</small>
+            </button>
+          </div>
+          <div id="history-list-mobile" class="d-flex flex-wrap gap-1">
+            <!-- Histórico será inserido aqui -->
+          </div>
+        </div>
+        
+        <!-- Categorias populares mobile -->
+        <div id="popular-categories-mobile" class="p-3 border-bottom d-none">
+          <small class="text-muted fw-medium mb-2 d-block">Categorias populares</small>
+          <div class="d-flex flex-wrap gap-1">
+            <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill" onclick="searchCategory('aneis', 'mobile')">Anéis</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill" onclick="searchCategory('aliancas', 'mobile')">Alianças</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill" onclick="searchCategory('brincos', 'mobile')">Brincos</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill" onclick="searchCategory('promocoes', 'mobile')">Promoções</button>
+          </div>
+        </div>
+        
         <div id="suggestions-list-mobile">
           <!-- Sugestões serão inseridas aqui via JavaScript -->
         </div>
@@ -294,177 +378,53 @@
   </script>
   <!-- Script Sugestões de Categoria -->
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const searchInput = document.getElementById("search-input");
-      const categorySuggestions = document.getElementById("category-suggestions");
-
-      if (searchInput && categorySuggestions) {
-        searchInput.addEventListener("focus", function() {
-          categorySuggestions.style.display = "block";
-        });
-        searchInput.addEventListener("blur", function() {
-          setTimeout(function() {
-            categorySuggestions.style.display = "none";
-          }, 150);
-        });
-      }
-
-      // Atualizar contador do carrinho
-      const cartCountBadge = document.getElementById("cart-count");
-      const cartCountMobile = document.getElementById("cart-count-mobile");
-      const cartLink = document.getElementById("cart-link");
-      
-      function updateCartCount() {
-        {% if user.is_authenticated %}
-          fetch('/cart/count/')
-            .then(response => response.json())
-            .then(data => {
-              if (data.count > 0) {
-                // Atualizar contador desktop
-                if (cartCountBadge) {
-                  cartCountBadge.textContent = data.count;
-                  cartCountBadge.style.display = "inline-block";
-                }
-                // Atualizar contador mobile
-                if (cartCountMobile) {
-                  cartCountMobile.textContent = data.count;
-                  cartCountMobile.style.display = "inline-block";
-                }
-                
-                // Adicionar efeito hover no link do carrinho
-                if (cartLink) {
-                  cartLink.setAttribute('title', `${data.count} ${data.count === 1 ? 'item' : 'itens'} no carrinho`);
-                }
-              } else {
-                // Ocultar ambos os contadores
-                if (cartCountBadge) {
-                  cartCountBadge.style.display = "none";
-                }
-                if (cartCountMobile) {
-                  cartCountMobile.style.display = "none";
-                }
-                
-                if (cartLink) {
-                  cartLink.setAttribute('title', 'Carrinho vazio');
-                }
-              }
-            })
-            .catch(error => {
-              console.error('Erro ao buscar contador do carrinho:', error);
-            });
-        {% endif %}
-      }
-
-      // Atualizar contador ao carregar a página
-      updateCartCount();
-
-      // Atualizar contador periodicamente (opcional)
-      setInterval(updateCartCount, 30000); // A cada 30 segundos
-      
-      // Criar evento customizado para atualizar o carrinho
-      window.updateCartCount = updateCartCount;
-      
-      // Configurar navbar fixa com JavaScript
-      function setupFixedNavbar() {
-        const header = document.querySelector('header');
-        const navbar = document.querySelector('nav');
-        const mobileSearchBar = document.querySelector('.d-md-none.bg-light.border-bottom');
-        
-        // Calcular altura total da navbar (incluindo barra de busca mobile)
-        function calculateNavbarHeight() {
-          let totalHeight = header.offsetHeight;
-          
-          // Se estivermos em mobile e a barra de busca estiver visível
-          if (window.innerWidth < 768 && mobileSearchBar) {
-            totalHeight = header.offsetHeight; // Já inclui a barra de busca
-          }
-          
-          return totalHeight;
-        }
-        
-        // Função para aplicar padding
-        function applyPadding() {
-          const navbarHeight = calculateNavbarHeight();
-          
-          // Aplicar padding apenas em mobile (largura < 768px)
-          if (window.innerWidth < 768) {
-            document.body.style.paddingTop = (navbarHeight + 10) + 'px';
-          } else {
-            // No desktop, aplicar apenas a altura da navbar sem padding extra
-            document.body.style.paddingTop = navbarHeight + 'px';
-          }
-        }
-        
-        // Aplicar padding inicial
-        applyPadding();
-        
-        // Efeito de sombra no scroll
-        let lastScrollTop = 0;
-        
-        window.addEventListener('scroll', function() {
-          let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-          
-          // Adicionar sombra quando rolar
-          if (scrollTop > 50) {
-            header.style.boxShadow = '0 4px 20px rgba(0,0,0,0.15)';
-            header.style.transition = 'box-shadow 0.3s ease';
-          } else {
-            header.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
-          }
-          
-          lastScrollTop = scrollTop;
-        });
-        
-        // Recalcular padding quando a janela for redimensionada
-        window.addEventListener('resize', function() {
-          setTimeout(applyPadding, 100); // Delay para garantir que o DOM foi atualizado
-        });
-        
-        // Recalcular quando a orientação mudar (mobile)
-        window.addEventListener('orientationchange', function() {
-          setTimeout(applyPadding, 200);
-        });
-        
-        // Observer para detectar mudanças na altura da navbar
-        const resizeObserver = new ResizeObserver(function(entries) {
-          applyPadding();
-        });
-        
-        resizeObserver.observe(header);
-        
-        // Disponibilizar função para outros scripts
-        recalculatePadding = applyPadding;
-      }
-      
-      // Executar quando a página carregar
-      setupFixedNavbar();
-    });
-    
-    // Sistema de sugestões de busca
+    // Sistema de busca inteligente melhorado
     document.addEventListener('DOMContentLoaded', function() {
       // Elementos desktop
       const searchInput = document.getElementById('search-input');
       const suggestionsContainer = document.getElementById('search-suggestions');
       const suggestionsList = document.getElementById('suggestions-list');
+      const searchHistory = document.getElementById('search-history');
+      const historyList = document.getElementById('history-list');
+      const popularCategories = document.getElementById('popular-categories');
+      const advancedSearch = document.getElementById('advanced-search');
       
       // Elementos mobile
       const searchInputMobile = document.getElementById('search-input-mobile');
       const suggestionsContainerMobile = document.getElementById('search-suggestions-mobile');
       const suggestionsListMobile = document.getElementById('suggestions-list-mobile');
+      const searchHistoryMobile = document.getElementById('search-history-mobile');
+      const historyListMobile = document.getElementById('history-list-mobile');
+      const popularCategoriesMobile = document.getElementById('popular-categories-mobile');
       
       let searchTimeout;
+      let isRecording = false;
       
       // Configurar eventos para versão desktop
       if (searchInput && suggestionsContainer && suggestionsList) {
-        setupSearchSuggestions(searchInput, suggestionsContainer, suggestionsList);
+        setupSearchSuggestions(searchInput, suggestionsContainer, suggestionsList, 'desktop');
       }
       
       // Configurar eventos para versão mobile
       if (searchInputMobile && suggestionsContainerMobile && suggestionsListMobile) {
-        setupSearchSuggestions(searchInputMobile, suggestionsContainerMobile, suggestionsListMobile);
+        setupSearchSuggestions(searchInputMobile, suggestionsContainerMobile, suggestionsListMobile, 'mobile');
       }
       
-      function setupSearchSuggestions(input, container, list) {
+      function setupSearchSuggestions(input, container, list, version) {
+        const historyElement = version === 'desktop' ? searchHistory : searchHistoryMobile;
+        const historyListElement = version === 'desktop' ? historyList : historyListMobile;
+        const popularElement = version === 'desktop' ? popularCategories : popularCategoriesMobile;
+        
+        // Mostrar histórico e categorias populares quando ganhar foco
+        input.addEventListener('focus', function() {
+          const query = this.value.trim();
+          if (query.length === 0) {
+            showHistoryAndCategories(historyElement, historyListElement, popularElement);
+          } else if (query.length >= 2) {
+            fetchSuggestions(query, container, list);
+          }
+        });
+        
         // Buscar sugestões quando o usuário digitar
         input.addEventListener('input', function() {
           const query = this.value.trim();
@@ -474,7 +434,13 @@
             clearTimeout(searchTimeout);
           }
           
-          // Se a query estiver vazia, esconder sugestões
+          // Se a query estiver vazia, mostrar histórico e categorias
+          if (query.length === 0) {
+            showHistoryAndCategories(historyElement, historyListElement, popularElement);
+            return;
+          }
+          
+          // Se a query tiver menos de 2 caracteres, esconder sugestões
           if (query.length < 2) {
             hideSuggestions(container);
             return;
@@ -494,20 +460,108 @@
           }, 200);
         });
         
-        // Mostrar sugestões quando ganhar foco (se houver query)
-        input.addEventListener('focus', function() {
-          const query = this.value.trim();
-          if (query.length >= 2) {
-            fetchSuggestions(query, container, list);
-          }
-        });
-        
         // Esconder sugestões ao clicar fora
         document.addEventListener('click', function(e) {
           if (!input.contains(e.target) && !container.contains(e.target)) {
             hideSuggestions(container);
           }
         });
+      }
+      
+      function showHistoryAndCategories(historyElement, historyListElement, popularElement) {
+        // Mostrar histórico de buscas
+        const history = getSearchHistory();
+        if (history.length > 0) {
+          displaySearchHistory(history, historyListElement);
+          historyElement.classList.remove('d-none');
+        } else {
+          historyElement.classList.add('d-none');
+        }
+        
+        // Mostrar categorias populares
+        popularElement.classList.remove('d-none');
+        
+        // Mostrar container
+        const container = historyElement.parentElement;
+        container.classList.remove('d-none');
+      }
+      
+      function displaySearchHistory(history, listElement) {
+        let html = '';
+        history.slice(0, 5).forEach(term => {
+          html += `
+            <button type="button" class="btn btn-sm btn-outline-light border rounded-pill" onclick="searchTerm('${term}')">
+              <i class="bi bi-clock me-1"></i>${term}
+            </button>
+          `;
+        });
+        listElement.innerHTML = html;
+      }
+      
+      function getSearchHistory() {
+        const history = localStorage.getItem('searchHistory');
+        return history ? JSON.parse(history) : [];
+      }
+      
+      function addToSearchHistory(term) {
+        const history = getSearchHistory();
+        // Remover se já existe
+        const filtered = history.filter(item => item !== term);
+        // Adicionar no início
+        filtered.unshift(term);
+        // Manter apenas os últimos 10
+        const limited = filtered.slice(0, 10);
+        localStorage.setItem('searchHistory', JSON.stringify(limited));
+      }
+      
+      function clearSearchHistory(version = 'desktop') {
+        localStorage.removeItem('searchHistory');
+        const historyElement = version === 'desktop' ? searchHistory : searchHistoryMobile;
+        const historyListElement = version === 'desktop' ? historyList : historyListMobile;
+        historyElement.classList.add('d-none');
+        historyListElement.innerHTML = '';
+      }
+      
+      function searchCategory(category, version = 'desktop') {
+        const input = version === 'desktop' ? searchInput : searchInputMobile;
+        const container = version === 'desktop' ? suggestionsContainer : suggestionsContainerMobile;
+        
+        let searchTerm = '';
+        switch(category) {
+          case 'aneis':
+            searchTerm = 'anel';
+            break;
+          case 'aliancas':
+            searchTerm = 'aliança';
+            break;
+          case 'brincos':
+            searchTerm = 'brinco';
+            break;
+          case 'promocoes':
+            searchTerm = 'promoção';
+            break;
+        }
+        
+        input.value = searchTerm;
+        addToSearchHistory(searchTerm);
+        window.location.href = `/buscar/?q=${encodeURIComponent(searchTerm)}`;
+      }
+      
+      function searchTerm(term) {
+        addToSearchHistory(term);
+        window.location.href = `/buscar/?q=${encodeURIComponent(term)}`;
+      }
+      
+      function applyAdvancedSearch() {
+        const category = document.getElementById('category-filter').value;
+        const price = document.getElementById('price-filter').value;
+        const query = searchInput.value;
+        
+        let url = `/buscar/?q=${encodeURIComponent(query)}`;
+        if (category) url += `&categoria=${category}`;
+        if (price) url += `&preco=${price}`;
+        
+        window.location.href = url;
       }
       
       function fetchSuggestions(query, container, list) {
@@ -524,34 +578,39 @@
       
       function displaySuggestions(suggestions, container, list) {
         if (suggestions.length === 0) {
-          hideSuggestions(container);
-          return;
+          list.innerHTML = `
+            <div class="p-3 text-center text-muted">
+              <i class="bi bi-search mb-2"></i>
+              <div>Nenhum produto encontrado</div>
+            </div>
+          `;
+        } else {
+          let html = '';
+          
+          suggestions.forEach(product => {
+            const price = product.em_promocao && product.preco_promocional 
+              ? `<span class="text-muted text-decoration-line-through small">R$ ${product.preco}</span> <span class="text-success fw-bold">R$ ${product.preco_promocional}</span>`
+              : `<span class="fw-bold">R$ ${product.preco}</span>`;
+              
+            const image = product.imagem 
+              ? `<img src="${product.imagem}" alt="${product.nome}" class="rounded" style="width: 40px; height: 40px; object-fit: cover;">`
+              : `<div class="bg-light rounded d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;"><i class="bi bi-image text-muted"></i></div>`;
+              
+            html += `
+              <a href="/item/${product.slug}/" class="d-flex align-items-center gap-3 p-3 text-decoration-none text-dark suggestion-item" style="border-bottom: 1px solid #f0f0f0;" onclick="addToSearchHistory('${product.nome}')">
+                ${image}
+                <div class="flex-grow-1">
+                  <div class="fw-medium mb-1">${product.nome}</div>
+                  <div class="small">${price}</div>
+                </div>
+                ${product.em_promocao ? '<span class="badge bg-danger small">Promoção</span>' : ''}
+              </a>
+            `;
+          });
+          
+          list.innerHTML = html;
         }
         
-        let html = '';
-        
-        suggestions.forEach(product => {
-          const price = product.em_promocao && product.preco_promocional 
-            ? `<span class="text-muted text-decoration-line-through small">R$ ${product.preco}</span> <span class="text-success fw-bold">R$ ${product.preco_promocional}</span>`
-            : `<span class="fw-bold">R$ ${product.preco}</span>`;
-            
-          const image = product.imagem 
-            ? `<img src="${product.imagem}" alt="${product.nome}" class="rounded" style="width: 40px; height: 40px; object-fit: cover;">`
-            : `<div class="bg-light rounded d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;"><i class="bi bi-image text-muted"></i></div>`;
-            
-          html += `
-            <a href="/item/${product.slug}/" class="d-flex align-items-center gap-3 p-3 text-decoration-none text-dark suggestion-item" style="border-bottom: 1px solid #f0f0f0;">
-              ${image}
-              <div class="flex-grow-1">
-                <div class="fw-medium mb-1">${product.nome}</div>
-                <div class="small">${price}</div>
-              </div>
-              ${product.em_promocao ? '<span class="badge bg-danger small">Promoção</span>' : ''}
-            </a>
-          `;
-        });
-        
-        list.innerHTML = html;
         showSuggestions(container);
       }
       
@@ -562,6 +621,157 @@
       function hideSuggestions(container) {
         container.classList.add('d-none');
       }
+      
+      // Função para mostrar alerta amigável
+      function showVoiceError(message) {
+        alert(message + '\n\nDicas:\n- Use Google Chrome\n- Permita o microfone\n- Teste em localhost ou domínio HTTPS\n- Se persistir, pode ser limitação do navegador ou domínio');
+      }
+
+      // Busca por voz
+      window.startVoiceSearch = function(version) {
+        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+          showVoiceError('Busca por voz não é suportada neste navegador.');
+          return;
+        }
+        
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        
+        recognition.lang = 'pt-BR';
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        
+        const voiceBtn = version === 'mobile' ? document.getElementById('voice-btn-mobile') : document.getElementById('voice-btn');
+        const input = version === 'mobile' ? document.getElementById('search-input-mobile') : document.getElementById('search-input');
+        
+        recognition.onstart = function() {
+          voiceBtn.innerHTML = '<i class="bi bi-mic-fill text-danger"></i>';
+          voiceBtn.classList.add('recording');
+        };
+        
+        recognition.onresult = function(event) {
+          const transcript = event.results[0][0].transcript;
+          input.value = transcript;
+          // Simular busca
+          const inputEvent = new Event('input', { bubbles: true });
+          input.dispatchEvent(inputEvent);
+        };
+        
+        recognition.onerror = function(event) {
+          let msg = 'Erro na busca por voz: ' + event.error;
+          if (event.error === 'network') {
+            msg = 'Busca por voz indisponível no momento.\nVerifique sua conexão, tente em outro navegador, ou use um domínio HTTPS confiável.';
+          } else if (event.error === 'not-allowed') {
+            msg = 'Permissão de microfone negada. Permita o acesso ao microfone para usar a busca por voz.';
+          }
+          showVoiceError(msg);
+          voiceBtn.innerHTML = '<i class="bi bi-mic text-muted"></i>';
+          voiceBtn.classList.remove('recording');
+        };
+        
+        recognition.onend = function() {
+          voiceBtn.innerHTML = '<i class="bi bi-mic text-muted"></i>';
+          voiceBtn.classList.remove('recording');
+        };
+        
+        recognition.start();
+      };
+      
+      // Expor funções globalmente
+      window.clearSearchHistory = clearSearchHistory;
+      window.searchCategory = searchCategory;
+      window.searchTerm = searchTerm;
+      window.applyAdvancedSearch = applyAdvancedSearch;
+      window.addToSearchHistory = addToSearchHistory;
     });
   </script>
+  <style>
+    /* Estilos para busca inteligente */
+    .recording {
+      animation: pulse 1.5s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    
+    .suggestion-item:hover {
+      background-color: #f8f9fa;
+    }
+    
+    .suggestion-item:last-child {
+      border-bottom: none !important;
+    }
+    
+    /* Estilos para histórico de busca */
+    #search-history button,
+    #search-history-mobile button {
+      transition: all 0.2s;
+    }
+    
+    #search-history button:hover,
+    #search-history-mobile button:hover {
+      background-color: #e9ecef;
+      border-color: #dee2e6;
+    }
+    
+    /* Estilos para categorias populares */
+    #popular-categories button,
+    #popular-categories-mobile button {
+      transition: all 0.2s;
+    }
+    
+    #popular-categories button:hover,
+    #popular-categories-mobile button:hover {
+      background-color: #ffc107;
+      border-color: #ffc107;
+      color: white;
+    }
+    
+    /* Estilos para busca avançada */
+    #advanced-search select {
+      font-size: 0.85rem;
+    }
+    
+    #advanced-search .btn {
+      font-size: 0.85rem;
+    }
+    #voice-btn, #voice-btn-mobile { display: none; }
+  </style>
+  <script>
+function testVoiceSupportAndShowBtn() {
+  const btn = document.getElementById('voice-btn');
+  const btnMobile = document.getElementById('voice-btn-mobile');
+  const hasSupport = ('webkitSpeechRecognition' in window) || ('SpeechRecognition' in window);
+  if (!hasSupport) return;
+  try {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    let tested = false;
+    recognition.onstart = function() {
+      tested = true;
+      recognition.abort();
+      if (btn) btn.style.display = '';
+      if (btnMobile) btnMobile.style.display = '';
+    };
+    recognition.onerror = function(event) {
+      if (btn) btn.style.display = 'none';
+      if (btnMobile) btnMobile.style.display = 'none';
+    };
+    recognition.start();
+    setTimeout(function() {
+      if (!tested) {
+        if (btn) btn.style.display = 'none';
+        if (btnMobile) btnMobile.style.display = 'none';
+      }
+    }, 2000);
+  } catch (e) {
+    if (btn) btn.style.display = 'none';
+    if (btnMobile) btnMobile.style.display = 'none';
+  }
+}
+document.addEventListener('DOMContentLoaded', testVoiceSupportAndShowBtn);
+</script>
 </header>
