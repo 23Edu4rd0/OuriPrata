@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  {% if query %}
+    Resultados para "{{ query }}" - OuriPrata
+  {% else %}
+    Busca - OuriPrata
+  {% endif %}
+{% endblock %}
+{% block meta_description %}<meta name="description" content="Veja os resultados da busca por '{{ query }}' na OuriPrata.">{% endblock %}
+{% block og_title %}{% if query %}Resultados para '{{ query }}' - OuriPrata{% else %}Busca - OuriPrata{% endif %}{% endblock %}
+{% block og_description %}Veja os resultados da busca por '{{ query }}' na OuriPrata.{% endblock %}
+{% block og_image %}{% static 'assets/landing_page/logo.png' %}{% endblock %}
+
+{% block content %}
+<main class="container-fluid px-0">
+  <header>
+    {% include 'landing_page/partials/_page_header.html' %}
+  </header>
+  <div class="container my-3 my-md-5">
+    <div class="row g-2 g-md-4">
+      <aside class="col-lg-3 col-md-4">
+        <div class="sticky-top" style="top: 2rem;">
+          {% include 'landing_page/produtos/partials/_filters_menu.html' %}
+        </div>
+      </aside>
+      <section class="col-lg-9 col-md-8">
+        {% if products %}
+          <div class="row g-2 g-md-4">
+            {% for product in products %}
+              {% include 'landing_page/produtos/partials/_product_card.html' %}
+            {% endfor %}
+          </div>
+        {% else %}
+          {% if query %}
+            {% include 'landing_page/partials/_empty_state.html' with icon_name='search' empty_title='Nenhum resultado encontrado' empty_message='Não encontramos produtos que correspondem à sua busca. Tente usar termos diferentes ou explore nossas categorias.' empty_button_url='/catalogo/' empty_button_icon='grid' empty_button_text='Ver Todos os Produtos' %}
+          {% else %}
+            {% include 'landing_page/partials/_empty_state.html' with icon_name='search' empty_title='Digite algo para buscar' empty_message='Use a barra de pesquisa para encontrar produtos específicos.' empty_button_url='/catalogo/' empty_button_icon='grid' empty_button_text='Ver Todos os Produtos' %}
+          {% endif %}
+        {% endif %}
+      </section>
+    </div>
+  </div>
+</main>
+{% include 'landing_page/partials/_shared_styles.html' %}
+{% endblock %}

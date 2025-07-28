@@ -1,0 +1,50 @@
+/* ===== NAVBAR FIX - CSS SIMPLES ===== */
+
+/* RESET - Sem padding extra */
+body {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+/* Garantir que a navbar seja normal */
+header {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Garantir que o conteúdo seja visível */
+main {
+  position: relative !important;
+  z-index: 1 !important;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Garantir que o header da lista seja visível */
+.product-list-header {
+  position: relative !important;
+  z-index: 1 !important;
+  background: white !important;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Garantir que o carrossel seja visível */
+.carousel {
+  position: relative !important;
+  z-index: 1 !important;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* MOBILE - Remover só o espaço cinza entre navbar e barra de busca */
+@media (max-width: 768px) {
+  .d-md-none.bg-white {
+    background: white !important;
+    /* Remove apenas o padding/margin extra dessa barra */
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+} 

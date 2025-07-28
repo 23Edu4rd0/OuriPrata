@@ -1,0 +1,114 @@
+{% comment %}
+Partial parametrizável para grids de produtos (destaque ou promoção)
+Parâmetros esperados:
+- title: título da seção
+- subtitle: subtítulo opcional
+- products: lista de produtos
+- button_url: url do botão de "ver mais"
+- button_text: texto do botão
+- button_class: classe do botão (ex: btn-dark, btn-danger)
+- badge_class: classe do badge de promoção (opcional)
+- is_promotion: booleano, se é grid de promoções
+{% endcomment %}
+<section class="pt-0 pb-2 pb-md-4">
+  <div class="container">
+    <div class="text-center mb-2 mb-md-4">
+      <h2 class="fw-semibold mb-1 mb-md-2" style="font-family: 'Montserrat', sans-serif; font-weight: 500; color: {{ title_color|default:'#bfa14a' }}; font-size: 0.95rem; letter-spacing: 0.5px;">{{ title }}</h2>
+      {% if subtitle %}<p class="text-muted small mb-1 mb-md-2" style="font-family: 'Montserrat', sans-serif; font-weight: 400; font-size: 0.85rem; letter-spacing: 0.3px;">{{ subtitle }}</p>{% endif %}
+      <div class="mx-auto rounded-pill" style="height: 3px; width: 60px; background: {{ title_color|default:'#bfa14a' }};"></div>
+    </div>
+    {% if products %}
+    <div class="row g-1 g-md-3">
+      {% for product in products|slice:":6" %}
+      {% if not is_promotion or product.em_promocao and product.preco_promocional %}
+      <div class="col-6 col-md-4 col-lg-2">
+        <div class="card border-0 h-100 shadow-sm">
+          <div class="position-relative overflow-hidden">
+            <img class="card-img-top" 
+                 src="{% if product.imagem %}{{ product.imagem.url }}{% else %}/static/assets/landing_page/logo.png{% endif %}" 
+                 alt="{{ product.nome }}" 
+                 style="height: 150px; object-fit: cover;">
+            {% if is_promotion and product.em_promocao and product.preco_promocional %}
+            <span class="position-absolute top-0 end-0 m-1 m-md-2 badge {{ badge_class|default:'bg-danger' }} px-1 px-md-2 py-0 py-md-1 rounded-pill small">
+              <i class="bi bi-lightning-fill me-1"></i>Oferta
+            </span>
+            {% endif %}
+            <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center overlay-hover" 
+                 style="background: rgba(0,0,0,0.4); opacity: 0; transition: opacity 0.3s;">
+              <div class="d-flex gap-1 gap-md-2">
+                <a href="{% url 'product_detail' product.slug %}" 
+                   class="btn {{ button_class|default:'btn-warning' }} px-1 px-md-2 py-0 py-md-1 rounded-pill fw-semibold" 
+                   style="font-size: 0.7rem;">
+                  <i class="bi bi-eye me-1"></i>Ver
+                </a>
+                {% if user.is_authenticated %}
+                  <button class="btn btn-outline-light px-1 px-md-2 py-0 py-md-1 rounded-pill fw-semibold" 
+                          style="font-size: 0.7rem;"
+                          onclick="addToCart({{ product.id }})"
+                          data-product-id="{{ product.id }}">
+                    <i class="bi bi-cart-plus me-1"></i>Carrinho
+                  </button>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          <div class="card-body text-center p-1 p-md-2">
+            <h5 class="card-title fw-bold mb-1 mb-md-2" style="font-size: 0.8rem; min-height: 2rem; display: flex; align-items: center; justify-content: center;">
+              <span style="font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 0.85rem; letter-spacing: 0.5px; padding: 0; margin: 0; background: none; border: none; box-shadow: none;">{{ product.nome }}</span>
+            </h5>
+            <div class="mb-1 mb-md-2" style="min-height: 1.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+              {% if product.em_promocao and product.preco_promocional %}
+                <div class="d-flex justify-content-center align-items-center gap-1">
+                  <span class="text-muted text-decoration-line-through" style="font-size: 0.7rem;">
+                    R$ {{ product.preco|floatformat:2 }}
+                  </span>
+                  <span class="fw-bold text-success mb-0" style="font-size: 0.85rem; color: {{ title_color|default:'#bfa14a' }};">
+                    R$ {{ product.preco_promocional|floatformat:2 }}
+                  </span>
+                </div>
+                <small class="fw-semibold" style="font-size: 0.65rem; color: {{ title_color|default:'#bfa14a' }};">
+                  <i class="bi bi-arrow-down me-1"></i>
+                  {% widthratio product.preco_promocional product.preco 100 as discount %}
+                  {{ discount|floatformat:0 }}% OFF
+                </small>
+              {% else %}
+                <span class="fw-bold text-dark mb-0" style="font-size: 0.85rem;">
+                  R$ {{ product.preco|floatformat:2 }}
+                </span>
+              {% endif %}
+            </div>
+            <div class="d-flex gap-1">
+              <a href="{% url 'product_detail' product.slug %}" 
+                 class="btn btn-outline-dark px-1 px-md-2 py-0 py-md-1 rounded-pill fw-semibold flex-fill" 
+                 style="font-size: 0.7rem;">
+                Ver Detalhes
+              </a>
+              {% if user.is_authenticated %}
+                <button class="btn btn-warning px-1 px-md-2 py-0 py-md-1 rounded-pill fw-semibold" 
+                        style="font-size: 0.7rem;"
+                        onclick="addToCart({{ product.id }})"
+                        data-product-id="{{ product.id }}">
+                  <i class="bi bi-cart-plus"></i>
+                </button>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-4 py-md-5">
+      <i class="bi bi-gem text-muted mb-2 mb-md-3" style="font-size: 2.5rem;"></i>
+      <h5 class="text-muted">Nenhum produto encontrado</h5>
+      <p class="text-muted">Em breve teremos novos produtos para você!</p>
+    </div>
+    {% endif %}
+    <div class="text-center mt-3 mt-md-4">
+      <a href="{{ button_url }}" class="btn {{ button_class|default:'btn-dark' }} px-3 px-md-4 py-1 py-md-2 rounded-pill fw-semibold">
+        <i class="bi bi-grid me-2"></i>{{ button_text|default:'Ver Todos os Produtos' }}
+      </a>
+    </div>
+  </div>
+</section> 

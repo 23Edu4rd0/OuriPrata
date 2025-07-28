@@ -14,16 +14,10 @@ def home(request):
     """
     # Buscar todos os produtos para os templates
     products = Joais.objects.all()
-    
-    # Buscar produtos em promoção
-    promotional_products = Joais.objects.filter(em_promocao=True)
-    
     # Buscar categorias
     categories = Categorias.objects.all()
-    
     context = {
         'products': products,
-        'promotional_products': promotional_products,
         'categories': categories,
     }
     return render(request, 'landing_page/home.html', context)
@@ -32,19 +26,19 @@ def about(request):
     """
     View para a página 'Quem Somos'
     """
-    return render(request, 'landing_page/about.html')
+    return render(request, 'landing_page/sobre/about_us.html')
 
 def contact(request):
     """
     View para a página de contato
     """
-    return render(request, 'landing_page/contact_us.html')
+    return render(request, 'landing_page/contato/contact_us.html')
 
 def policy(request):
     """
     View para a página de política de privacidade
     """
-    return render(request, 'landing_page/policy.html')
+    return render(request, 'landing_page/politicas/privacy_policy.html')
 
 def item_detail(request, slug):
     """
@@ -146,14 +140,14 @@ def item_detail(request, slug):
         'mercado_pago_public_key': mercado_pago_public_key,
         'related_products': Joais.objects.filter(categoria=product.categoria).exclude(id=product.id)[:4],
     }
-    return render(request, 'landing_page/product_detail.html', context)
+    return render(request, 'landing_page/produtos/product_detail.html', context)
 
 
 @login_required
 def meus_pedidos(request):
     from pagamentos.models import Pedido
     pedidos = Pedido.objects.filter(usuario=request.user).order_by('-data_criacao')
-    return render(request, 'landing_page/meus_pedidos.html', {'pedidos': pedidos})
+    return render(request, 'landing_page/pedidos/meus_pedidos.html', {'pedidos': pedidos})
 
 
 def products_by_category(request, categoria_slug):
@@ -177,7 +171,7 @@ def products_by_category(request, categoria_slug):
         'page_subtitle': page_subtitle,
         'breadcrumbs': breadcrumbs,
     }
-    return render(request, 'landing_page/product_list.html', context)
+    return render(request, 'landing_page/produtos/products_by_category.html', context)
 
 def all_products(request):
     """
@@ -211,8 +205,9 @@ def all_products(request):
         'page_title': page_title,
         'page_subtitle': page_subtitle,
         'breadcrumbs': breadcrumbs,
+        'auto_activate_promotion_filter': show_only_promotions,  # Para ativar o filtro automaticamente
     }
-    return render(request, 'landing_page/product_list.html', context)
+    return render(request, 'landing_page/produtos/all_products.html', context)
 
 def search_products(request):
     """
@@ -277,7 +272,7 @@ def search_products(request):
         'page_subtitle': page_subtitle,
         'breadcrumbs': breadcrumbs,
     }
-    return render(request, 'landing_page/search_results.html', context)
+    return render(request, 'landing_page/produtos/search_results.html', context)
 
 def search_suggestions(request):
     """

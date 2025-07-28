@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Sobre Nós - OuriPrata{% endblock %}
+{% block meta_description %}<meta name="description" content="Conheça a história e valores da OuriPrata.">{% endblock %}
+{% block og_title %}Sobre Nós - OuriPrata{% endblock %}
+{% block og_description %}Conheça a história e valores da OuriPrata.{% endblock %}
+{% block og_image %}{% static 'assets/landing_page/logo.png' %}{% endblock %}
+
+{% block content %}
+<main class="bg-gray-100 py-5">
+  <header class="container mb-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <h1 class="text-3xl font-bold mb-4 text-gray-800">Quem Somos</h1>
+      </div>
+    </div>
+  </header>
+  <section class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="bg-white rounded-lg shadow-lg p-4 p-md-5">
+          <div class="space-y-4 text-gray-700 text-lg leading-relaxed">
+            <ul class="mb-4 ps-3">
+              <li>Somos a OuriPrata, uma loja feita com carinho para quem ama joias que têm significado.</li>
+              <li>Aqui, cada peça é escolhida com cuidado, pensando em você que valoriza beleza, qualidade e momentos especiais. Trabalhamos com prata e ouro, sempre buscando oferecer joias lindas, duráveis e que combinam com todos os estilos.</li>
+              <li>Acreditamos que uma joia pode marcar um momento, contar uma história ou simplesmente fazer você se sentir bem. Por isso, colocamos amor em cada detalhe.</li>
+            </ul>
+            <p>Seja bem-vindo(a) à nossa loja. Vai ser um prazer fazer parte da sua história!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+{% endblock %}

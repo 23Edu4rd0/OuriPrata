@@ -1,0 +1,184 @@
+/* ===== HOME CSS - VERSÃO COMPACTA ===== */
+
+/* ===== SEÇÕES PRINCIPAIS ===== */
+@media (max-width: 768px) {
+  /* Reduzir espaçamento geral */
+  section {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+  
+
+  
+  /* Carrossel responsivo */
+  #mainCarousel img {
+    max-height: 200px !important;
+    min-height: 150px !important;
+  }
+  
+  /* Carrossel mais compacto */
+  .carousel {
+    margin-bottom: 1rem !important;
+  }
+  
+  /* Categorias mais compactas */
+  .category-image-container > div {
+    width: 60px !important;
+    height: 60px !important;
+  }
+  
+  .category-image-container i {
+    font-size: 1.5rem !important;
+  }
+  
+  h3[itemprop="name"] span {
+    font-size: 0.7rem !important;
+    margin-top: 0.2rem !important;
+  }
+  
+
+  
+  .badge {
+    font-size: 0.6rem !important;
+    padding: 0.1rem 0.3rem !important;
+  }
+  
+  /* Seção de benefícios mais compacta */
+  .bg-light {
+    padding: 1rem 0 !important;
+  }
+  
+  .bg-light h2 {
+    font-size: 0.8rem !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  .bg-light .fw-semibold {
+    font-size: 0.7rem !important;
+  }
+  
+  .bg-light .bi {
+    font-size: 1.5rem !important;
+  }
+  
+  /* Títulos das seções mais compactos */
+  .fw-semibold {
+    font-size: 0.85rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  .text-muted.small {
+    font-size: 0.7rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  /* Grid mais apertado */
+  .row.g-2.g-md-3 {
+    margin: 0 -0.1rem !important;
+  }
+  
+  .row.g-2.g-md-3 > * {
+    padding: 0 0.1rem !important;
+  }
+  
+  .row.g-4 {
+    margin: 0 -0.2rem !important;
+  }
+  
+  .row.g-4 > * {
+    padding: 0 0.2rem !important;
+  }
+  
+  /* Divisórias mais finas */
+  hr {
+    margin: 1rem 0 !important;
+  }
+  
+  /* Botões mais compactos */
+  .btn-dark {
+    font-size: 0.8rem !important;
+    padding: 0.5rem 1rem !important;
+  }
+}
+
+/* ===== ESPAÇAMENTO EXTRA COMPACTO ===== */
+@media (max-width: 576px) {
+  /* Reduzir ainda mais o espaçamento */
+  section {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+  
+  .container {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+  
+  /* Categorias ainda menores */
+  .category-image-container > div {
+    width: 50px !important;
+    height: 50px !important;
+  }
+  
+  .category-image-container i {
+    font-size: 1.2rem !important;
+  }
+  
+  h3[itemprop="name"] span {
+    font-size: 0.65rem !important;
+  }
+  
+
+  
+  /* Benefícios ainda menores */
+  .bg-light h2 {
+    font-size: 0.75rem !important;
+  }
+  
+  .bg-light .fw-semibold {
+    font-size: 0.65rem !important;
+  }
+  
+  .bg-light .bi {
+    font-size: 1.2rem !important;
+  }
+}
+
+/* ===== DESKTOP ===== */
+@media (min-width: 768px) {
+  #mainCarousel img {
+    max-height: 300px !important;
+  }
+}
+
+@media (min-width: 992px) {
+  #mainCarousel img {
+    max-height: 350px !important;
+  }
+  
+  /* ===== ANIMAÇÕES ===== */
+  .spin {
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  
+  /* Animação para o modal */
+  .modal-content {
+    animation: modalSlideIn 0.3s ease-out;
+  }
+  
+  @keyframes modalSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+} 
