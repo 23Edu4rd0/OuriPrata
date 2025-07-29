@@ -106,9 +106,9 @@ Parâmetros esperados:
     </div>
     {% endif %}
     <div class="text-center mt-3 mt-md-4">
-      <a href="{{ button_url }}" class="btn {{ button_class|default:'btn-dark' }} px-3 px-md-4 py-1 py-md-2 rounded-pill fw-semibold">
+      <button onclick="window.location.href='{% if is_promotion %}/catalogo/?promocoes=true{% else %}{{ button_url }}{% endif %}'" class="btn {{ button_class|default:'btn-dark' }} px-3 px-md-4 py-1 py-md-2 rounded-pill fw-semibold">
         <i class="bi bi-grid me-2"></i>{{ button_text|default:'Ver Todos os Produtos' }}
-      </a>
+      </button>
     </div>
   </div>
 </section> 

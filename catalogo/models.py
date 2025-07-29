@@ -19,6 +19,15 @@ class Joais(models.Model):
 
     def imagens(self):
         return self.imagens_extra.all()
+    
+    @property
+    def average_rating(self):
+        """Calcula a média das avaliações do produto"""
+        reviews = self.reviews.filter(aprovado=True)
+        if reviews.exists():
+            total = sum(review.rating for review in reviews)
+            return round(total / reviews.count(), 1)
+        return 0
 
 class JoaisImagem(models.Model):
     joia = models.ForeignKey(Joais, on_delete=models.CASCADE, related_name='imagens_extra')

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }} - OuriPrata{% endblock %}
+{% block meta_description %}<meta name="description" content="Veja todos os produtos da categoria {{ categoria.nome }} na OuriPrata.">{% endblock %}
+{% block og_title %}{{ page_title }} - OuriPrata{% endblock %}
+{% block og_description %}Veja todos os produtos da categoria {{ categoria.nome }} na OuriPrata.{% endblock %}
+{% block og_image %}{% static 'assets/landing_page/logo.png' %}{% endblock %}
+
+{% block content %}
+<style>
+@media (max-width: 576px) {
+  .card-img-top {
+    height: 120px !important;
+  }
+  .card-body {
+    padding: 0.75rem !important;
+  }
+  .card-title {
+    font-size: 0.85rem !important;
+  }
+  .btn {
+    font-size: 0.8rem !important;
+    padding: 0.375rem 0.75rem !important;
+  }
+}
+
+@media (min-width: 577px) and (max-width: 768px) {
+  .card-img-top {
+    height: 150px !important;
+  }
+}
+</style>
+
+<main class="container-fluid px-0">
+  <header>
+    {% include 'landing_page/partials/page_header.html' %}
+  </header>
+  <section class="container my-3 my-md-5">
+    <div class="row">
+      <aside class="col-lg-3 col-md-4 d-none d-md-block">
+        <div class="sticky-top" style="top: 2rem;">
+          {% include 'landing_page/partials/filters_menu.html' %}
+        </div>
+      </aside>
+      <section class="col-lg-9">
+        {% if products %}
+          <div class="row g-2 g-md-4">
+            {% for product in products %}
+              {% include 'landing_page/partials/product_card.html' %}
+            {% endfor %}
+          </div>
+        {% else %}
+          {% include 'landing_page/partials/empty_state.html' with icon_name='gem' empty_title='Nenhum produto encontrado' empty_message='Ainda não temos produtos nesta categoria. Explore outras categorias ou volte em breve!' empty_button_url='/catalogo/' empty_button_icon='grid' empty_button_text='Ver Todas as Categorias' %}
+        {% endif %}
+      </section>
+    </div>
+  </section>
+</main>
+{% include 'landing_page/partials/shared_styles.html' %}
+{% endblock %}

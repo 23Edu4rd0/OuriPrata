@@ -40,84 +40,34 @@
 
 <main class="container-fluid px-0">
   <header>
-    {% include 'landing_page/partials/_page_header.html' %}
+    {% include 'landing_page/partials/page_header.html' %}
   </header>
   <section class="container my-3 my-md-5">
-    <div class="row g-2 g-md-4">
+    <div class="row">
       <aside class="col-lg-3 col-md-4 d-none d-md-block">
         <div class="sticky-top" style="top: 2rem;">
-          {% include 'landing_page/produtos/partials/_filters_menu.html' %}
+          {% include 'landing_page/partials/filters_menu.html' %}
         </div>
       </aside>
       <section class="col-lg-9">
         {% if products %}
           <div class="row g-2 g-md-4">
             {% for product in products %}
-              {% include 'landing_page/produtos/partials/_product_card.html' %}
+              {% include 'landing_page/partials/product_card.html' %}
             {% endfor %}
           </div>
         {% else %}
           {% if show_only_promotions %}
-            {% include 'landing_page/partials/_empty_state.html' with icon_name='percent' empty_title='Nenhuma promoção ativa' empty_message='No momento não temos produtos em promoção. Explore nosso catálogo completo ou cadastre-se para receber notificações de ofertas.' empty_button_url='/catalogo/' empty_button_icon='grid' empty_button_text='Ver Todos os Produtos' %}
+            {% include 'landing_page/partials/empty_state.html' with icon_name='percent' empty_title='Nenhuma promoção ativa' empty_message='No momento não temos produtos em promoção. Explore nosso catálogo completo ou cadastre-se para receber notificações de ofertas.' empty_button_url='/catalogo/' empty_button_icon='grid' empty_button_text='Ver Todos os Produtos' %}
           {% else %}
-            {% include 'landing_page/partials/_empty_state.html' with icon_name='gem' empty_title='Nenhum produto encontrado' empty_message='Ainda não temos produtos em nosso catálogo. Volte em breve para conferir nossas novidades!' empty_button_url='/' empty_button_icon='house' empty_button_text='Voltar ao Início' %}
+            {% include 'landing_page/partials/empty_state.html' with icon_name='gem' empty_title='Nenhum produto encontrado' empty_message='Ainda não temos produtos em nosso catálogo. Volte em breve para conferir nossas novidades!' empty_button_url='/' empty_button_icon='house' empty_button_text='Voltar ao Início' %}
           {% endif %}
         {% endif %}
       </section>
     </div>
   </section>
 </main>
-{% include 'landing_page/partials/_shared_styles.html' %}
+{% include 'landing_page/partials/shared_styles.html' %}
 
-<!-- Debug info (remover depois) -->
-{% if auto_activate_promotion_filter %}
-<!-- DEBUG: Auto-activation should be enabled -->
-{% endif %}
-
-<script>
-// Ativar filtro de promoções automaticamente se vier da página de promoções
-{% if auto_activate_promotion_filter %}
-console.log('Auto-activation should be enabled');
-// Função para ativar o filtro
-function activatePromotionFilter() {
-    const promotionCheckbox = document.getElementById('promocao');
-    console.log('Looking for checkbox:', promotionCheckbox);
-    
-    if (promotionCheckbox) {
-        promotionCheckbox.checked = true;
-        console.log('Checkbox checked:', promotionCheckbox.checked);
-        
-        // Disparar o evento change para ativar o filtro
-        const event = new Event('change', { bubbles: true });
-        promotionCheckbox.dispatchEvent(event);
-        
-        // Também tentar chamar as funções diretamente
-        if (typeof filterByPromotion === 'function') {
-            console.log('Calling filterByPromotion...');
-            filterByPromotion();
-        } else if (typeof applyFilters === 'function') {
-            console.log('Calling applyFilters...');
-            applyFilters();
-        }
-    } else {
-        console.log('Checkbox not found, retrying...');
-        setTimeout(activatePromotionFilter, 200);
-    }
-}
-
-// Tentar ativar quando o DOM estiver pronto
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded, activating filter...');
-    setTimeout(activatePromotionFilter, 100);
-});
-
-// Também tentar quando a página estiver completamente carregada
-window.addEventListener('load', function() {
-    console.log('Page loaded, activating filter...');
-    setTimeout(activatePromotionFilter, 200);
-});
-{% else %}
-console.log('Auto-activation not needed');
-{% endif %}
-</script>
+<script src="{% static 'assets/js/promotion-filter.js' %}"></script>
 {% endblock %}

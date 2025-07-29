@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from catalogo.models import Joais, Categorias, Review, ReviewImage
-from django.db.models import Q, Avg, Count
+from django.db.models import Q, Avg, Count, F
 from django.contrib import messages
 from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator
@@ -178,9 +178,17 @@ def all_products(request):
     View para mostrar todos os produtos do catálogo
     """
     products = Joais.objects.all()
-    show_only_promotions = request.GET.get('promocoes', '').lower() == 'true'
+    promocoes_param = request.GET.get('promocoes', '').lower()
+    show_only_promotions = promocoes_param in ['true', '1', 'sim', 'yes']
+    
     if show_only_promotions:
-        products = products.filter(em_promocao=True)
+        products = products.filter(
+            em_promocao=True,
+            preco_promocional__isnull=False,
+            preco_promocional__gt=0,
+            preco_promocional__lt=F('preco')
+        )
+    
     total_products = products.count()
     all_categories = Categorias.objects.all()
     if show_only_promotions:
@@ -246,7 +254,7 @@ def search_products(request):
         elif preco_filter == '500+':
             products = products.filter(preco__gte=500)
     
-    total_products = products.count()
+        total_products = products.count()
     all_categories = Categorias.objects.all()
     
     if query:
@@ -328,47 +336,62 @@ def add_review(request, product_slug):
         # Verificar se o usuário já avaliou este produto
         existing_review = Review.objects.filter(produto=product, usuario=request.user).first()
         if existing_review:
-            messages.error(request, 'Você já avaliou este produto.')
-            return redirect('item_detail', slug=product_slug)
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Você já avaliou este produto.'
+            })
         
         try:
             rating = int(request.POST.get('rating', 0))
-            titulo = request.POST.get('titulo', '').strip()
-            comentario = request.POST.get('comentario', '').strip()
-            recomendado = request.POST.get('recomendado') == 'on'
+            title = request.POST.get('title', '').strip()
+            comment = request.POST.get('comment', '').strip()
             
             if rating < 1 or rating > 5:
-                messages.error(request, 'Avaliação deve ser entre 1 e 5 estrelas.')
-                return redirect('item_detail', slug=product_slug)
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Avaliação deve ser entre 1 e 5 estrelas.'
+                })
             
-            if not comentario:
-                messages.error(request, 'Comentário é obrigatório.')
-                return redirect('item_detail', slug=product_slug)
+            if not comment:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Comentário é obrigatório.'
+                })
             
             # Criar a avaliação
             review = Review.objects.create(
                 produto=product,
                 usuario=request.user,
                 rating=rating,
-                titulo=titulo,
-                comentario=comentario,
-                recomendado=recomendado,
+                titulo=title,
+                comentario=comment,
                 aprovado=True  # Auto-aprovar para usuários logados
             )
             
-            # Processar foto se fornecida
-            if 'foto' in request.FILES:
-                review.foto = request.FILES['foto']
-                review.save()
+            # Processar imagens se fornecidas
+            if 'images' in request.FILES:
+                for image_file in request.FILES.getlist('images'):
+                    if image_file.size <= 5 * 1024 * 1024:  # 5MB limit
+                        ReviewImage.objects.create(
+                            review=review,
+                            image=image_file
+                        )
             
-            messages.success(request, 'Avaliação enviada com sucesso!')
-            return redirect('item_detail', slug=product_slug)
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Avaliação enviada com sucesso!'
+            })
             
         except (ValueError, TypeError):
-            messages.error(request, 'Dados inválidos fornecidos.')
-            return redirect('item_detail', slug=product_slug)
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Dados inválidos fornecidos.'
+            })
     
-    return redirect('item_detail', slug=product_slug)
+    return JsonResponse({
+        'status': 'error',
+        'message': 'Método não permitido.'
+    })
 
 @login_required
 def edit_review(request, review_id):

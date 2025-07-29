@@ -63,6 +63,55 @@
   font-weight: 500;
 }
 
+/* Imagem principal responsiva */
+#main-product-image {
+  height: 400px !important;
+  object-fit: cover !important;
+  width: 100% !important;
+}
+
+@media (max-width: 576px) {
+  #main-product-image {
+    height: 250px !important;
+  }
+  
+  .card-img-top {
+    height: 120px !important;
+  }
+  .card-body {
+    padding: 0.75rem !important;
+  }
+  .card-title {
+    font-size: 0.85rem !important;
+  }
+  .btn {
+    font-size: 0.8rem !important;
+    padding: 0.375rem 0.75rem !important;
+  }
+}
+
+@media (min-width: 577px) and (max-width: 768px) {
+  #main-product-image {
+    height: 350px !important;
+  }
+  
+  .card-img-top {
+    height: 150px !important;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 991px) {
+  #main-product-image {
+    height: 380px !important;
+  }
+}
+
+@media (min-width: 992px) {
+  #main-product-image {
+    height: 450px !important;
+  }
+}
+
 @media (max-width: 576px) {
   .breadcrumb {
     font-size: 0.8rem !important;
@@ -272,12 +321,12 @@
     <div class="col-12 col-lg-6">
       <div class="position-sticky" style="top: 2rem;">
         <div class="card border-0 shadow-sm">
-          <div class="position-relative overflow-hidden">
+          <div class="position-relative overflow-hidden" style="min-height: 400px;">
             <img id="main-product-image" 
                  src="{{ product.imagem.url }}" 
                  class="card-img-top" 
                  alt="{{ product.nome }}" 
-                 style="height: 300px; object-fit: cover; cursor: zoom-in;">
+                 style="cursor: zoom-in;">
             
             {% if product.em_promocao and product.preco_promocional %}
             <span class="position-absolute top-0 end-0 m-1 m-md-3 badge bg-danger px-1 px-md-3 py-0 py-md-2 rounded-pill">
@@ -416,7 +465,7 @@
         </div>
 
         <!-- Ações Secundárias -->
-        <div class="d-flex gap-3 mb-5">
+        <div class="d-flex gap-3 mb-4">
           {% if user.is_authenticated %}
             <button id="wishlist-btn" 
                     class="btn btn-outline-secondary flex-fill py-2" 
@@ -442,7 +491,7 @@
         </div>
 
         <!-- Informações Essenciais -->
-        <div class="border-top pt-4">
+        <div class="border-top pt-4 mb-5">
           <div class="row g-4 text-center">
             <div class="col-6 col-md-3">
               <i class="bi bi-truck text-muted mb-2 d-block" style="font-size: 1.2rem;"></i>
@@ -526,6 +575,142 @@
           </div>
         </div>
         {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Seção de Avaliações -->
+  <section class="py-5">
+    <div class="container">
+      <div class="text-center mb-4">
+        <h2 class="h3 fw-bold text-dark mb-2">Avaliações dos Clientes</h2>
+        <p class="text-muted small">O que nossos clientes dizem sobre este produto</p>
+        <div class="mx-auto bg-warning rounded-pill" style="height: 3px; width: 60px;"></div>
+      </div>
+
+      <!-- Estatísticas das Avaliações -->
+      <div class="row g-4 mb-5">
+        <div class="col-md-4">
+          <div class="card border-0 bg-light text-center p-4">
+            <div class="display-4 text-warning fw-bold mb-2">
+              {{ product.average_rating }}
+            </div>
+            <div class="mb-3">
+              {% if product.average_rating > 0 %}
+                {% for i in "12345" %}
+                  {% if forloop.counter <= product.average_rating %}
+                    <i class="bi bi-star-fill text-warning"></i>
+                  {% else %}
+                    <i class="bi bi-star text-muted"></i>
+                  {% endif %}
+                {% endfor %}
+              {% else %}
+                {% for i in "12345" %}
+                  <i class="bi bi-star text-muted"></i>
+                {% endfor %}
+              {% endif %}
+            </div>
+            <small class="text-muted">Média Geral</small>
+          </div>
+        </div>
+        
+        <div class="col-md-4">
+          <div class="card border-0 bg-light text-center p-4">
+            <div class="display-4 text-success fw-bold mb-2">
+              {% if product.reviews.all %}
+                {{ product.reviews.all|length }}
+              {% else %}
+                0
+              {% endif %}
+            </div>
+            <small class="text-muted">Total de Avaliações</small>
+          </div>
+        </div>
+        
+        <div class="col-md-4">
+          <div class="card border-0 bg-light text-center p-4">
+            {% if user.is_authenticated %}
+              <button class="btn btn-warning fw-bold" onclick="showReviewForm()">
+                <i class="bi bi-pencil-square me-2"></i>
+                Avaliar Produto
+              </button>
+            {% else %}
+              <a href="{% url 'accounts:login' %}" class="btn btn-warning fw-bold">
+                <i class="bi bi-pencil-square me-2"></i>
+                Fazer Login para Avaliar
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Lista de Avaliações -->
+      <div class="row">
+        <div class="col-12">
+          {% if product.reviews.all %}
+            <div class="row g-4">
+              {% for review in product.reviews.all %}
+                <div class="col-md-6">
+                  <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                          <h6 class="fw-bold mb-1">{{ review.usuario.first_name|default:review.usuario.username }}</h6>
+                          <div class="mb-2">
+                            {% for i in "12345" %}
+                              {% if forloop.counter <= review.rating %}
+                                <i class="bi bi-star-fill text-warning"></i>
+                              {% else %}
+                                <i class="bi bi-star text-muted"></i>
+                              {% endif %}
+                            {% endfor %}
+                          </div>
+                        </div>
+                        <small class="text-muted">{{ review.data_criacao|date:"d/m/Y" }}</small>
+                      </div>
+                      
+                      {% if review.titulo %}
+                        <h6 class="fw-semibold mb-2">{{ review.titulo }}</h6>
+                      {% endif %}
+                      
+                      <p class="text-muted mb-3" style="font-size: 0.9rem; line-height: 1.5;">
+                        {{ review.comentario }}
+                      </p>
+                      
+                      {% if review.imagens.all %}
+                        <div class="d-flex gap-2">
+                          {% for image in review.imagens.all %}
+                            <img src="{{ image.imagem.url }}" 
+                                 alt="Imagem da avaliação" 
+                                 style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; cursor: pointer;"
+                                 onclick="openImageModal('{{ image.imagem.url }}')">
+                          {% endfor %}
+                        </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="text-center py-5">
+              <i class="bi bi-chat-dots text-muted" style="font-size: 3rem;"></i>
+              <h5 class="text-muted mt-3">Nenhuma avaliação ainda</h5>
+              <p class="text-muted">Seja o primeiro a avaliar este produto!</p>
+              {% if user.is_authenticated %}
+                <button class="btn btn-warning" onclick="showReviewForm()">
+                  <i class="bi bi-pencil-square me-2"></i>
+                  Avaliar Produto
+                </button>
+              {% else %}
+                <a href="{% url 'accounts:login' %}" class="btn btn-warning">
+                  <i class="bi bi-pencil-square me-2"></i>
+                  Fazer Login para Avaliar
+                </a>
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
       </div>
     </div>
   </section>
@@ -706,6 +891,71 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Avaliação -->
+  <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-warning text-dark">
+          <h5 class="modal-title fw-bold" id="reviewModalLabel">
+            <i class="bi bi-star me-2"></i>Avaliar {{ product.nome }}
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="reviewForm" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="rating" class="form-label fw-semibold">Sua Avaliação</label>
+              <div class="rating-stars mb-2">
+                {% for i in "12345" %}
+                  <i class="bi bi-star fs-4 me-1" data-rating="{{ forloop.counter }}" style="cursor: pointer; color: #dee2e6;"></i>
+                {% endfor %}
+              </div>
+              <input type="hidden" id="rating-input" name="rating" value="5">
+            </div>
+            
+            <div class="mb-3">
+              <label for="title" class="form-label fw-semibold">Título da Avaliação (opcional)</label>
+              <input type="text" class="form-control" id="title" name="title" placeholder="Ex: Produto incrível!">
+            </div>
+            
+            <div class="mb-3">
+              <label for="comment" class="form-label fw-semibold">Comentário</label>
+              <textarea class="form-control" id="comment" name="comment" rows="4" placeholder="Conte sua experiência com este produto..." required></textarea>
+            </div>
+            
+            <div class="mb-3">
+              <label for="images" class="form-label fw-semibold">Imagens (opcional)</label>
+              <input type="file" class="form-control" id="images" name="images" multiple accept="image/*">
+              <small class="text-muted">Você pode adicionar até 3 imagens</small>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-warning fw-bold" onclick="submitReview()">
+            <i class="bi bi-send me-2"></i>Enviar Avaliação
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Imagem -->
+  <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="imageModalLabel">Imagem da Avaliação</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center">
+          <img id="modalImage" src="" alt="Imagem da avaliação" class="img-fluid">
         </div>
       </div>
     </div>
@@ -1204,6 +1454,92 @@
           });
         });
       }
+    });
+  </script>
+
+  <script>
+    // Funções para o sistema de avaliações
+    function showReviewForm() {
+      const modal = new bootstrap.Modal(document.getElementById('reviewModal'));
+      modal.show();
+      setupRatingStars();
+    }
+
+    function setupRatingStars() {
+      const stars = document.querySelectorAll('.rating-stars .bi-star');
+      const ratingInput = document.getElementById('rating-input');
+      
+      stars.forEach((star, index) => {
+        star.addEventListener('click', () => {
+          const rating = index + 1;
+          ratingInput.value = rating;
+          
+          // Atualizar visual das estrelas
+          stars.forEach((s, i) => {
+            if (i < rating) {
+              s.classList.remove('bi-star');
+              s.classList.add('bi-star-fill');
+              s.style.color = '#ffc107';
+            } else {
+              s.classList.remove('bi-star-fill');
+              s.classList.add('bi-star');
+              s.style.color = '#dee2e6';
+            }
+          });
+        });
+      });
+    }
+
+    function submitReview() {
+      const form = document.getElementById('reviewForm');
+      const formData = new FormData(form);
+      
+      // Validar campos obrigatórios
+      const comment = formData.get('comment');
+      if (!comment.trim()) {
+        showAlert('warning', 'Por favor, escreva um comentário.');
+        return;
+      }
+      
+      // Enviar avaliação
+      fetch(`/catalogo/avaliar/{{ product.slug }}/`, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+        },
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'success') {
+          showAlert('success', 'Avaliação enviada com sucesso!');
+          const modal = bootstrap.Modal.getInstance(document.getElementById('reviewModal'));
+          modal.hide();
+          
+          // Recarregar a página para mostrar a nova avaliação
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        } else {
+          showAlert('danger', data.message || 'Erro ao enviar avaliação.');
+        }
+      })
+      .catch(error => {
+        console.error('Erro:', error);
+        showAlert('danger', 'Erro de conexão. Tente novamente.');
+      });
+    }
+
+    function openImageModal(imageUrl) {
+      const modalImage = document.getElementById('modalImage');
+      modalImage.src = imageUrl;
+      const modal = new bootstrap.Modal(document.getElementById('imageModal'));
+      modal.show();
+    }
+
+    // Configurar estrelas de rating quando a página carregar
+    document.addEventListener('DOMContentLoaded', function() {
+      setupRatingStars();
     });
   </script>
 </main>

@@ -11,7 +11,7 @@
 <main>
   <header>
     <!-- Carousel Bootstrap -->
-    <div id="mainCarousel" class="carousel slide mb-2 mb-md-4" data-bs-ride="carousel">
+    <div id="mainCarousel" class="carousel slide mb-2 mb-md-4" data-bs-ride="carousel" style="z-index: 1;">
       <div class="carousel-inner">
         <div class="carousel-item active">
           <img src="{% static 'assets/landing_page/teste1.webp' %}" 
@@ -125,7 +125,7 @@
     {% include 'landing_page/produtos/partials/_product_grid.html' with title='Produtos em Destaque' subtitle='Descubra nossas peças mais exclusivas' products=products button_url='/catalogo/' button_text='Ver Todos os Produtos' button_class='btn-dark' title_color='#bfa14a' is_promotion=False %}
   </section>
   <section>
-    {% include 'landing_page/produtos/partials/_product_grid.html' with title='Produtos em Promoção' subtitle='Ofertas especiais por tempo limitado' products=products button_url='/catalogo/?promocoes=true' button_text='Ver Todas as Promoções' button_class='btn-danger' title_color='#d9534f' is_promotion=True badge_class='bg-danger' %}
+    {% include 'landing_page/produtos/partials/_product_grid.html' with title='Produtos em Promoção' subtitle='Ofertas especiais por tempo limitado' products=products button_url='javascript:void(0)' button_text='Ver Todas as Promoções' button_class='btn-danger' title_color='#d9534f' is_promotion=True badge_class='bg-danger' %}
   </section>
 
   <section class="bg-light py-2 py-md-4 mb-2 mb-md-4">

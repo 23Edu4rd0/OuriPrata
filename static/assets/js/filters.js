@@ -13,7 +13,7 @@ function applyFilters() {
   
   const priceMin = document.getElementById('preco-min')?.value;
   const priceMax = document.getElementById('preco-max')?.value;
-  const onlyPromotions = document.getElementById('apenas-promocoes')?.checked;
+  const onlyPromotions = document.getElementById('promocao')?.checked;
   const ratingFilter = document.querySelector('input[name="rating"]:checked')?.value;
   
   // Construir URL com parâmetros
@@ -33,7 +33,7 @@ function applyFilters() {
   
   if (priceMin) params.append('preco_min', priceMin);
   if (priceMax) params.append('preco_max', priceMax);
-  if (onlyPromotions) params.append('promocao', 'true');
+  if (onlyPromotions) params.append('promocoes', 'true');
   if (ratingFilter) params.append('rating', ratingFilter);
   
   // Redirecionar com filtros
@@ -110,7 +110,7 @@ function applyMobileFilters() {
   
   const priceMin = document.getElementById('mobile-preco-min')?.value;
   const priceMax = document.getElementById('mobile-preco-max')?.value;
-  const onlyPromotions = document.getElementById('mobile-apenas-promocoes')?.checked;
+  const onlyPromotions = document.getElementById('mobile-promocao')?.checked;
   const ratingFilter = document.querySelector('#filterModal input[name="rating"]:checked')?.value;
   
   // Construir URL com parâmetros
@@ -130,7 +130,7 @@ function applyMobileFilters() {
   
   if (priceMin) params.append('preco_min', priceMin);
   if (priceMax) params.append('preco_max', priceMax);
-  if (onlyPromotions) params.append('promocao', 'true');
+  if (onlyPromotions) params.append('promocoes', 'true');
   if (ratingFilter) params.append('rating', ratingFilter);
   
   // Fechar modal

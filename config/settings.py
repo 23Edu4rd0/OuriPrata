@@ -173,7 +173,7 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://62a619c43c6e.ngrok-free.app',
+    'https://0bcfd8c06314.ngrok-free.app',
     'http://localhost',
     'http://127.0.0.1',
 ]

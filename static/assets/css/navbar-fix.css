@@ -6,10 +6,37 @@ body {
   margin-top: 0 !important;
 }
 
-/* Garantir que a navbar seja normal */
+/* Garantir que a navbar seja normal e apareça sobre outros elementos */
 header {
   position: relative !important;
-  z-index: 1 !important;
+  z-index: 1050 !important;
+}
+
+nav {
+  position: relative !important;
+  z-index: 1050 !important;
+}
+
+/* Garantir que todos os elementos do navbar apareçam sobre outros */
+header nav,
+header nav *,
+.bg-white.shadow-sm {
+  z-index: 1050 !important;
+  position: relative !important;
+}
+
+/* FORÇAR o dropdown do usuário a aparecer sempre acima */
+.dropdown-menu {
+  position: absolute !important;
+  z-index: 9999 !important;
+  top: 100% !important;
+  left: auto !important;
+  right: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  border-radius: 0 0 0.375rem 0.375rem !important;
+  transform: none !important;
 }
 
 /* Garantir que o conteúdo seja visível */
@@ -29,10 +56,10 @@ main {
   padding-top: 0 !important;
 }
 
-/* Garantir que o carrossel seja visível */
+/* Garantir que o carrossel seja visível mas abaixo do dropdown */
 .carousel {
   position: relative !important;
-  z-index: 1 !important;
+  z-index: 0 !important;
   margin-top: 0 !important;
   padding-top: 0 !important;
 }

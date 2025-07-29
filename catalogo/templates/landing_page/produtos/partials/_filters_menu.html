@@ -234,11 +234,27 @@
   }
 
   function applyFilters() {
+    console.log('applyFilters called');
     const checkbox = document.getElementById('promocao');
     const minPrice = parsePrice(document.getElementById('preco-min').value);
     const maxPrice = parsePrice(document.getElementById('preco-max').value) || Infinity;
     const ratingFilter = document.querySelector('.rating-filter-btn.active')?.dataset.rating || 'all';
     const products = document.querySelectorAll('.product-item');
+    
+    console.log('Found products:', products.length);
+    console.log('Checkbox checked:', checkbox?.checked);
+    console.log('Min price:', minPrice);
+    console.log('Max price:', maxPrice);
+    console.log('Rating filter:', ratingFilter);
+    
+    // Verificar se os produtos têm os atributos corretos
+    products.forEach((product, index) => {
+      console.log(`Product ${index}:`, {
+        price: product.dataset.price,
+        promotion: product.dataset.promotion,
+        rating: product.dataset.rating
+      });
+    });
     
     products.forEach(product => {
       const isPromotion = product.dataset.promotion === 'true';
@@ -261,6 +277,8 @@
       
       product.style.display = show ? 'block' : 'none';
     });
+    
+    console.log('Filters applied');
   }
 
   // Configurar filtros de avaliação
@@ -274,10 +292,6 @@
       applyFilters();
     });
   });
-
-  document.getElementById('promocao').addEventListener('change', applyFilters);
-  document.getElementById('preco-min').addEventListener('input', applyFilters);
-  document.getElementById('preco-max').addEventListener('input', applyFilters);
 
   // Função para filtrar por promoção e atualizar URL
   function filterByPromotion() {
@@ -296,4 +310,27 @@
     // Atualizar URL sem recarregar a página
     window.history.pushState({}, '', currentUrl);
   }
+
+  // Configurar event listeners quando o DOM estiver pronto
+  document.addEventListener('DOMContentLoaded', function() {
+    const precoMin = document.getElementById('preco-min');
+    const precoMax = document.getElementById('preco-max');
+    const applyButton = document.querySelector('button[onclick="applyFilters()"]');
+    
+    if (precoMin) {
+      precoMin.addEventListener('input', applyFilters);
+    }
+    if (precoMax) {
+      precoMax.addEventListener('input', applyFilters);
+    }
+    if (applyButton) {
+      applyButton.addEventListener('click', applyFilters);
+    }
+    
+    // Configurar checkbox de promoção
+    const promoCheckbox = document.getElementById('promocao');
+    if (promoCheckbox) {
+      promoCheckbox.addEventListener('change', filterByPromotion);
+    }
+  });
 </script>
