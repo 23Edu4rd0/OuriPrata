@@ -31,6 +31,26 @@
         font-family: 'Montserrat', sans-serif;
       }
       
+      /* FORÇAR COR DOURADA NAS ESTRELAS */
+      .text-warning,
+      span.text-warning,
+      .rating-distribution .text-warning,
+      .review-item .text-warning,
+      .rating-distribution span,
+      .review-item span {
+        color: #ffc107 !important;
+        font-weight: bold !important;
+        text-shadow: none !important;
+      }
+      
+      /* ESTRELAS ESPECÍFICAS */
+      .rating-distribution span[style*="color: #ffc107"],
+      .review-item span[style*="color: #ffc107"] {
+        color: #ffc107 !important;
+        font-weight: bold !important;
+        text-shadow: none !important;
+      }
+      
       /* Prevent horizontal scroll */
       body {
         overflow-x: hidden;

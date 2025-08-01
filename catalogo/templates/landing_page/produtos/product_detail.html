@@ -8,8 +8,8 @@
 {% block og_image %}{{ product.imagem.url }}{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'assets/css/reviews.css' %}">
-<link rel="stylesheet" href="{% static 'assets/css/image-viewer.css' %}">
+<link rel="stylesheet" href="{% static 'assets/css/reviews.css' %}?v=17">
+<link rel="stylesheet" href="{% static 'assets/css/image-viewer.css' %}?v=17">
 {% endblock %}
 
 {% block content %}
@@ -536,7 +536,7 @@
         <div class="mb-3 mb-md-4">
           <div class="d-flex align-items-center gap-1 gap-md-2 mb-1 mb-md-2">
             <h5 class="fw-semibold mb-0" style="font-size: 0.9rem;">Tamanho do Dedo</h5>
-            <button type="button" class="btn btn-link p-0 text-decoration-none" data-bs-toggle="modal" data-bs-target="#sizeGuideModal">
+            <button type="button" class="btn btn-link p-0 text-decoration-none" onclick="openSizeGuideModal()">
               <small class="text-primary">
                 <i class="bi bi-info-circle me-1"></i>Como medir?
               </small>
@@ -739,23 +739,72 @@
 
       <div class="row g-4">
         <!-- Distribuição das Avaliações - Coluna Esquerda -->
-        <div class="col-lg-3 col-md-4 col-12 mb-4">
+        <div class="col-lg-3 col-12 mb-4">
           <div class="card h-100 border-0 shadow-sm">
             <div class="card-body">
-              <h5 class="card-title fw-bold text-dark mb-3">Distribuição das Avaliações</h5>
-              <div class="rating-distribution">
-                {% for rating in "54321" %}
-                  {% with rating=rating|add:"0" %}
-                    <div class="d-flex align-items-center mb-2">
-                      <span class="text-warning me-2">{{ rating }}★</span>
-                      <div class="progress flex-grow-1 me-2" style="height: 8px;">
-                        <div class="progress-bar bg-warning" role="progressbar" 
-                             style="width: {% if rating == 4 %}100%{% else %}0%{% endif %};"></div>
-                      </div>
-                      <small class="text-muted">{{ rating|add:"0"|default:"0" }}</small>
+              <h6 class="text-dark mb-3">Distribuição das Avaliações</h6>
+              
+              <!-- Design equilibrado -->
+              <div class="rating-balanced">
+                <!-- 5 estrelas -->
+                <div class="rating-item mb-3">
+                  <div class="d-flex align-items-center">
+                    <span class="text-warning me-2">★★★★★</span>
+                    <div class="progress flex-grow-1 me-2" style="height: 6px;">
+                      <div class="progress-bar bg-warning" role="progressbar" 
+                           style="width: {{ rating_percentages.5|floatformat:1 }}%;"></div>
                     </div>
-                  {% endwith %}
-                {% endfor %}
+                    <small class="text-muted">{{ rating_distribution.5|default:"0" }}</small>
+                  </div>
+                </div>
+                
+                <!-- 4 estrelas -->
+                <div class="rating-item mb-3">
+                  <div class="d-flex align-items-center">
+                    <span class="text-warning me-2">★★★★☆</span>
+                    <div class="progress flex-grow-1 me-2" style="height: 6px;">
+                      <div class="progress-bar bg-warning" role="progressbar" 
+                           style="width: {{ rating_percentages.4|floatformat:1 }}%;"></div>
+                    </div>
+                    <small class="text-muted">{{ rating_distribution.4|default:"0" }}</small>
+                  </div>
+                </div>
+                
+                <!-- 3 estrelas -->
+                <div class="rating-item mb-3">
+                  <div class="d-flex align-items-center">
+                    <span class="text-warning me-2">★★★☆☆</span>
+                    <div class="progress flex-grow-1 me-2" style="height: 6px;">
+                      <div class="progress-bar bg-warning" role="progressbar" 
+                           style="width: {{ rating_percentages.3|floatformat:1 }}%;"></div>
+                    </div>
+                    <small class="text-muted">{{ rating_distribution.3|default:"0" }}</small>
+                  </div>
+                </div>
+                
+                <!-- 2 estrelas -->
+                <div class="rating-item mb-3">
+                  <div class="d-flex align-items-center">
+                    <span class="text-warning me-2">★★☆☆☆</span>
+                    <div class="progress flex-grow-1 me-2" style="height: 6px;">
+                      <div class="progress-bar bg-warning" role="progressbar" 
+                           style="width: {{ rating_percentages.2|floatformat:1 }}%;"></div>
+                    </div>
+                    <small class="text-muted">{{ rating_distribution.2|default:"0" }}</small>
+                  </div>
+                </div>
+                
+                <!-- 1 estrela -->
+                <div class="rating-item mb-3">
+                  <div class="d-flex align-items-center">
+                    <span class="text-warning me-2">★☆☆☆☆</span>
+                    <div class="progress flex-grow-1 me-2" style="height: 6px;">
+                      <div class="progress-bar bg-warning" role="progressbar" 
+                           style="width: {{ rating_percentages.1|floatformat:1 }}%;"></div>
+                    </div>
+                    <small class="text-muted">{{ rating_distribution.1|default:"0" }}</small>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -774,13 +823,11 @@
                         <div>
                           <h6 class="fw-bold mb-1">{{ review.usuario.first_name|default:review.usuario.username }}</h6>
                           <div class="text-warning mb-2">
-                            {% for i in "12345" %}
-                              {% if forloop.counter <= review.rating %}
-                                ★
-                              {% else %}
-                                <span class="text-muted">★</span>
-                              {% endif %}
-                            {% endfor %}
+                            <span>★</span>
+                            <span>★</span>
+                            <span>★</span>
+                            <span class="text-muted">★</span>
+                            <span class="text-muted">★</span>
                           </div>
                         </div>
                         <small class="text-muted">{{ review.data_criacao|date:"d/m/Y" }}</small>
@@ -884,147 +931,131 @@
     </div>
   </div>
 
-  <!-- Modal - Guia de Tamanhos -->
-  <div class="modal fade" id="sizeGuideModal" tabindex="-1" aria-labelledby="sizeGuideModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header bg-warning text-dark">
-          <h5 class="modal-title fw-bold" id="sizeGuideModalLabel">
-            <i class="bi bi-ruler me-2"></i>Como Medir o Tamanho do Dedo
-          </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  <!-- Modal - Guia de Tamanhos (Simplificado) -->
+  <div id="sizeGuideModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 9999;">
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; border-radius: 8px; max-width: 90%; max-height: 90%; overflow-y: auto; width: 800px;">
+      <div style="padding: 1rem 1.5rem; background-color: #ffc107; color: #000; border-bottom: 1px solid #dee2e6; display: flex; justify-content: space-between; align-items: center;">
+        <h5 style="margin: 0; font-weight: bold;">
+          <i class="bi bi-ruler me-2"></i>Como Medir o Tamanho do Dedo
+        </h5>
+        <button type="button" onclick="closeSizeGuideModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #000; padding: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">×</button>
+      </div>
+      <div style="padding: 1.5rem;">
+        <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+          <!-- Método 1 -->
+          <div style="flex: 1; background-color: #f8f9fa; padding: 1rem; border-radius: 8px;">
+            <h6 style="color: #ffc107; font-weight: bold; margin-bottom: 1rem;">
+              <i class="bi bi-1-circle me-2"></i>Método da Fita
+            </h6>
+            <ol style="font-size: 0.9rem;">
+              <li style="margin-bottom: 0.5rem;">Corte uma tira de papel ou use uma fita métrica</li>
+              <li style="margin-bottom: 0.5rem;">Enrole ao redor do dedo onde ficará o anel</li>
+              <li style="margin-bottom: 0.5rem;">Marque onde a fita se encontra</li>
+              <li style="margin-bottom: 0.5rem;">Meça o comprimento com uma régua (em mm)</li>
+              <li>Compare com a tabela abaixo</li>
+            </ol>
+            <div style="background-color: #d1ecf1; color: #0c5460; padding: 0.5rem; border-radius: 4px; margin-top: 1rem;">
+              <small>
+                <i class="bi bi-info-circle me-1"></i>
+                <strong>Dica:</strong> Meça no final do dia quando o dedo está mais inchado
+              </small>
+            </div>
+          </div>
+
+          <!-- Método 2 -->
+          <div style="flex: 1; background-color: #f8f9fa; padding: 1rem; border-radius: 8px;">
+            <h6 style="color: #ffc107; font-weight: bold; margin-bottom: 1rem;">
+              <i class="bi bi-2-circle me-2"></i>Método do Anel
+            </h6>
+            <ol style="font-size: 0.9rem;">
+              <li style="margin-bottom: 0.5rem;">Pegue um anel que já serve no dedo</li>
+              <li style="margin-bottom: 0.5rem;">Meça o diâmetro interno com uma régua</li>
+              <li style="margin-bottom: 0.5rem;">Multiplique por 3,14 para obter a circunferência</li>
+              <li style="margin-bottom: 0.5rem;">Compare com a tabela abaixo</li>
+            </ol>
+            <div style="background-color: #fff3cd; color: #856404; padding: 0.5rem; border-radius: 4px; margin-top: 1rem;">
+              <small>
+                <i class="bi bi-exclamation-triangle me-1"></i>
+                <strong>Atenção:</strong> Use um anel que sirva perfeitamente, nem apertado nem folgado
+              </small>
+            </div>
+          </div>
         </div>
-        <div class="modal-body">
-          <div class="row g-4">
-            <!-- Método 1 -->
-            <div class="col-md-6">
-              <div class="card border-0 bg-light h-100">
-                <div class="card-body">
-                  <h6 class="card-title text-warning fw-bold">
-                    <i class="bi bi-1-circle me-2"></i>Método da Fita
-                  </h6>
-                  <ol class="small">
-                    <li class="mb-2">Corte uma tira de papel ou use uma fita métrica</li>
-                    <li class="mb-2">Enrole ao redor do dedo onde ficará o anel</li>
-                    <li class="mb-2">Marque onde a fita se encontra</li>
-                    <li class="mb-2">Meça o comprimento com uma régua (em mm)</li>
-                    <li>Compare com a tabela abaixo</li>
-                  </ol>
-                  <div class="alert alert-info p-2">
-                    <small>
-                      <i class="bi bi-info-circle me-1"></i>
-                      <strong>Dica:</strong> Meça no final do dia quando o dedo está mais inchado
-                    </small>
-                  </div>
-                </div>
-              </div>
-            </div>
 
-            <!-- Método 2 -->
-            <div class="col-md-6">
-              <div class="card border-0 bg-light h-100">
-                <div class="card-body">
-                  <h6 class="card-title text-warning fw-bold">
-                    <i class="bi bi-2-circle me-2"></i>Método do Anel
-                  </h6>
-                  <ol class="small">
-                    <li class="mb-2">Pegue um anel que já serve no dedo</li>
-                    <li class="mb-2">Meça o diâmetro interno com uma régua</li>
-                    <li class="mb-2">Multiplique por 3,14 para obter a circunferência</li>
-                    <li class="mb-2">Compare com a tabela abaixo</li>
-                  </ol>
-                  <div class="alert alert-warning p-2">
-                    <small>
-                      <i class="bi bi-exclamation-triangle me-1"></i>
-                      <strong>Atenção:</strong> Use um anel que sirva perfeitamente, nem apertado nem folgado
-                    </small>
-                  </div>
-                </div>
-              </div>
-            </div>
+        <!-- Tabela de Tamanhos -->
+        <div style="margin-top: 1.5rem;">
+          <h6 style="font-weight: bold; text-align: center; margin-bottom: 1rem;">Tabela de Tamanhos Brasileiros</h6>
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: center; font-size: 0.85rem;">
+              <thead style="background-color: #ffc107;">
+                <tr>
+                  <th style="padding: 0.5rem; border: 1px solid #dee2e6;">Tamanho BR</th>
+                  <th style="padding: 0.5rem; border: 1px solid #dee2e6;">Circunferência (mm)</th>
+                  <th style="padding: 0.5rem; border: 1px solid #dee2e6;">Diâmetro (mm)</th>
+                  <th style="padding: 0.5rem; border: 1px solid #dee2e6;">Tamanho US</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="background-color: #f8f9fa;"><td style="padding: 0.5rem; border: 1px solid #dee2e6;">12</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">52</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">16.5</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">6</td></tr>
+                <tr><td style="padding: 0.5rem; border: 1px solid #dee2e6;">13</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">53</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">16.9</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">6.25</td></tr>
+                <tr style="background-color: #f8f9fa;"><td style="padding: 0.5rem; border: 1px solid #dee2e6;">14</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">54</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">17.2</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">6.5</td></tr>
+                <tr><td style="padding: 0.5rem; border: 1px solid #dee2e6;">15</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">55</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">17.5</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">7</td></tr>
+                <tr style="background-color: #f8f9fa;"><td style="padding: 0.5rem; border: 1px solid #dee2e6;">16</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">56</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">17.8</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">7.25</td></tr>
+                <tr><td style="padding: 0.5rem; border: 1px solid #dee2e6;">17</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">57</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">18.1</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">7.5</td></tr>
+                <tr style="background-color: #f8f9fa;"><td style="padding: 0.5rem; border: 1px solid #dee2e6;">18</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">58</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">18.5</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">8</td></tr>
+                <tr><td style="padding: 0.5rem; border: 1px solid #dee2e6;">19</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">59</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">18.8</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">8.5</td></tr>
+                <tr style="background-color: #f8f9fa;"><td style="padding: 0.5rem; border: 1px solid #dee2e6;">20</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">60</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">19.1</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">9</td></tr>
+                <tr><td style="padding: 0.5rem; border: 1px solid #dee2e6;">21</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">61</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">19.4</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">9.25</td></tr>
+                <tr style="background-color: #f8f9fa;"><td style="padding: 0.5rem; border: 1px solid #dee2e6;">22</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">62</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">19.7</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">9.5</td></tr>
+                <tr><td style="padding: 0.5rem; border: 1px solid #dee2e6;">23</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">63</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">20.1</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">10</td></tr>
+                <tr style="background-color: #f8f9fa;"><td style="padding: 0.5rem; border: 1px solid #dee2e6;">24</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">64</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">20.4</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">10.5</td></tr>
+                <tr><td style="padding: 0.5rem; border: 1px solid #dee2e6;">25</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">65</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">20.7</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">11</td></tr>
+                <tr style="background-color: #f8f9fa;"><td style="padding: 0.5rem; border: 1px solid #dee2e6;">26</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">66</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">21.0</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">11.5</td></tr>
+                <tr><td style="padding: 0.5rem; border: 1px solid #dee2e6;">27</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">67</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">21.3</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">12</td></tr>
+                <tr style="background-color: #f8f9fa;"><td style="padding: 0.5rem; border: 1px solid #dee2e6;">28</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">68</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">21.6</td><td style="padding: 0.5rem; border: 1px solid #dee2e6;">12.5</td></tr>
+              </tbody>
+            </table>
           </div>
+        </div>
 
-          <!-- Tabela de Tamanhos -->
-          <div class="mt-4">
-            <h6 class="fw-bold text-center mb-3">Tabela de Tamanhos Brasileiros</h6>
-            <div class="table-responsive">
-              <table class="table table-sm table-striped text-center">
-                <thead class="table-warning">
-                  <tr>
-                    <th>Tamanho BR</th>
-                    <th>Circunferência (mm)</th>
-                    <th>Diâmetro (mm)</th>
-                    <th>Tamanho US</th>
-                  </tr>
-                </thead>
-                <tbody style="font-size: 0.85rem;">
-                  <tr><td>12</td><td>52</td><td>16.5</td><td>6</td></tr>
-                  <tr><td>13</td><td>53</td><td>16.9</td><td>6.25</td></tr>
-                  <tr><td>14</td><td>54</td><td>17.2</td><td>6.5</td></tr>
-                  <tr><td>15</td><td>55</td><td>17.5</td><td>7</td></tr>
-                  <tr><td>16</td><td>56</td><td>17.8</td><td>7.25</td></tr>
-                  <tr><td>17</td><td>57</td><td>18.1</td><td>7.5</td></tr>
-                  <tr><td>18</td><td>58</td><td>18.5</td><td>8</td></tr>
-                  <tr><td>19</td><td>59</td><td>18.8</td><td>8.5</td></tr>
-                  <tr><td>20</td><td>60</td><td>19.1</td><td>9</td></tr>
-                  <tr><td>21</td><td>61</td><td>19.4</td><td>9.25</td></tr>
-                  <tr><td>22</td><td>62</td><td>19.7</td><td>9.5</td></tr>
-                  <tr><td>23</td><td>63</td><td>20.1</td><td>10</td></tr>
-                  <tr><td>24</td><td>64</td><td>20.4</td><td>10.5</td></tr>
-                  <tr><td>25</td><td>65</td><td>20.7</td><td>11</td></tr>
-                  <tr><td>26</td><td>66</td><td>21.0</td><td>11.5</td></tr>
-                  <tr><td>27</td><td>67</td><td>21.3</td><td>12</td></tr>
-                  <tr><td>28</td><td>68</td><td>21.6</td><td>12.5</td></tr>
-                </tbody>
-              </table>
-            </div>
+        <!-- Dicas Importantes -->
+        <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+          <div style="flex: 1; text-align: center;">
+            <i class="bi bi-thermometer-sun" style="color: #ffc107; font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
+            <h6 style="font-size: 0.9rem; font-weight: bold; margin-bottom: 0.5rem;">Melhor Horário</h6>
+            <small style="color: #6c757d;">Meça no final do dia quando o dedo está ligeiramente inchado</small>
           </div>
-
-          <!-- Dicas Importantes -->
-          <div class="row g-3 mt-3">
-            <div class="col-md-4">
-              <div class="text-center">
-                <i class="bi bi-thermometer-sun text-warning fs-4 mb-2"></i>
-                <h6 class="small fw-bold">Melhor Horário</h6>
-                <small class="text-muted">Meça no final do dia quando o dedo está ligeiramente inchado</small>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="text-center">
-                <i class="bi bi-snow text-primary fs-4 mb-2"></i>
-                <h6 class="small fw-bold">Evite o Frio</h6>
-                <small class="text-muted">Não meça quando estiver com frio, pois os dedos ficam menores</small>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="text-center">
-                <i class="bi bi-hand-index text-success fs-4 mb-2"></i>
-                <h6 class="small fw-bold">Dedo Correto</h6>
-                <small class="text-muted">Cada dedo tem um tamanho diferente, meça o dedo correto</small>
-              </div>
-            </div>
+          <div style="flex: 1; text-align: center;">
+            <i class="bi bi-snow" style="color: #007bff; font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
+            <h6 style="font-size: 0.9rem; font-weight: bold; margin-bottom: 0.5rem;">Evite o Frio</h6>
+            <small style="color: #6c757d;">Não meça quando estiver com frio, pois os dedos ficam menores</small>
           </div>
+          <div style="flex: 1; text-align: center;">
+            <i class="bi bi-hand-index" style="color: #28a745; font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
+            <h6 style="font-size: 0.9rem; font-weight: bold; margin-bottom: 0.5rem;">Dedo Correto</h6>
+            <small style="color: #6c757d;">Cada dedo tem um tamanho diferente, meça o dedo correto</small>
+          </div>
+        </div>
 
-          <!-- Contato para Dúvidas -->
-          <div class="alert alert-success mt-4">
-            <div class="d-flex align-items-center">
-              <i class="bi bi-whatsapp text-success fs-4 me-3"></i>
-              <div>
-                <h6 class="mb-1">Ainda tem dúvidas?</h6>
-                <small>Entre em contato conosco pelo WhatsApp e te ajudaremos a encontrar o tamanho perfeito!</small>
-                <div class="mt-2">
-                  <a href="https://wa.me/5537998623061?text=Olá! Preciso de ajuda para medir o tamanho do meu dedo para um anel." 
-                     class="btn btn-success btn-sm" target="_blank">
-                    <i class="bi bi-whatsapp me-1"></i>Falar no WhatsApp
-                  </a>
-                </div>
+        <!-- Contato para Dúvidas -->
+        <div style="background-color: #d4edda; color: #155724; padding: 1rem; border-radius: 4px; margin-top: 1.5rem;">
+          <div style="display: flex; align-items: center;">
+            <i class="bi bi-whatsapp" style="color: #28a745; font-size: 1.5rem; margin-right: 1rem;"></i>
+            <div>
+              <h6 style="margin-bottom: 0.5rem;">Ainda tem dúvidas?</h6>
+              <small>Entre em contato conosco pelo WhatsApp e te ajudaremos a encontrar o tamanho perfeito!</small>
+              <div style="margin-top: 0.5rem;">
+                <a href="https://wa.me/5537998623061?text=Olá! Preciso de ajuda para medir o tamanho do meu dedo para um anel." 
+                   style="background-color: #28a745; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 4px; font-size: 0.9rem;" target="_blank">
+                  <i class="bi bi-whatsapp me-1"></i>Falar no WhatsApp
+                </a>
               </div>
             </div>
           </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-        </div>
+      </div>
+      <div style="padding: 1rem 1.5rem; border-top: 1px solid #dee2e6; text-align: right;">
+        <button type="button" onclick="closeSizeGuideModal()" style="background-color: #6c757d; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;">Fechar</button>
       </div>
     </div>
   </div>
@@ -1077,10 +1108,52 @@
   <script src="{% static 'assets/js/review-system.js' %}"></script>
   <script src="{% static 'assets/js/image-modal.js' %}"></script>
   
+  <!-- Script para forçar cor dourada nas barras -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Aplicar estilo equilibrado com cor dourada
+      const progressBars = document.querySelectorAll('.rating-balanced .progress-bar');
+      progressBars.forEach(function(bar) {
+        bar.style.backgroundColor = '#ffc107';
+        bar.style.border = 'none';
+        bar.style.boxShadow = 'none';
+        bar.style.transition = 'width 0.3s ease';
+      });
+      
+      // Também aplicar cor dourada nas estrelas
+      const warningStars = document.querySelectorAll('.rating-balanced .text-warning');
+      warningStars.forEach(function(star) {
+        star.style.color = '#ffc107';
+      });
+    });
+    
+    // Funções para o modal de tamanho customizado
+    function openSizeGuideModal() {
+      const modal = document.getElementById('sizeGuideModal');
+      modal.style.display = 'block';
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeSizeGuideModal() {
+      const modal = document.getElementById('sizeGuideModal');
+      modal.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+    
+    // Fechar modal ao clicar fora dele
+    document.addEventListener('click', function(event) {
+      const modal = document.getElementById('sizeGuideModal');
+      if (event.target === modal) {
+        closeSizeGuideModal();
+      }
+    });
+  </script>
+  
   <!-- Passar dados do usuário para o JavaScript -->
   <script>
     // Dados do usuário para o sistema de reviews
     {% if user_review %}
+      window.userReviewId = {{ user_review.id }};
       window.userReviewRating = {{ user_review.rating }};
       window.userReviewComment = "{{ user_review.comentario|escapejs }}";
       window.userReviewImages = [
@@ -1089,6 +1162,7 @@
         {% endfor %}
       ];
     {% else %}
+      window.userReviewId = null;
       window.userReviewRating = 0;
       window.userReviewComment = "";
       window.userReviewImages = [];
@@ -1096,3 +1170,4 @@
   </script>
 </main>
 {% endblock content %}
+

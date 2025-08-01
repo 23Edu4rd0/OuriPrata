@@ -1,5 +1,40 @@
 /* Sistema de Reviews - CSS */
 
+/* Garantir que as estrelas fiquem douradas - FORÇADO */
+.text-warning,
+.rating-distribution .text-warning,
+.review-item .text-warning,
+span.text-warning {
+  color: #ffc107 !important;
+  font-weight: bold !important;
+}
+
+/* Estrelas específicas para reviews - MAIS ESPECÍFICO */
+.rating-distribution span.text-warning,
+.review-item .text-warning span,
+.card-body .text-warning {
+  color: #ffc107 !important;
+  font-weight: bold !important;
+}
+
+/* BARRAS DE PROGRESSO DOURADAS - FORÇADO */
+.progress-bar.bg-warning,
+.rating-distribution .progress-bar,
+.card-body .progress-bar.bg-warning {
+  background-color: #ffc107 !important;
+  color: #ffc107 !important;
+}
+
+/* Estrelas não selecionadas - CINZAS */
+.text-muted {
+  color: #6c757d !important;
+}
+
+/* Estrelas dentro de reviews - CORREÇÃO */
+.review-item .text-warning span.text-muted {
+  color: #6c757d !important;
+}
+
 /* Responsividade da seção de avaliações */
 @media (max-width: 768px) {
   /* Ajustar espaçamento em mobile */

@@ -140,6 +140,22 @@ def item_detail(request, slug):
     # Buscar todas as reviews do produto
     reviews = Review.objects.filter(produto=product).order_by('-data_criacao')
     
+    # Calcular distribuição das avaliações
+    rating_distribution = {5: 0, 4: 0, 3: 0, 2: 0, 1: 0}
+    total_reviews = reviews.count()
+    
+    for review in reviews:
+        if review.rating in rating_distribution:
+            rating_distribution[review.rating] += 1
+    
+    # Calcular porcentagens para cada rating
+    rating_percentages = {}
+    for rating in range(1, 6):
+        if total_reviews > 0:
+            rating_percentages[rating] = (rating_distribution[rating] / total_reviews) * 100
+        else:
+            rating_percentages[rating] = 0
+    
     context = {
         'product': product,
         'show_buy_button': show_buy_button,
@@ -149,6 +165,9 @@ def item_detail(request, slug):
         'related_products': Joais.objects.filter(categoria=product.categoria).exclude(id=product.id)[:4],
         'user_review': user_review,
         'reviews': reviews,
+        'rating_distribution': rating_distribution,
+        'rating_percentages': rating_percentages,
+        'total_reviews': total_reviews,
     }
     return render(request, 'landing_page/produtos/product_detail.html', context)
 
