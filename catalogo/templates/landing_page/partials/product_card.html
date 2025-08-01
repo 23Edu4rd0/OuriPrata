@@ -2,7 +2,7 @@
 <div class="col-6 col-md-4 col-xl-3 product-item"
      data-price="{% if product.em_promocao and product.preco_promocional %}{{ product.preco_promocional|floatformat:2 }}{% else %}{{ product.preco|floatformat:2 }}{% endif %}"
      data-promotion="{% if product.em_promocao %}true{% else %}false{% endif %}"
-     data-rating="{{ product.reviews.all|length|default:0|floatformat:1 }}">
+     data-rating="{{ product.average_rating|default:0|floatformat:1 }}">
   <div class="card border-0 h-100 product-card rounded-3">
     <div class="position-relative overflow-hidden">
       {% if product.imagem %}
@@ -21,7 +21,7 @@
         <div class="position-absolute top-0 end-0 m-1 m-md-2">
           <div class="bg-white rounded-pill px-1 px-md-2 py-0 py-md-1 d-flex align-items-center gap-1" style="font-size: 0.65rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
             <i class="bi bi-star-fill text-warning"></i>
-            <span class="fw-semibold">{{ product.reviews.all|length|default:0 }}</span>
+            <span class="fw-semibold">{{ product.average_rating|default:0|floatformat:1 }}</span>
           </div>
         </div>
       {% endif %}
@@ -34,7 +34,7 @@
         <div class="mb-1 mb-md-2">
           <div class="stars-small">
             {% for i in "12345" %}
-              {% if forloop.counter <= product.reviews.all|length %}
+              {% if forloop.counter <= product.average_rating %}
                 <i class="bi bi-star-fill text-warning" style="font-size: 0.65rem;"></i>
               {% else %}
                 <i class="bi bi-star text-muted" style="font-size: 0.65rem;"></i>

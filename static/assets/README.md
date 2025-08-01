@@ -167,3 +167,122 @@ static/assets/
 **Última Atualização**: Janeiro 2025
 **Versão**: 1.0.0
 **Mantenedor**: Equipe OuriPrata 
+
+# Organização dos Arquivos CSS e JavaScript
+
+## Estrutura de Arquivos
+
+### CSS
+- `navbar.css` - Estilos específicos para a navbar (sticky, mobile)
+- `dropdown.css` - Estilos para dropdowns (menu do usuário)
+- `review-modal.css` - Estilos para modais de avaliações
+- `reviews.css` - Estilos para o sistema de avaliações (responsividade)
+- `image-viewer.css` - Estilos para o visualizador de imagens
+- `landing.css` - Estilos para a página inicial
+- `catalog.css` - Estilos para o catálogo de produtos
+- `search-filters.css` - Estilos para filtros de busca
+- `utilities.css` - Utilitários CSS gerais
+- `components.css` - Componentes CSS diversos
+
+### JavaScript
+- `review-system.js` - Lógica completa do sistema de avaliações
+- `image-modal.js` - Lógica para o modal de ampliação de imagens
+
+## Funcionalidades
+
+### Navbar
+- **Sticky**: Sempre visível no topo
+- **Responsivo**: Layout otimizado para mobile
+- **Z-index**: Sempre acima de outros elementos
+
+### Dropdown
+- **Menu do usuário**: Sempre visível e acessível
+- **Mobile**: Adaptação para telas pequenas
+- **Posicionamento**: Correto em todos os dispositivos
+
+### Review Modal
+- **Review Modal**: Formulário para avaliações
+- **Image Preview**: Preview de imagens
+- **Botões**: Sempre visíveis e acessíveis
+
+### Sistema de Reviews
+- **Responsividade**: Adaptação para mobile e tablet
+- **Modal de Review**: Formulário para adicionar/editar avaliações
+- **Upload de Imagens**: Preview e upload de imagens
+- **Estrelas Interativas**: Sistema de rating com estrelas
+- **CRUD Completo**: Criar, ler, atualizar e deletar reviews
+
+### Image Viewer
+- **Ampliação**: Clique para ampliar imagens
+- **Zoom**: Funcionalidade de zoom 1.5x
+- **Responsivo**: Funciona em todos os dispositivos
+- **Bordas**: Imagens com bordas para destacar
+
+### Landing Page
+- **Página inicial**: Estilos específicos da home
+- **Carrossel**: Componentes visuais principais
+- **Seções**: Layout responsivo
+
+### Catalog
+- **Catálogo**: Estilos para listagem de produtos
+- **Cards**: Layout dos cards de produtos
+- **Grid**: Sistema de grid responsivo
+
+### Search Filters
+- **Filtros**: Interface de filtros de busca
+- **Responsivo**: Adaptação para mobile
+- **Interativo**: Filtros dinâmicos
+
+## Como Usar
+
+### No Template Base
+```html
+<!-- CSS essenciais (incluídos automaticamente) -->
+<link rel="stylesheet" href="{% static 'assets/css/navbar.css' %}">
+<link rel="stylesheet" href="{% static 'assets/css/dropdown.css' %}">
+<link rel="stylesheet" href="{% static 'assets/css/review-modal.css' %}">
+<link rel="stylesheet" href="{% static 'assets/css/search-filters.css' %}">
+<link rel="stylesheet" href="{% static 'assets/css/catalog.css' %}">
+<link rel="stylesheet" href="{% static 'assets/css/landing.css' %}">
+
+<!-- CSS específicos (usar block extra_css) -->
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'assets/css/reviews.css' %}">
+<link rel="stylesheet" href="{% static 'assets/css/image-viewer.css' %}">
+{% endblock %}
+```
+
+### Chamadas de Função
+```javascript
+// Abrir modal de review
+showReviewForm();
+
+// Ampliar imagem
+showImageFullscreen(imageUrl, username);
+```
+
+## Benefícios da Organização
+
+1. **Separação de Responsabilidades**: Cada arquivo tem uma função específica
+2. **Manutenibilidade**: Fácil de encontrar e modificar código
+3. **Performance**: Carregamento otimizado por funcionalidade
+4. **Reutilização**: Arquivos podem ser usados em outras páginas
+5. **Debugging**: Mais fácil identificar problemas específicos
+6. **Escalabilidade**: Fácil adicionar novas funcionalidades
+7. **Nomenclatura Clara**: Nomes descritivos e organizados
+
+## Estrutura Final
+
+```
+static/assets/css/
+├── navbar.css           # Navbar sticky e mobile
+├── dropdown.css         # Dropdown menus
+├── review-modal.css     # Modais de avaliações
+├── reviews.css          # Sistema de reviews
+├── image-viewer.css     # Visualizador de imagens
+├── landing.css          # Página inicial
+├── catalog.css          # Catálogo de produtos
+├── search-filters.css   # Filtros de busca
+├── utilities.css        # Utilitários gerais
+└── components.css       # Componentes diversos
+``` 

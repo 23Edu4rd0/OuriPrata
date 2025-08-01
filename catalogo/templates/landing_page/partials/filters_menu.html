@@ -45,7 +45,7 @@
     <div class="mb-4">
       <div class="filter-title mb-2"><i class="bi bi-star me-2 text-dark"></i>Avaliação</div>
       <div class="d-grid gap-2">
-        <button type="button" class="btn btn-sm text-start px-3 py-2 rounded-pill rating-filter-btn" data-rating="all">
+        <button type="button" class="btn btn-sm text-start px-3 py-2 rounded-pill rating-filter-btn active" data-rating="all">
           <div class="d-flex justify-content-between align-items-center">
             <span><i class="bi bi-star me-2"></i>Todas as Avaliações</span>
           </div>
@@ -233,6 +233,12 @@
     return parseFloat(val.replace(',', '.')) || 0;
   }
 
+  function parseRating(val) {
+    if (!val) return 0;
+    // Aceita vírgula ou ponto para ratings
+    return parseFloat(val.replace(',', '.')) || 0;
+  }
+
   function applyLocalFilters() {
     console.log('applyLocalFilters called');
     const checkbox = document.getElementById('promocao');
@@ -246,6 +252,7 @@
     console.log('Min price:', minPrice);
     console.log('Max price:', maxPrice);
     console.log('Rating filter:', ratingFilter);
+    console.log('Active rating button:', document.querySelector('.rating-filter-btn.active'));
     
     // Verificar se os produtos têm os atributos corretos
     products.forEach((product, index) => {
@@ -256,34 +263,47 @@
       });
     });
     
+    let visibleCount = 0;
     products.forEach(product => {
       const isPromotion = product.dataset.promotion === 'true';
       const price = parsePrice(product.dataset.price);
-      const rating = parseFloat(product.dataset.rating) || 0;
+      const rating = parseRating(product.dataset.rating);
       
       let show = true;
       
       // Filtro de promoção
-      if (checkbox.checked && !isPromotion) show = false;
+      if (checkbox && checkbox.checked && !isPromotion) {
+        console.log(`Hiding product due to promotion filter: ${product.dataset.price}`);
+        show = false;
+      }
       
       // Filtro de preço
-      if (price < minPrice || price > maxPrice) show = false;
+      if (price < minPrice || price > maxPrice) {
+        console.log(`Hiding product due to price filter: ${price} (min: ${minPrice}, max: ${maxPrice})`);
+        show = false;
+      }
       
       // Filtro de avaliação
       if (ratingFilter !== 'all') {
         const minRating = parseInt(ratingFilter);
-        if (rating < minRating) show = false;
+        console.log(`Checking rating filter: ${rating} >= ${minRating}?`);
+        if (rating < minRating) {
+          console.log(`Hiding product due to rating filter: ${rating} < ${minRating}`);
+          show = false;
+        }
       }
       
       product.style.display = show ? 'block' : 'none';
+      if (show) visibleCount++;
     });
     
-    console.log('Local filters applied');
+    console.log(`Local filters applied. Visible products: ${visibleCount}/${products.length}`);
   }
 
   // Configurar filtros de avaliação
   document.querySelectorAll('.rating-filter-btn').forEach(btn => {
     btn.addEventListener('click', function() {
+      console.log('Rating filter button clicked:', this.dataset.rating);
       // Remover classe active de todos os botões
       document.querySelectorAll('.rating-filter-btn').forEach(b => b.classList.remove('active'));
       // Adicionar classe active ao botão clicado
@@ -295,6 +315,9 @@
 
   // Configurar event listeners quando o DOM estiver pronto
   document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, setting up filters...');
+    console.log('Rating filter buttons found:', document.querySelectorAll('.rating-filter-btn').length);
+    
     const precoMin = document.getElementById('preco-min');
     const precoMax = document.getElementById('preco-max');
     const applyButton = document.querySelector('button[onclick="applyLocalFilters()"]');
@@ -308,5 +331,8 @@
     if (applyButton) {
       applyButton.addEventListener('click', applyLocalFilters);
     }
+    
+    // Aplicar filtros iniciais
+    applyLocalFilters();
   });
 </script>

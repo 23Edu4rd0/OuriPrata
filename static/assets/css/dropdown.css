@@ -1,0 +1,28 @@
+/* Dropdown - CSS */
+
+/* Dropdown menu sempre visível */
+.dropdown-menu {
+  position: absolute !important;
+  top: 100% !important;
+  left: 0 !important;
+  z-index: 1050 !important;
+  background-color: white !important;
+  border: 1px solid rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  border-radius: 8px !important;
+  margin-top: 0 !important;
+}
+
+/* Mobile dropdown */
+@media (max-width: 768px) {
+  .dropdown-menu {
+    position: static !important;
+    float: none !important;
+    width: auto !important;
+    margin-top: 0 !important;
+    background-color: #f8f9fa !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+} 

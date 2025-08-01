@@ -132,6 +132,14 @@ def item_detail(request, slug):
         except Exception:
             show_buy_button = False
     
+    # Verificar se o usuário já avaliou este produto
+    user_review = None
+    if request.user.is_authenticated:
+        user_review = Review.objects.filter(produto=product, usuario=request.user).first()
+    
+    # Buscar todas as reviews do produto
+    reviews = Review.objects.filter(produto=product).order_by('-data_criacao')
+    
     context = {
         'product': product,
         'show_buy_button': show_buy_button,
@@ -139,6 +147,8 @@ def item_detail(request, slug):
         'preference_id': preference_id,
         'mercado_pago_public_key': mercado_pago_public_key,
         'related_products': Joais.objects.filter(categoria=product.categoria).exclude(id=product.id)[:4],
+        'user_review': user_review,
+        'reviews': reviews,
     }
     return render(request, 'landing_page/produtos/product_detail.html', context)
 
@@ -341,10 +351,26 @@ def add_review(request, product_slug):
                 'message': 'Você já avaliou este produto.'
             })
         
+        # Verificar se o usuário está logado
+        if not request.user.is_authenticated:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Você precisa estar logado para avaliar.'
+            })
+        
         try:
-            rating = int(request.POST.get('rating', 0))
+            rating_raw = request.POST.get('rating', 0)
             title = request.POST.get('title', '').strip()
             comment = request.POST.get('comment', '').strip()
+            
+            # Tentar converter rating
+            try:
+                rating = int(rating_raw)
+            except (ValueError, TypeError) as e:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': f'Rating inválido: {rating_raw}. Deve ser um número entre 1 e 5.'
+                })
             
             if rating < 1 or rating > 5:
                 return JsonResponse({
@@ -372,20 +398,23 @@ def add_review(request, product_slug):
             if 'images' in request.FILES:
                 for image_file in request.FILES.getlist('images'):
                     if image_file.size <= 5 * 1024 * 1024:  # 5MB limit
-                        ReviewImage.objects.create(
-                            review=review,
-                            image=image_file
-                        )
+                        try:
+                            ReviewImage.objects.create(
+                                review=review,
+                                imagem=image_file
+                            )
+                        except Exception as e:
+                            print(f"Error saving image {image_file.name}: {e}")
             
             return JsonResponse({
                 'status': 'success',
                 'message': 'Avaliação enviada com sucesso!'
             })
             
-        except (ValueError, TypeError):
+        except (ValueError, TypeError) as e:
             return JsonResponse({
                 'status': 'error',
-                'message': 'Dados inválidos fornecidos.'
+                'message': f'Dados inválidos fornecidos. Erro: {str(e)}'
             })
     
     return JsonResponse({
@@ -403,38 +432,58 @@ def edit_review(request, review_id):
     if request.method == 'POST':
         try:
             rating = int(request.POST.get('rating', 0))
-            titulo = request.POST.get('titulo', '').strip()
-            comentario = request.POST.get('comentario', '').strip()
-            recomendado = request.POST.get('recomendado') == 'on'
+            title = request.POST.get('title', '').strip()
+            comment = request.POST.get('comment', '').strip()
             
             if rating < 1 or rating > 5:
-                messages.error(request, 'Avaliação deve ser entre 1 e 5 estrelas.')
-                return redirect('item_detail', slug=review.produto.slug)
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Avaliação deve ser entre 1 e 5 estrelas.'
+                })
             
-            if not comentario:
-                messages.error(request, 'Comentário é obrigatório.')
-                return redirect('item_detail', slug=review.produto.slug)
+            if not comment:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Comentário é obrigatório.'
+                })
             
             # Atualizar a avaliação
             review.rating = rating
-            review.titulo = titulo
-            review.comentario = comentario
-            review.recomendado = recomendado
-            
-            # Processar nova foto se fornecida
-            if 'foto' in request.FILES:
-                review.foto = request.FILES['foto']
-            
+            review.titulo = title
+            review.comentario = comment
             review.save()
             
-            messages.success(request, 'Avaliação atualizada com sucesso!')
-            return redirect('item_detail', slug=review.produto.slug)
+            # Processar imagens se fornecidas
+            if 'images' in request.FILES:
+                # Remover imagens antigas
+                review.imagens.all().delete()
+                
+                # Adicionar novas imagens
+                for image_file in request.FILES.getlist('images'):
+                    if image_file.size <= 5 * 1024 * 1024:  # 5MB limit
+                        try:
+                            ReviewImage.objects.create(
+                                review=review,
+                                imagem=image_file
+                            )
+                        except Exception as e:
+                            print(f"Error saving image in edit {image_file.name}: {e}")
+            
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Avaliação atualizada com sucesso!'
+            })
             
         except (ValueError, TypeError):
-            messages.error(request, 'Dados inválidos fornecidos.')
-            return redirect('item_detail', slug=review.produto.slug)
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Dados inválidos fornecidos.'
+            })
     
-    return redirect('item_detail', slug=review.produto.slug)
+    return JsonResponse({
+        'status': 'error',
+        'message': 'Método não permitido.'
+    })
 
 @login_required
 def delete_review(request, review_id):
@@ -442,13 +491,18 @@ def delete_review(request, review_id):
     View para deletar uma avaliação
     """
     review = get_object_or_404(Review, id=review_id, usuario=request.user)
-    product_slug = review.produto.slug
     
     if request.method == 'POST':
         review.delete()
-        messages.success(request, 'Avaliação removida com sucesso!')
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Avaliação removida com sucesso!'
+        })
     
-    return redirect('item_detail', slug=product_slug)
+    return JsonResponse({
+        'status': 'error',
+        'message': 'Método não permitido.'
+    })
 
 def get_product_reviews(request, product_slug):
     """

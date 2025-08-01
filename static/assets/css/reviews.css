@@ -1,0 +1,98 @@
+/* Sistema de Reviews - CSS */
+
+/* Responsividade da seção de avaliações */
+@media (max-width: 768px) {
+  /* Ajustar espaçamento em mobile */
+  .py-5 {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+  }
+  
+  /* Títulos menores em mobile */
+  .card-title {
+    font-size: 1.1rem !important;
+  }
+  
+  /* Botões mais compactos */
+  .btn {
+    padding: 0.5rem 1rem !important;
+    font-size: 0.9rem !important;
+  }
+  
+  /* Distribuição de avaliações mais compacta */
+  .rating-distribution .d-flex {
+    margin-bottom: 0.5rem !important;
+  }
+  
+  .rating-distribution .progress {
+    height: 6px !important;
+  }
+  
+  /* Comentários mais compactos */
+  .review-item {
+    padding-bottom: 1rem !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  .review-item h6 {
+    font-size: 0.95rem !important;
+  }
+  
+  .review-item p {
+    font-size: 0.9rem !important;
+    line-height: 1.4 !important;
+  }
+  
+  /* Imagens menores em mobile */
+  .review-item img {
+    width: 50px !important;
+    height: 50px !important;
+  }
+  
+  /* Botões de ação em linha em mobile */
+  .d-flex.flex-column.gap-3 {
+    flex-direction: row !important;
+    gap: 0.5rem !important;
+  }
+  
+  .d-flex.flex-column.gap-3 .btn {
+    flex: 1 !important;
+    font-size: 0.8rem !important;
+    padding: 0.4rem 0.5rem !important;
+  }
+  
+  /* Espaçamento entre colunas */
+  .row.g-4 > div {
+    margin-bottom: 1rem !important;
+  }
+}
+
+@media (max-width: 576px) {
+  /* Layout ainda mais compacto */
+  .container {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+  
+  /* Títulos ainda menores */
+  h2.fw-bold {
+    font-size: 1.5rem !important;
+  }
+  
+  /* Botões em coluna em telas muito pequenas */
+  .d-flex.flex-column.gap-3 {
+    flex-direction: column !important;
+  }
+  
+  /* Imagens ainda menores */
+  .review-item img {
+    width: 45px !important;
+    height: 45px !important;
+  }
+}
+
+/* Garantir que os botões sempre fiquem visíveis */
+.review-modal-footer .btn {
+  min-width: 120px;
+  z-index: 1000;
+} 
