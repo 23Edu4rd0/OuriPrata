@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator
 import json
+import logging
 
 def home(request):
     """
@@ -431,9 +432,10 @@ def add_review(request, product_slug):
             })
             
         except (ValueError, TypeError) as e:
+            logging.exception("Erro ao processar avaliação do produto.")
             return JsonResponse({
                 'status': 'error',
-                'message': f'Dados inválidos fornecidos. Erro: {str(e)}'
+                'message': 'Dados inválidos fornecidos.'
             })
     
     return JsonResponse({
