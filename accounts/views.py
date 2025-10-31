@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.contrib import messages
 from .form import SignUpForm
 from .forms import UserProfileForm
@@ -160,7 +161,7 @@ def complete_profile(request):
             
             # Verificar se veio de um checkout
             next_url = request.GET.get('next')
-            if next_url:
+            if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}):
                 return redirect(next_url)
             
             return redirect('accounts:settings')
