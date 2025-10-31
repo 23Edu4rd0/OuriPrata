@@ -155,12 +155,24 @@ function displaySearchHistory(history, list) {
   history.slice(0, 5).forEach(term => {
     const item = document.createElement('div');
     item.className = 'mb-2';
-    item.innerHTML = `
-      <button class="btn btn-outline-secondary btn-sm w-100 text-start" onclick="searchTerm('${term}')">
-        <i class="bi bi-clock-history me-2"></i>
-        ${term}
-      </button>
-    `;
+    
+    const button = document.createElement('button');
+    button.className = 'btn btn-outline-secondary btn-sm w-100 text-start';
+
+    // Add icon
+    const icon = document.createElement('i');
+    icon.className = 'bi bi-clock-history me-2';
+    button.appendChild(icon);
+
+    // Add the term as plain text
+    button.appendChild(document.createTextNode(term));
+
+    // Add click handler
+    button.addEventListener('click', function() {
+      searchTerm(term);
+    });
+
+    item.appendChild(button);
     list.appendChild(item);
   });
   
