@@ -7,140 +7,95 @@
 
 {% block content %}
 
-<!-- Hero -->
 <div class="page-hero">
-  <div class="container">
+  <div class="op-container">
     <span class="page-hero__eyebrow">Contato</span>
     <h1 class="page-hero__title">Fale Conosco</h1>
     <p class="page-hero__sub">Estamos prontos para atender você com carinho.</p>
   </div>
 </div>
 
-<section style="padding: 72px 0 80px;">
-  <div class="container">
-    <div class="row g-5">
+<section class="py-18 pb-20">
+  <div class="op-container">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
 
-      <!-- Formulário -->
-      <div class="col-12 col-lg-7">
-        <div style="background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-xl); padding: 40px;">
-          <h2 style="font-family: var(--font-serif); font-size: 1.75rem; color: var(--gray-800); margin-bottom: 8px;">
-            Envie sua Mensagem
-          </h2>
-          <p style="font-size:14px; color: var(--gray-500); margin-bottom: 32px;">
+      <div class="lg:col-span-7">
+        <div class="form-card">
+          <h2 class="font-serif text-3xl text-ink mb-2">Envie sua Mensagem</h2>
+          <p class="text-sm text-gray-500 font-light mb-8">
             Preencheu o formulário? Respondemos em até 24h.
           </p>
 
-          <form method="post" id="contactForm">
+          <form method="post" id="contactForm" class="space-y-5">
             {% csrf_token %}
-            <div class="row g-3">
-              <div class="col-md-6">
-                <label for="nome" style="font-size:12px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color: var(--gray-500); display:block; margin-bottom:6px;">Nome Completo</label>
-                <input
-                  type="text"
-                  id="nome"
-                  name="nome"
-                  required
-                  placeholder="Seu nome"
-                  class="search-input"
-                  style="max-width:100%; display:block; width:100%; padding: 12px 16px; border-radius: var(--radius);"
-                >
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label for="nome" class="form-label">Nome Completo</label>
+                <input type="text" id="nome" name="nome" required placeholder="Seu nome"
+                  class="search-input !max-w-none !block !w-full !py-3 !rounded-xl">
               </div>
-              <div class="col-md-6">
-                <label for="email" style="font-size:12px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color: var(--gray-500); display:block; margin-bottom:6px;">E-mail</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  required
-                  placeholder="seu@email.com"
-                  class="search-input"
-                  style="max-width:100%; display:block; width:100%; padding: 12px 16px; border-radius: var(--radius);"
-                >
+              <div>
+                <label for="email" class="form-label">E-mail</label>
+                <input type="email" id="email" name="email" required placeholder="seu@email.com"
+                  class="search-input !max-w-none !block !w-full !py-3 !rounded-xl">
               </div>
             </div>
-            <div style="margin-top: 20px;">
-              <label for="mensagem" style="font-size:12px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color: var(--gray-500); display:block; margin-bottom:6px;">Mensagem</label>
-              <textarea
-                id="mensagem"
-                name="mensagem"
-                rows="6"
-                required
-                placeholder="Como podemos ajudar?"
-                class="search-input"
-                style="max-width:100%; display:block; width:100%; padding: 12px 16px; border-radius: var(--radius); resize: vertical; font-family: var(--font-sans);"
-              ></textarea>
+            <div>
+              <label for="mensagem" class="form-label">Mensagem</label>
+              <textarea id="mensagem" name="mensagem" rows="6" required placeholder="Como podemos ajudar?"
+                class="search-input !max-w-none !block !w-full !py-3 !rounded-xl resize-y font-sans"></textarea>
             </div>
-            <div style="margin-top: 24px;">
-              <button type="submit" class="btn-gold" style="width:100%; justify-content:center;" id="contact-submit">
-                <i class="bi bi-send" aria-hidden="true"></i> Enviar Mensagem
-              </button>
-            </div>
+            <button type="submit" class="btn-gold w-full !justify-center" id="contact-submit">
+              <i class="bi bi-send" aria-hidden="true"></i> Enviar Mensagem
+            </button>
           </form>
         </div>
       </div>
 
-      <!-- Informações de Contato -->
-      <div class="col-12 col-lg-5">
-        <div style="display: flex; flex-direction: column; gap: 20px;">
+      <div class="lg:col-span-5 flex flex-col gap-5">
 
-          <!-- WhatsApp card -->
-          <div style="background: var(--gold-50); border: 1px solid var(--gold-200); border-radius: var(--radius-xl); padding: 28px 24px;">
-            <div style="display:flex; align-items:flex-start; gap: 16px;">
-              <div style="width:48px; height:48px; background: var(--gold-400); border-radius: 50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                <i class="bi bi-whatsapp" style="color:#fff; font-size:20px;" aria-hidden="true"></i>
-              </div>
-              <div>
-                <h3 style="font-family: var(--font-serif); font-size:1.2rem; margin-bottom:4px; color: var(--gray-800);">WhatsApp</h3>
-                <p style="font-size:15px; color: var(--gray-600); margin-bottom: 4px;">(37) 99862-3061</p>
-                <p style="font-size:13px; color: var(--gray-400); margin-bottom: 16px;">Seg. a Sex., das 8h às 17h</p>
-                <a
-                  href="https://wa.me/5537998623061?text=Olá!%20Gostaria%20de%20mais%20informações."
-                  target="_blank"
-                  rel="noopener"
-                  class="btn-gold"
-                  id="contact-whatsapp"
-                  style="font-size:12px; padding: 10px 20px;"
-                >
-                  <i class="bi bi-whatsapp" aria-hidden="true"></i> Abrir WhatsApp
-                </a>
-              </div>
+        <div class="contact-card contact-card--gold">
+          <div class="flex items-start gap-4">
+            <div class="contact-card__icon contact-card__icon--gold">
+              <i class="bi bi-whatsapp text-xl" aria-hidden="true"></i>
+            </div>
+            <div>
+              <h3 class="font-serif text-xl text-ink mb-1">WhatsApp</h3>
+              <p class="text-[15px] text-gray-600 mb-1">(37) 99862-3061</p>
+              <p class="text-sm text-gray-400 mb-4">Seg. a Sex., das 8h às 17h</p>
+              <a href="https://wa.me/5537998623061?text=Olá!%20Gostaria%20de%20mais%20informações."
+                target="_blank" rel="noopener" class="btn-gold !text-xs !py-2.5 !px-5" id="contact-whatsapp">
+                <i class="bi bi-whatsapp" aria-hidden="true"></i> Abrir WhatsApp
+              </a>
             </div>
           </div>
-
-          <!-- Endereço card -->
-          <div style="background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-xl); padding: 28px 24px;">
-            <div style="display:flex; align-items:flex-start; gap: 16px;">
-              <div style="width:48px; height:48px; background: var(--gray-100); border-radius: 50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                <i class="bi bi-geo-alt-fill" style="color: var(--gold-500); font-size:20px;" aria-hidden="true"></i>
-              </div>
-              <div>
-                <h3 style="font-family: var(--font-serif); font-size:1.2rem; margin-bottom:4px; color: var(--gray-800);">Endereço</h3>
-                <p style="font-size:15px; color: var(--gray-600); margin-bottom: 4px;">
-                  Av. 1° de Junho, 411 – 501<br>
-                  Centro, Divinópolis – MG
-                </p>
-                <p style="font-size:13px; color: var(--gray-400); margin-bottom: 16px;">Seg. a Sex., das 9h às 17h</p>
-                <a
-                  href="https://maps.app.goo.gl/EhoHJBKm7o2f9R4U7"
-                  target="_blank"
-                  rel="noopener"
-                  class="btn-ghost"
-                  id="contact-mapa"
-                  style="font-size:12px; padding: 9px 18px;"
-                >
-                  <i class="bi bi-map" aria-hidden="true"></i> Ver no Mapa
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Dica -->
-          <div style="padding: 20px 24px; background: var(--gray-50); border-radius: var(--radius-lg); font-size:14px; color: var(--gray-500); line-height:1.65; border: 1px solid var(--gray-100);">
-            <i class="bi bi-lightbulb" style="color: var(--gold-400);" aria-hidden="true"></i>&nbsp;
-            Prefere falar pelo WhatsApp? É mais rápido! Respondemos em minutos durante o horário de atendimento.
-          </div>
-
         </div>
+
+        <div class="contact-card contact-card--white">
+          <div class="flex items-start gap-4">
+            <div class="contact-card__icon contact-card__icon--muted">
+              <i class="bi bi-geo-alt-fill text-xl" aria-hidden="true"></i>
+            </div>
+            <div>
+              <h3 class="font-serif text-xl text-ink mb-1">Endereço</h3>
+              <p class="text-[15px] text-gray-600 mb-1">
+                Av. 1° de Junho, 411 – 501<br>
+                Centro, Divinópolis – MG
+              </p>
+              <p class="text-sm text-gray-400 mb-4">Seg. a Sex., das 9h às 17h</p>
+              <a href="https://maps.app.goo.gl/EhoHJBKm7o2f9R4U7"
+                target="_blank" rel="noopener" class="btn-ghost !text-xs !py-2 !px-4" id="contact-mapa">
+                <i class="bi bi-map" aria-hidden="true"></i> Ver no Mapa
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-tip">
+          <i class="bi bi-lightbulb text-gold-400" aria-hidden="true"></i>&nbsp;
+          Prefere falar pelo WhatsApp? É mais rápido! Respondemos em minutos durante o horário de atendimento.
+        </div>
+
       </div>
 
     </div>

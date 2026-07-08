@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer components {
+  /* Velocidade padrão (Desktop/Laptops) */
+  .animate-scroll {
+    animation: scroll-left 25s linear infinite;
+  }
+
+  /* Velocidade ajustada para Mobile */
+  @media (max-width: 768px) {
+    .animate-scroll {
+      animation-duration: 10s; 
+    }
+  }
+}
+
+@keyframes scroll-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}

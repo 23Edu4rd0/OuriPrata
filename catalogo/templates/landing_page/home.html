@@ -1,252 +1,72 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}OuriPrata — Joias em Ouro e Prata{% endblock %}
-{% block meta_description %}<meta name="description" content="Descubra a coleção OuriPrata. Joias artesanais em ouro e prata com design exclusivo e materiais de alta qualidade.">{% endblock %}
-{% block og_title %}OuriPrata — Joias com Elegância{% endblock %}
-{% block og_description %}Descubra nossa coleção de joias em ouro e prata. Design exclusivo, qualidade garantida.{% endblock %}
+{% block title %}OuriPrata | Joias com alma e propósito{% endblock %}
 
 {% block content %}
-
-<!-- ====== HERO ====== -->
-<section class="hero" id="inicio">
-  <div class="hero__bg" style="background-image: linear-gradient(135deg, rgba(23,23,23,0.88) 0%, rgba(23,23,23,0.45) 65%), url('{% static "assets/landing_page/hero.png" %}'); background-size: cover; background-position: center;"></div>
-  <div class="hero__pattern" aria-hidden="true"></div>
-
-  <div class="container" style="position:relative; z-index:2; padding-top: 48px; padding-bottom: 80px;">
-    <div class="hero__content fade-up">
-      <span class="hero__eyebrow">Coleção 2025</span>
-      <h1 class="hero__title">
-        Cada peça conta<br>
-        uma <em>história</em>
-      </h1>
-      <p class="hero__text">
-        Joias artesanais em ouro e prata criadas com amor e dedicação. Descubra a peça que vai marcar os seus momentos mais especiais.
-      </p>
-      <div class="hero__actions">
-        <a href="{% url 'all_products' %}" class="btn-gold" id="hero-cta-colecao">
-          Ver Coleção <i class="bi bi-arrow-right" aria-hidden="true"></i>
-        </a>
-        <a href="{% url 'contact_us' %}" class="btn-gold-outline" id="hero-cta-contato"
-           style="color: rgba(255,255,255,0.8); border-color: rgba(255,255,255,0.4);">
-          Falar Conosco
-        </a>
-      </div>
-    </div>
-  </div>
-
-  <div class="hero__scroll" aria-hidden="true">
-    <span>Explorar</span>
-    <i class="bi bi-chevron-down"></i>
-  </div>
+<!-- Hero Section: Apenas imagem clicável -->
+<section class="w-full">
+  <a href="{% url 'all_products' %}" class="block w-full h-[50vh] md:h-[65vh] overflow-hidden group">
+    <img src="{% static 'assets/joias/aliança.jpg' %}" 
+         alt="Coleção OuriPrata" 
+         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+  </a>
 </section>
 
-<!-- ====== STRIP NÚMEROS ====== -->
-<section class="stats-strip" aria-label="Diferenciais">
-  <div class="container">
-    <div class="stats-strip__grid">
-      <div>
-        <p class="stats-strip__number">+500</p>
-        <p class="stats-strip__label">Peças Únicas</p>
-      </div>
-      <div>
-        <p class="stats-strip__number">10+</p>
-        <p class="stats-strip__label">Anos de Experiência</p>
-      </div>
-      <div>
-        <p class="stats-strip__number">100%</p>
-        <p class="stats-strip__label">Satisfação Garantida</p>
-      </div>
-    </div>
-  </div>
-</section>
+{% include 'landing_page/partials/_trust_bar.html' %}
 
-<!-- ====== CATEGORIAS ====== -->
-<section class="categories-section" id="categorias">
-  <div class="container">
-    <div class="section-header">
-      <span class="section-header__eyebrow">Explore</span>
-      <h2 class="section-header__title">Nossas Categorias</h2>
-      <span class="divider-gold"></span>
-      <p class="section-header__sub">Cada categoria, uma história diferente.</p>
+<!-- Grid de Destaques -->
+<section class="py-16">
+  <div class="op-container">
+    <div class="text-center mb-12">
+      <h2 class="font-serif text-3xl text-ink">Nossos Destaques</h2>
+      <span class="block w-16 h-0.5 bg-gold-400 mx-auto mt-4"></span>
     </div>
 
-    <div class="row g-4">
-      {% if categories %}
-        {% for categoria in categories %}
-          <div class="col-6 col-md-4 col-lg-3">
-            <a href="{{ categoria.get_absolute_url }}" class="category-card">
-              {% if categoria.imagem %}
-                <img src="{{ categoria.imagem.url }}" alt="{{ categoria.nome }}" class="category-card__img" loading="lazy">
-                <div class="category-card__overlay" aria-hidden="true"></div>
-                <div class="category-card__body">
-                  <span class="category-card__name">{{ categoria.nome }}</span>
-                  <span class="category-card__count">{{ categoria.joias_count }} peças</span>
-                </div>
-              {% else %}
-                <div class="category-card--placeholder">
-                  <i class="bi bi-gem cat-icon" aria-hidden="true"></i>
-                  <span class="category-card__name">{{ categoria.nome }}</span>
-                  <span class="category-card__count" style="margin-top: 6px; font-size:12px; color:var(--gray-400);">Ver coleção</span>
-                </div>
-              {% endif %}
-            </a>
+    <!-- Grid de Produtos -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {% for produto in destaques %}
+      <div class="group bg-white rounded-2xl p-4 shadow-card hover:shadow-soft transition-all">
+        <a href="{% url 'product_detail' produto.slug %}">
+          <div class="aspect-square overflow-hidden rounded-xl mb-4">
+            {% if produto.imagem %}
+            <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}"
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            {% else %}
+            <div class="w-full h-full bg-cream-100 flex items-center justify-center text-ink-light">Sem foto</div>
+            {% endif %}
           </div>
-        {% endfor %}
-      {% else %}
-        <!-- Categorias mockadas -->
-        <div class="col-6 col-md-4 col-lg-3">
-          <a href="{% url 'all_products' %}" class="category-card">
-            <img src="{% static 'assets/landing_page/cat-aneis.png' %}" alt="Anéis" class="category-card__img" loading="lazy">
-            <div class="category-card__overlay" aria-hidden="true"></div>
-            <div class="category-card__body">
-              <span class="category-card__name">Anéis</span>
-              <span class="category-card__count">Ver coleção</span>
-            </div>
-          </a>
-        </div>
-        <div class="col-6 col-md-4 col-lg-3">
-          <a href="{% url 'all_products' %}" class="category-card">
-            <img src="{% static 'assets/landing_page/cat-colares.png' %}" alt="Colares" class="category-card__img" loading="lazy">
-            <div class="category-card__overlay" aria-hidden="true"></div>
-            <div class="category-card__body">
-              <span class="category-card__name">Colares</span>
-              <span class="category-card__count">Ver coleção</span>
-            </div>
-          </a>
-        </div>
-        <div class="col-6 col-md-4 col-lg-3">
-          <a href="{% url 'all_products' %}" class="category-card">
-            <img src="{% static 'assets/landing_page/cat-brincos.png' %}" alt="Brincos" class="category-card__img" loading="lazy">
-            <div class="category-card__overlay" aria-hidden="true"></div>
-            <div class="category-card__body">
-              <span class="category-card__name">Brincos</span>
-              <span class="category-card__count">Ver coleção</span>
-            </div>
-          </a>
-        </div>
-        <div class="col-6 col-md-4 col-lg-3">
-          <a href="{% url 'all_products' %}" class="category-card category-card--placeholder">
-            <i class="bi bi-gem cat-icon" aria-hidden="true"></i>
-            <span class="category-card__name">Pulseiras</span>
-            <span class="category-card__count" style="margin-top: 6px; font-size:12px; color:var(--gray-400);">Ver coleção</span>
-          </a>
-        </div>
-      {% endif %}
-    </div>
-  </div>
-</section>
-
-<!-- ====== DESTAQUES ====== -->
-{% if featured_products %}
-<section class="featured-section" id="destaques">
-  <div class="container">
-    <div class="section-header">
-      <span class="section-header__eyebrow">Seleção Especial</span>
-      <h2 class="section-header__title">Peças em Destaque</h2>
-      <span class="divider-gold"></span>
-      <p class="section-header__sub">Escolhidas com cuidado para você.</p>
-    </div>
-
-    <div class="products-grid">
-      {% for product in featured_products %}
-        {% include 'landing_page/partials/product_card.html' %}
+          <h3 class="font-serif text-lg text-ink">{{ produto.nome }}</h3>
+          <p class="text-gold-500 font-medium">R$ {{ produto.preco }}</p>
+        </a>
+      </div>
+      {% empty %}
+      <p class="col-span-full text-center text-ink-muted">Nenhum produto em destaque no momento.</p>
       {% endfor %}
     </div>
+  </div>
+</section>
 
-    <div style="text-align:center; margin-top:48px;">
-      <a href="{% url 'all_products' %}" class="btn-gold-outline" id="home-ver-tudo">
-        Ver Coleção Completa <i class="bi bi-arrow-right" aria-hidden="true"></i>
+<!-- Categorias -->
+<section class="py-16 bg-white">
+  <div class="op-container">
+    <div class="text-center mb-12">
+      <h2 class="font-serif text-3xl text-ink">Explore por Categoria</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <a href="{% url 'products_by_category' 'aneis' %}" class="group block overflow-hidden rounded-2xl">
+        <img src="{% static 'assets/landing_page/cat-aneis.png' %}"
+          class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+      </a>
+      <a href="{% url 'products_by_category' 'brincos' %}" class="group block overflow-hidden rounded-2xl">
+        <img src="{% static 'assets/landing_page/cat-brincos.png' %}"
+          class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+      </a>
+      <a href="{% url 'products_by_category' 'colares' %}" class="group block overflow-hidden rounded-2xl">
+        <img src="{% static 'assets/landing_page/cat-colares.png' %}"
+          class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
       </a>
     </div>
   </div>
 </section>
-{% endif %}
-
-<!-- ====== BRAND / SOBRE ====== -->
-<section class="brand-section" id="sobre">
-  <div class="container">
-    <div class="row align-items-center g-5">
-      <div class="col-12 col-lg-5">
-        <div class="brand-section__image">
-          <img src="{% static 'assets/landing_page/cat-colares.png' %}" alt="OuriPrata — Artesãs trabalhando" loading="lazy">
-        </div>
-      </div>
-      <div class="col-12 col-lg-7 brand-section__content">
-        <span class="brand-section__eyebrow">Nossa História</span>
-        <h2 class="brand-section__title">Beleza e significado em cada detalhe</h2>
-        <p class="brand-section__text">
-          A OuriPrata nasceu da paixão por joias que vão além da estética — peças que marcam momentos, celebram conquistas e perpetuam memórias. Cada joia é escolhida e trabalhada com atenção ao detalhe, unindo design contemporâneo e técnicas artesanais refinadas.
-        </p>
-        <p class="brand-section__text" style="margin-bottom: 32px;">
-          Trabalhamos com ouro e prata de alta qualidade, oferecendo um portfólio exclusivo para quem valoriza peças únicas com história.
-        </p>
-        <a href="{% url 'about_us' %}" class="btn-ghost" id="home-sobre-nos">
-          Conhecer Nossa História <i class="bi bi-arrow-right" aria-hidden="true"></i>
-        </a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ====== DIFERENCIAIS ====== -->
-<section class="perks-section">
-  <div class="container">
-    <div class="row g-4 text-center">
-      <div class="col-6 col-md-3">
-        <div class="perk-item">
-          <i class="bi bi-gem perk-item__icon" aria-hidden="true"></i>
-          <h3 class="perk-item__title">Alta Qualidade</h3>
-          <p class="perk-item__text">Ouro e prata com procedência e qualidade garantidas.</p>
-        </div>
-      </div>
-      <div class="col-6 col-md-3">
-        <div class="perk-item">
-          <i class="bi bi-hand-index-thumb perk-item__icon" aria-hidden="true"></i>
-          <h3 class="perk-item__title">Feito à Mão</h3>
-          <p class="perk-item__text">Cada peça é trabalhada com dedicação artesanal.</p>
-        </div>
-      </div>
-      <div class="col-6 col-md-3">
-        <div class="perk-item">
-          <i class="bi bi-award perk-item__icon" aria-hidden="true"></i>
-          <h3 class="perk-item__title">Design Exclusivo</h3>
-          <p class="perk-item__text">Criações únicas e contemporâneas para você.</p>
-        </div>
-      </div>
-      <div class="col-6 col-md-3">
-        <div class="perk-item">
-          <i class="bi bi-chat-heart perk-item__icon" aria-hidden="true"></i>
-          <h3 class="perk-item__title">Atendimento Especial</h3>
-          <p class="perk-item__text">Suporte personalizado via WhatsApp para você.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ====== CTA BANNER ====== -->
-<section class="cta-banner">
-  <div class="container">
-    <div class="cta-banner__content">
-      <h2 class="cta-banner__title">
-        Encontrou a peça <span>perfeita</span>?
-      </h2>
-      <p class="cta-banner__text">
-        Entre em contato pelo WhatsApp e saiba tudo sobre sua joia favorita.
-      </p>
-      <a
-        href="https://wa.me/5537998623061?text=Olá!%20Gostaria%20de%20mais%20informações%20sobre%20as%20joias%20da%20OuriPrata."
-        target="_blank"
-        rel="noopener"
-        class="btn-gold"
-        id="cta-whatsapp-home"
-      >
-        <i class="bi bi-whatsapp" aria-hidden="true"></i>
-        Falar pelo WhatsApp
-      </a>
-    </div>
-  </div>
-</section>
-
 {% endblock %}

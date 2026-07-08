@@ -9,17 +9,17 @@
 
 <!-- Hero interno -->
 <div class="page-hero">
-  <div class="container">
+  <div class="op-container">
     <span class="page-hero__eyebrow">Categoria</span>
     <h1 class="page-hero__title">{{ categoria.nome }}</h1>
     <p class="page-hero__sub">{{ total_products }} peça{{ total_products|pluralize:"s" }} nesta categoria</p>
   </div>
 </div>
 
-<div class="container" style="padding-top: 16px; padding-bottom: 80px;">
+<div class="op-container pt-8 pb-20">
 
   <!-- Toolbar de filtros -->
-  <div class="catalog-toolbar" role="navigation" aria-label="Filtrar por categoria">
+  <div class="catalog-toolbar flex flex-wrap items-center gap-3 mb-8 animate-fade-up" role="navigation" aria-label="Filtrar por categoria">
     <a href="{% url 'all_products' %}" class="chip">Todas</a>
     {% for cat in all_categories %}
       <a href="{{ cat.get_absolute_url }}"
@@ -28,20 +28,24 @@
         {{ cat.nome }}
       </a>
     {% endfor %}
-    <span class="catalog-count">{{ total_products }} peça{{ total_products|pluralize:"s" }}</span>
+    
+    <!-- Contador alinhado à direita -->
+    <span class="catalog-count ml-auto text-sm text-ink-light tracking-wide">{{ total_products }} peça{{ total_products|pluralize:"s" }}</span>
   </div>
 
+  <!-- Grid de Produtos -->
   {% if products %}
-    <div class="products-grid">
+    <div class="products-grid animate-fade-up" style="animation-delay: 0.1s">
       {% for product in products %}
         {% include 'landing_page/partials/product_card.html' %}
       {% endfor %}
     </div>
   {% else %}
-    <div class="empty-state">
-      <i class="bi bi-gem empty-state__icon" aria-hidden="true"></i>
-      <h2 class="empty-state__title">Nenhuma peça ainda</h2>
-      <p class="empty-state__text">Esta categoria ainda não possui peças cadastradas. Volte em breve!</p>
+    <!-- Estado Vazio (Empty State) -->
+    <div class="empty-state flex flex-col items-center justify-center text-center py-24 animate-fade-up" style="animation-delay: 0.1s">
+      <i class="bi bi-gem text-5xl text-gold-300 mb-4" aria-hidden="true"></i>
+      <h2 class="text-2xl font-serif text-ink mb-2">Nenhuma peça ainda</h2>
+      <p class="text-ink-muted mb-6 max-w-md">Esta categoria ainda não possui peças cadastradas. Volte em breve!</p>
       <a href="{% url 'all_products' %}" class="btn-ghost">Ver toda a coleção</a>
     </div>
   {% endif %}

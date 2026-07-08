@@ -8,19 +8,19 @@
 
 {% block content %}
 
-<!-- Hero interno -->
+<!-- Hero da Página -->
 <div class="page-hero">
-  <div class="container">
+  <div class="op-container">
     <span class="page-hero__eyebrow">Portfólio</span>
     <h1 class="page-hero__title">Nossa Coleção</h1>
     <p class="page-hero__sub">{{ total_products }} peça{{ total_products|pluralize:"s" }} esperando por você</p>
   </div>
 </div>
 
-<div class="container" style="padding-top: 16px; padding-bottom: 80px;">
+<div class="op-container pt-8 pb-20">
 
-  <!-- Toolbar de filtros -->
-  <div class="catalog-toolbar" role="navigation" aria-label="Filtrar por categoria">
+  <!-- Toolbar de Filtros -->
+  <div class="catalog-toolbar flex flex-wrap items-center gap-3 mb-8 animate-fade-up" role="navigation" aria-label="Filtrar por categoria">
     <a href="{% url 'all_products' %}"
        class="chip {% if not request.GET.categoria %}active{% endif %}"
        id="filter-todas">
@@ -34,23 +34,25 @@
       </a>
     {% endfor %}
 
-    <span class="catalog-count" aria-live="polite">
+    <!-- Contador alinhado à direita no desktop -->
+    <span class="catalog-count ml-auto text-sm text-ink-light tracking-wide" aria-live="polite">
       {{ total_products }} peça{{ total_products|pluralize:"s" }}
     </span>
   </div>
 
-  <!-- Grade de produtos -->
+  <!-- Grid de Produtos -->
   {% if products %}
-    <div class="products-grid" id="productGrid">
+    <div class="products-grid animate-fade-up" style="animation-delay: 0.1s" id="productGrid">
       {% for product in products %}
         {% include 'landing_page/partials/product_card.html' %}
       {% endfor %}
     </div>
   {% else %}
-    <div class="empty-state">
-      <i class="bi bi-gem empty-state__icon" aria-hidden="true"></i>
-      <h2 class="empty-state__title">Nenhuma peça encontrada</h2>
-      <p class="empty-state__text">Nossa coleção está sendo atualizada. Volte em breve ou entre em contato.</p>
+    <!-- Estado Vazio (Empty State) refatorado com Tailwind -->
+    <div class="empty-state flex flex-col items-center justify-center text-center py-24 animate-fade-up" style="animation-delay: 0.1s">
+      <i class="bi bi-gem text-5xl text-gold-300 mb-4" aria-hidden="true"></i>
+      <h2 class="text-2xl font-serif text-ink mb-2">Nenhuma peça encontrada</h2>
+      <p class="text-ink-muted mb-6 max-w-md">Nossa coleção está sendo atualizada. Volte em breve ou entre em contato para encomendas personalizadas.</p>
       <a href="https://wa.me/5537998623061" target="_blank" rel="noopener" class="btn-gold" id="empty-whatsapp">
         <i class="bi bi-whatsapp" aria-hidden="true"></i> Falar Conosco
       </a>
@@ -59,11 +61,11 @@
 
 </div>
 
-<!-- CTA final -->
-<div class="cta-banner" style="padding: 72px 0;">
-  <div class="container">
-    <div class="cta-banner__content">
-      <h2 class="cta-banner__title" style="font-size: clamp(1.5rem, 3vw, 2.25rem);">
+<!-- CTA Footer Banner -->
+<div class="cta-banner !py-18">
+  <div class="op-container">
+    <div class="cta-banner__content animate-fade-up">
+      <h2 class="cta-banner__title !text-[clamp(1.5rem,3vw,2.25rem)]">
         Interesse em alguma peça?
       </h2>
       <p class="cta-banner__text">Converse conosco pelo WhatsApp e tire todas as suas dúvidas.</p>

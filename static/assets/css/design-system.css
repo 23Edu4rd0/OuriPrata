@@ -1,10 +1,8 @@
 /* =========================================
    OuriPrata — Design System
-   Paleta: Dourado + Cinza Premium
-   Estilo: Clean, Delicado, Joalheria
+   Paleta: Cream + Dourado + Rosa
+   Estilo: Delicado, Joalheria Premium
    ========================================= */
-
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap');
 
 /* ---- Variáveis ---- */
 :root {
@@ -17,32 +15,44 @@
   --gold-600: #9a7821;
   --gold-700: #7a5f18;
 
-  --gray-50:  #fafafa;
-  --gray-100: #f5f5f5;
-  --gray-200: #e8e8e8;
-  --gray-300: #d1d1d1;
-  --gray-400: #a8a8a8;
-  --gray-500: #737373;
-  --gray-600: #525252;
-  --gray-700: #3d3d3d;
-  --gray-800: #262626;
-  --gray-900: #171717;
+  --cream-50:  #fdfaf5;
+  --cream-100: #f7f2ea;
+  --cream-200: #f0e8db;
+
+  --rose-100: #f5ebe4;
+  --rose-200: #e7d5cc;
+
+  --gray-50:  #faf9f7;
+  --gray-100: #f5f3f0;
+  --gray-200: #e8e4df;
+  --gray-300: #d1cbc3;
+  --gray-400: #a89f96;
+  --gray-500: #736b63;
+  --gray-600: #524a43;
+  --gray-700: #3d3630;
+  --gray-800: #2a231c;
+  --gray-900: #1a1510;
+
+  --ink:       #241a13;
+  --ink-muted: #6f6259;
 
   --white: #ffffff;
 
   --font-serif: 'Cormorant Garamond', Georgia, serif;
   --font-sans:  'Inter', -apple-system, sans-serif;
 
-  --radius-sm:  4px;
-  --radius:     8px;
+  --radius-sm:  6px;
+  --radius:     10px;
   --radius-lg:  16px;
   --radius-xl:  24px;
+  --radius-4xl: 32px;
 
-  --shadow-sm:  0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-  --shadow:     0 4px 12px rgba(0,0,0,0.08);
-  --shadow-lg:  0 16px 40px rgba(0,0,0,0.10);
+  --shadow-sm:  0 2px 8px rgba(36, 26, 19, 0.04);
+  --shadow:     0 8px 24px rgba(36, 26, 19, 0.06);
+  --shadow-lg:  0 18px 50px rgba(36, 26, 19, 0.08);
+  --shadow-glow: 0 8px 32px rgba(212, 168, 67, 0.18);
 
-  --transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition: all 0.32s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ---- Reset & Base ---- */
@@ -53,39 +63,49 @@ html { scroll-behavior: smooth; }
 body {
   font-family: var(--font-sans);
   font-size: 15px;
-  line-height: 1.65;
-  color: var(--gray-700);
-  background: var(--white);
+  line-height: 1.7;
+  color: var(--ink-muted);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  background:
+    radial-gradient(1200px 600px at 10% 0%, rgba(253, 249, 238, 0.8) 0%, transparent 60%),
+    radial-gradient(900px 500px at 90% 5%, rgba(245, 235, 228, 0.5) 0%, transparent 55%),
+    linear-gradient(180deg, var(--cream-100) 0%, var(--cream-50) 50%, #faf7f2 100%);
+  min-height: 100vh;
+}
+
+/* ---- Container ---- */
+.op-container {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .op-container { padding-left: 1.5rem; padding-right: 1.5rem; }
 }
 
 /* ---- Tipografia ---- */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-serif);
   font-weight: 400;
-  line-height: 1.25;
-  color: var(--gray-800);
+  line-height: 1.2;
+  color: var(--ink);
 }
 
 .serif { font-family: var(--font-serif); }
 .sans  { font-family: var(--font-sans);  }
 
-/* ---- Paleta de Cores ---- */
-.text-gold    { color: var(--gold-500); }
-.text-gold-lt { color: var(--gold-300); }
-.bg-gold      { background-color: var(--gold-400); }
-.bg-gold-lt   { background-color: var(--gold-50);  }
-.bg-gray-lt   { background-color: var(--gray-50);  }
-.border-gold  { border-color: var(--gold-300) !important; }
-
 /* ---- Linha Decorativa ---- */
 .divider-gold {
   display: block;
   width: 48px;
-  height: 2px;
-  background: linear-gradient(90deg, var(--gold-400), var(--gold-200));
-  margin: 12px auto 0;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent, var(--gold-400), transparent);
+  margin: 14px auto 0;
   border-radius: 2px;
 }
 
@@ -95,133 +115,145 @@ h1, h2, h3, h4, h5, h6 {
 .btn-gold {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  padding: 12px 28px;
-  background: var(--gold-400);
+  padding: 13px 30px;
+  background: linear-gradient(135deg, var(--gold-300) 0%, var(--gold-500) 100%);
   color: var(--white);
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
-  letter-spacing: 1.2px;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
   text-decoration: none;
   border: none;
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-4xl);
   cursor: pointer;
   transition: var(--transition);
+  box-shadow: var(--shadow-glow);
 }
 
 .btn-gold:hover {
-  background: var(--gold-500);
+  background: linear-gradient(135deg, var(--gold-400) 0%, var(--gold-600) 100%);
   color: var(--white);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(184, 146, 46, 0.35);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 36px rgba(184, 146, 46, 0.35);
 }
 
 .btn-gold-outline {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  padding: 11px 28px;
-  background: transparent;
-  color: var(--gold-500);
+  padding: 12px 30px;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
+  color: var(--gold-600);
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
-  letter-spacing: 1.2px;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
   text-decoration: none;
-  border: 1.5px solid var(--gold-400);
-  border-radius: var(--radius-xl);
+  border: 1.5px solid rgba(212, 168, 67, 0.45);
+  border-radius: var(--radius-4xl);
   cursor: pointer;
   transition: var(--transition);
 }
 
 .btn-gold-outline:hover {
   background: var(--gold-400);
+  border-color: var(--gold-400);
   color: var(--white);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow);
 }
 
 .btn-ghost {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  padding: 11px 28px;
+  padding: 12px 28px;
   background: transparent;
-  color: var(--gray-700);
-  font-size: 13px;
+  color: var(--ink-muted);
+  font-size: 12px;
   font-weight: 500;
-  letter-spacing: 1px;
+  letter-spacing: 1.2px;
   text-transform: uppercase;
   text-decoration: none;
-  border: 1.5px solid var(--gray-300);
-  border-radius: var(--radius-xl);
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-4xl);
   cursor: pointer;
   transition: var(--transition);
 }
 
 .btn-ghost:hover {
-  border-color: var(--gold-400);
-  color: var(--gold-500);
+  border-color: var(--gold-300);
+  color: var(--gold-600);
+  background: rgba(253, 249, 238, 0.5);
 }
 
-/* ---- Cards ---- */
+/* ---- Cards de Joia ---- */
 .card-joia {
-  background: var(--white);
-  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  border-radius: var(--radius-xl);
   overflow: hidden;
-  border: 1px solid var(--gray-200);
+  border: 1px solid rgba(212, 168, 67, 0.12);
   transition: var(--transition);
+  box-shadow: var(--shadow-sm);
 }
 
 .card-joia:hover {
-  border-color: var(--gold-200);
+  border-color: rgba(212, 168, 67, 0.28);
   box-shadow: var(--shadow-lg);
-  transform: translateY(-4px);
+  transform: translateY(-6px);
 }
 
 .card-joia__image {
   aspect-ratio: 3/4;
   overflow: hidden;
-  background: var(--gray-100);
+  background: linear-gradient(145deg, var(--cream-100), var(--rose-100));
   position: relative;
+  display: block;
 }
 
 .card-joia__image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s ease;
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .card-joia:hover .card-joia__image img {
-  transform: scale(1.04);
+  transform: scale(1.05);
 }
 
 .card-joia__badge {
   position: absolute;
-  top: 12px;
-  left: 12px;
-  background: var(--gold-50);
+  top: 14px;
+  left: 14px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
   color: var(--gold-600);
-  border: 1px solid var(--gold-200);
+  border: 1px solid rgba(212, 168, 67, 0.25);
   font-size: 10px;
   font-weight: 600;
-  letter-spacing: 1px;
+  letter-spacing: 1.2px;
   text-transform: uppercase;
-  padding: 4px 10px;
-  border-radius: var(--radius-xl);
+  padding: 5px 12px;
+  border-radius: var(--radius-4xl);
 }
 
 .card-joia__body {
-  padding: 20px;
+  padding: 22px 20px 18px;
 }
 
 .card-joia__cat {
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 1.5px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--gold-500);
   margin-bottom: 6px;
@@ -230,44 +262,46 @@ h1, h2, h3, h4, h5, h6 {
 
 .card-joia__title {
   font-family: var(--font-serif);
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   font-weight: 500;
-  color: var(--gray-800);
+  color: var(--ink);
   margin-bottom: 8px;
   line-height: 1.3;
 }
 
 .card-joia__price {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 13px;
   color: var(--gray-500);
-  margin-bottom: 16px;
+  margin-bottom: 0;
 }
 
 .card-joia__price strong {
-  color: var(--gray-800);
+  color: var(--ink);
   font-size: 15px;
+  font-weight: 500;
 }
 
 .card-joia__cta {
-  display: block;
-  text-align: center;
-  padding: 10px;
-  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 14px;
+  font-size: 11px;
   font-weight: 500;
-  letter-spacing: 1px;
+  letter-spacing: 1.2px;
   text-transform: uppercase;
-  color: var(--gold-500);
+  color: var(--gold-600);
   text-decoration: none;
-  border-top: 1px solid var(--gray-200);
-  margin: 0 -20px -20px;
+  border-top: 1px solid rgba(212, 168, 67, 0.1);
   transition: var(--transition);
   background: transparent;
 }
 
 .card-joia__cta:hover {
   background: var(--gold-50);
-  color: var(--gold-600);
+  color: var(--gold-700);
 }
 
 /* ---- Section Header ---- */
@@ -278,26 +312,28 @@ h1, h2, h3, h4, h5, h6 {
 
 .section-header__eyebrow {
   display: inline-block;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
-  letter-spacing: 3px;
+  letter-spacing: 3.5px;
   text-transform: uppercase;
   color: var(--gold-500);
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .section-header__title {
   font-family: var(--font-serif);
-  font-size: clamp(2rem, 4vw, 2.75rem);
-  font-weight: 400;
-  color: var(--gray-800);
+  font-size: clamp(2rem, 4vw, 2.85rem);
+  font-weight: 300;
+  color: var(--ink);
   margin-bottom: 0;
+  letter-spacing: -0.01em;
 }
 
 .section-header__sub {
   font-size: 15px;
   color: var(--gray-500);
-  margin-top: 12px;
+  margin-top: 14px;
+  font-weight: 300;
 }
 
 /* ---- Input / Busca ---- */
@@ -310,20 +346,21 @@ h1, h2, h3, h4, h5, h6 {
 .search-input {
   width: 100%;
   padding: 10px 16px 10px 40px;
-  border: 1.5px solid var(--gray-200);
-  border-radius: var(--radius-xl);
-  background: var(--gray-50);
+  border: 1.5px solid rgba(212, 168, 67, 0.15);
+  border-radius: var(--radius-4xl);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(8px);
   font-family: var(--font-sans);
-  font-size: 14px;
-  color: var(--gray-700);
+  font-size: 13px;
+  color: var(--ink-muted);
   outline: none;
   transition: var(--transition);
 }
 
 .search-input:focus {
-  border-color: var(--gold-300);
+  border-color: rgba(212, 168, 67, 0.45);
   background: var(--white);
-  box-shadow: 0 0 0 3px rgba(212, 168, 67, 0.12);
+  box-shadow: 0 0 0 3px rgba(212, 168, 67, 0.1);
 }
 
 .search-input::placeholder { color: var(--gray-400); }
@@ -335,23 +372,24 @@ h1, h2, h3, h4, h5, h6 {
   transform: translateY(-50%);
   color: var(--gray-400);
   pointer-events: none;
-  font-size: 15px;
+  font-size: 14px;
 }
 
 /* ---- Chips / Filtros ---- */
 .chip {
   display: inline-block;
-  padding: 7px 18px;
-  border-radius: var(--radius-xl);
+  padding: 8px 20px;
+  border-radius: var(--radius-4xl);
   font-size: 12px;
   font-weight: 500;
-  letter-spacing: 0.5px;
-  border: 1.5px solid var(--gray-200);
+  letter-spacing: 0.3px;
+  border: 1.5px solid rgba(212, 168, 67, 0.15);
   color: var(--gray-600);
   text-decoration: none;
   transition: var(--transition);
   cursor: pointer;
-  background: var(--white);
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
   white-space: nowrap;
 }
 
@@ -359,26 +397,25 @@ h1, h2, h3, h4, h5, h6 {
   border-color: var(--gold-400);
   color: var(--gold-600);
   background: var(--gold-50);
+  box-shadow: var(--shadow-sm);
 }
 
 /* ---- Badges ---- */
 .badge-gold {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 5px 12px;
+  gap: 5px;
+  padding: 6px 14px;
   background: var(--gold-50);
   color: var(--gold-600);
-  border: 1px solid var(--gold-200);
-  border-radius: var(--radius-xl);
+  border: 1px solid rgba(212, 168, 67, 0.25);
+  border-radius: var(--radius-4xl);
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 /* ---- Utilitários ---- */
-.mt-auto { margin-top: auto !important; }
 .text-truncate-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -386,27 +423,13 @@ h1, h2, h3, h4, h5, h6 {
   overflow: hidden;
 }
 
-/* ---- Responsivo ---- */
-@media (max-width: 768px) {
-  .section-header { margin-bottom: 36px; }
-}
-
-/* ---- Animações suaves ---- */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0);     }
 }
 
-.fade-up {
-  animation: fadeUp 0.6s ease both;
-}
+.fade-up { animation: fadeUp 0.7s ease both; }
 
-/* ---- Scroll hint na grade ---- */
-.grid-scroll {
-  display: flex;
-  gap: 16px;
-  overflow-x: auto;
-  padding-bottom: 12px;
-  scrollbar-width: none;
+@media (max-width: 768px) {
+  .section-header { margin-bottom: 36px; }
 }
-.grid-scroll::-webkit-scrollbar { display: none; }

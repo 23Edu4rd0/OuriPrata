@@ -1,86 +1,164 @@
 {% load static %}
-<nav class="op-nav" id="opNav" role="navigation" aria-label="Navegação principal">
-  <div class="op-nav__inner">
+
+<!-- Navbar Desktop & Mobile -->
+<nav
+  class="fixed top-0 inset-x-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200/70 transition-all duration-300"
+  id="opNav" role="navigation" aria-label="Navegação principal">
+  <div class="max-w-[1200px] mx-auto px-6 lg:px-10 h-[80px] flex items-center justify-between">
 
     <!-- Logo -->
-    <a href="{% url 'home' %}" class="op-nav__logo" aria-label="OuriPrata - Página inicial">
-      <span class="op-nav__logo-ouri">Ouri</span><span class="op-nav__logo-prata">Prata</span>
+    <a href="{% url 'home' %}" class="flex-shrink-0 group flex items-center gap-3" aria-label="OuriPrata - Página inicial">
+      <span class="text-[22px] lg:text-2xl font-serif tracking-[0.02em] leading-none">
+        <span class="text-gray-800 font-medium transition-colors duration-500 group-hover:text-gray-500">Ouri</span><span
+          class="text-gold-500 italic font-light transition-colors duration-500 group-hover:text-gold-600">Prata</span>
+      </span>
+      <span class="h-3.5 w-px bg-gold-300"></span>
+      <span class="text-[9px] font-sans uppercase tracking-[0.35em] text-gray-400 mt-px">
+        Joalheria
+      </span>
     </a>
 
     <!-- Links desktop -->
-    <ul class="op-nav__links" role="list">
+    <ul class="hidden md:flex items-center gap-10 lg:gap-14" role="list">
       <li>
-        <a href="{% url 'home' %}" class="op-nav__link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+        <a href="{% url 'home' %}" class="relative pb-1 text-[11px] font-medium uppercase tracking-[0.2em] transition-colors duration-300
+          {% if request.resolver_match.url_name == 'home' %} text-gold-600 {% else %} text-gray-500 hover:text-gray-800 {% endif %}
+          after:content-[''] after:absolute after:left-0 after:-bottom-0 after:h-px after:bg-gold-500 after:transition-all after:duration-300
+          {% if request.resolver_match.url_name == 'home' %} after:w-full {% else %} after:w-0 hover:after:w-full {% endif %}">
           Início
         </a>
       </li>
       <li>
-        <a href="{% url 'all_products' %}" class="op-nav__link {% if 'products' in request.path %}active{% endif %}">
+        <a href="{% url 'all_products' %}" class="relative pb-1 text-[11px] font-medium uppercase tracking-[0.2em] transition-colors duration-300
+          {% if 'products' in request.path %} text-gold-600 {% else %} text-gray-500 hover:text-gray-800 {% endif %}
+          after:content-[''] after:absolute after:left-0 after:-bottom-0 after:h-px after:bg-gold-500 after:transition-all after:duration-300
+          {% if 'products' in request.path %} after:w-full {% else %} after:w-0 hover:after:w-full {% endif %}">
           Coleção
         </a>
       </li>
       <li>
-        <a href="{% url 'about_us' %}" class="op-nav__link {% if 'sobre' in request.path %}active{% endif %}">
+        <a href="{% url 'about_us' %}" class="relative pb-1 text-[11px] font-medium uppercase tracking-[0.2em] transition-colors duration-300
+          {% if 'sobre' in request.path %} text-gold-600 {% else %} text-gray-500 hover:text-gray-800 {% endif %}
+          after:content-[''] after:absolute after:left-0 after:-bottom-0 after:h-px after:bg-gold-500 after:transition-all after:duration-300
+          {% if 'sobre' in request.path %} after:w-full {% else %} after:w-0 hover:after:w-full {% endif %}">
           Sobre
         </a>
       </li>
       <li>
-        <a href="{% url 'contact_us' %}" class="op-nav__link {% if 'contato' in request.path %}active{% endif %}">
+        <a href="{% url 'contact_us' %}" class="relative pb-1 text-[11px] font-medium uppercase tracking-[0.2em] transition-colors duration-300
+          {% if 'contato' in request.path %} text-gold-600 {% else %} text-gray-500 hover:text-gray-800 {% endif %}
+          after:content-[''] after:absolute after:left-0 after:-bottom-0 after:h-px after:bg-gold-500 after:transition-all after:duration-300
+          {% if 'contato' in request.path %} after:w-full {% else %} after:w-0 hover:after:w-full {% endif %}">
           Contato
         </a>
       </li>
     </ul>
 
-    <!-- Ações -->
-    <div class="op-nav__actions">
-      <!-- Busca inline -->
-      <div class="search-wrap" style="max-width:240px;" role="search">
-        <i class="bi bi-search search-icon" aria-hidden="true"></i>
-        <input
-          type="search"
-          id="navSearch"
-          class="search-input"
-          placeholder="Buscar joias..."
-          autocomplete="off"
-          aria-label="Buscar joias"
-        >
-        <div class="search-suggestions" id="searchSuggestions" role="listbox"></div>
+    <!-- Ações Desktop -->
+    <div class="hidden md:flex items-center gap-6">
+      <!-- Busca: pill claro integrado à navbar, botão circular neutro (sem dourado) -->
+      <div class="relative group flex items-center h-10 pl-4 pr-1 bg-gray-50 rounded-full border border-gray-200 overflow-hidden hover:border-gray-300 focus-within:border-gray-400 focus-within:bg-white transition-colors duration-300" role="search">
+        <input type="text" id="navSearch"
+          class="w-[150px] lg:w-[180px] bg-transparent border-0 shadow-none appearance-none p-0 text-xs text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-0"
+          placeholder="Buscar joias..." autocomplete="off" aria-label="Buscar joias">
+        <button type="submit"
+          class="flex items-center justify-center w-8 h-8 rounded-full bg-gray-800 group-hover:bg-gray-700 transition-colors duration-300 shrink-0"
+          aria-label="Buscar">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 text-white">
+            <circle cx="11" cy="11" r="7"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+        <!-- Sugestões da busca -->
+        <div
+          class="absolute top-full left-0 right-0 mt-2 bg-white shadow-lg shadow-gray-200/60 border border-gray-200 rounded-2xl overflow-hidden hidden empty:hidden"
+          id="searchSuggestions" role="listbox"></div>
       </div>
     </div>
 
-    <!-- Toggle mobile -->
-    <button class="op-nav__toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="navDrawer">
-      <span></span>
-      <span></span>
-      <span></span>
+    <!-- Toggle Mobile (Hamburger) -->
+    <button class="md:hidden flex flex-col justify-center items-center gap-[6px] w-10 h-10 text-gray-700 focus:outline-none"
+      id="navToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="navDrawer">
+      <span class="w-6 h-px bg-current"></span>
+      <span class="w-6 h-px bg-current"></span>
+      <span class="w-3.5 h-px bg-gold-500"></span>
     </button>
 
   </div>
 </nav>
 
-<!-- Drawer Mobile -->
-<div class="op-nav__drawer" id="navDrawer" role="dialog" aria-label="Menu de navegação" aria-modal="true">
-  <div class="op-nav__drawer-backdrop" id="drawerBackdrop"></div>
-  <div class="op-nav__drawer-panel">
-    <p class="op-nav__drawer-logo">
-      <span>Ouri</span>Prata
-    </p>
-    <a href="{% url 'home' %}"         class="op-nav__drawer-link">Início</a>
-    <a href="{% url 'all_products' %}" class="op-nav__drawer-link">Coleção</a>
-    <a href="{% url 'about_us' %}"     class="op-nav__drawer-link">Sobre</a>
-    <a href="{% url 'contact_us' %}"   class="op-nav__drawer-link">Contato</a>
+<!-- Drawer Mobile Premium -->
+<!-- Backdrop escuro que fecha o menu ao clicar fora -->
+<div
+  class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-[60] opacity-0 pointer-events-none transition-opacity duration-300 [&.open]:opacity-100 [&.open]:pointer-events-auto"
+  id="drawerBackdrop"></div>
 
-    <div style="margin-top: 24px;">
-      <div class="search-wrap" style="max-width:100%;">
-        <i class="bi bi-search search-icon" aria-hidden="true"></i>
-        <input type="search" class="search-input" placeholder="Buscar joias..." aria-label="Buscar no mobile">
-      </div>
-    </div>
+<!-- Painel lateral -->
+<div
+  class="fixed top-0 right-0 h-[100dvh] w-[85vw] max-w-[360px] bg-white z-[70] translate-x-full transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] [&.open]:translate-x-0 flex flex-col shadow-2xl"
+  id="navDrawer" role="dialog" aria-label="Menu de navegação" aria-modal="true">
 
-    <div style="margin-top: auto; padding-top: 32px; border-top: 1px solid var(--gray-100);">
-      <p style="font-size:12px; color: var(--gray-400); line-height:1.6; margin:0;">
-        Joias em ouro e prata, feitas com amor e cuidado para cada momento especial.
-      </p>
+  <!-- Header do Drawer -->
+  <div class="flex items-center justify-between px-6 h-[80px] border-b border-gray-100 shrink-0">
+    <span class="text-xl font-serif tracking-[0.02em]">
+      <span class="text-gray-800 font-medium">Ouri</span><span class="text-gold-500 italic font-light">Prata</span>
+    </span>
+    <button onclick="closeDrawer()"
+      class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-800 transition-colors duration-300"
+      aria-label="Fechar menu">
+      <i class="bi bi-x-lg text-sm"></i>
+    </button>
+  </div>
+
+  <!-- Links Mobile -->
+  <div class="flex-grow overflow-y-auto px-6 py-10 flex flex-col gap-7">
+    <a href="{% url 'home' %}"
+      class="text-lg font-serif text-gray-800 hover:text-gold-600 transition-colors duration-300 flex items-center justify-between group">
+      Início
+      <span class="w-5 h-px bg-gray-300 group-hover:w-8 group-hover:bg-gold-500 transition-all duration-300"></span>
+    </a>
+    <a href="{% url 'all_products' %}"
+      class="text-lg font-serif text-gray-800 hover:text-gold-600 transition-colors duration-300 flex items-center justify-between group">
+      Coleção
+      <span class="w-5 h-px bg-gray-300 group-hover:w-8 group-hover:bg-gold-500 transition-all duration-300"></span>
+    </a>
+    <a href="{% url 'about_us' %}"
+      class="text-lg font-serif text-gray-800 hover:text-gold-600 transition-colors duration-300 flex items-center justify-between group">
+      Sobre
+      <span class="w-5 h-px bg-gray-300 group-hover:w-8 group-hover:bg-gold-500 transition-all duration-300"></span>
+    </a>
+    <a href="{% url 'contact_us' %}"
+      class="text-lg font-serif text-gray-800 hover:text-gold-600 transition-colors duration-300 flex items-center justify-between group">
+      Contato
+      <span class="w-5 h-px bg-gray-300 group-hover:w-8 group-hover:bg-gold-500 transition-all duration-300"></span>
+    </a>
+
+    <!-- Busca Mobile -->
+    <div class="mt-6 pt-8 border-t border-gray-100">
+      <p class="text-[10px] font-medium uppercase tracking-[0.3em] text-gray-400 mb-4">Procurando algo?</p>
+      <form method="get" action="{% url 'search_products' %}" class="flex items-center h-11 pl-4 pr-1 bg-gray-50 rounded-full border border-gray-200 overflow-hidden focus-within:border-gray-400 focus-within:bg-white transition-colors duration-300">
+        <input type="text" name="q"
+          class="flex-1 bg-transparent border-0 shadow-none appearance-none p-0 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-0"
+          placeholder="Buscar joias..." aria-label="Buscar no mobile">
+        <button type="submit" class="flex items-center justify-center w-9 h-9 rounded-full bg-gray-800 shrink-0" aria-label="Buscar">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-white">
+            <circle cx="11" cy="11" r="7"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+      </form>
     </div>
   </div>
+
+  <!-- Footer do Drawer -->
+  <div class="p-6 border-t border-gray-100 shrink-0">
+    <p class="text-[13px] text-gray-500 leading-relaxed font-light mb-5">
+      Joias em ouro e prata, feitas com amor e cuidado para cada momento especial.
+    </p>
+    <a href="https://wa.me/5537998623061" target="_blank" rel="noopener"
+      class="flex items-center justify-center gap-2 w-full py-3.5 border border-gold-500 text-gold-600 hover:bg-gold-500 hover:text-white rounded-full text-xs font-medium uppercase tracking-[0.15em] transition-colors duration-300">
+      <i class="bi bi-whatsapp"></i> Falar via WhatsApp
+    </a>
+  </div>
+
 </div>

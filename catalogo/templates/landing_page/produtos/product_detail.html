@@ -9,150 +9,151 @@
 
 {% block content %}
 
-<div class="container">
+<div class="op-container py-8 lg:py-12">
 
   <!-- Breadcrumb -->
-  <ol class="breadcrumb-clean" aria-label="Caminho de navegação">
-    <li><a href="{% url 'home' %}">Início</a></li>
-    <li class="sep" aria-hidden="true"><i class="bi bi-chevron-right"></i></li>
-    <li><a href="{% url 'all_products' %}">Coleção</a></li>
+  <ol class="breadcrumb-clean flex flex-wrap items-center gap-2 text-sm text-ink-light mb-8 lg:mb-12 animate-fade-up" aria-label="Caminho de navegação">
+    <li><a href="{% url 'home' %}" class="hover:text-gold-500 transition-colors">Início</a></li>
+    <li class="sep text-xs opacity-50" aria-hidden="true"><i class="bi bi-chevron-right"></i></li>
+    <li><a href="{% url 'all_products' %}" class="hover:text-gold-500 transition-colors">Coleção</a></li>
     {% if product.categoria %}
-      <li class="sep" aria-hidden="true"><i class="bi bi-chevron-right"></i></li>
-      <li><a href="{{ product.categoria.get_absolute_url }}">{{ product.categoria.nome }}</a></li>
+      <li class="sep text-xs opacity-50" aria-hidden="true"><i class="bi bi-chevron-right"></i></li>
+      <li><a href="{{ product.categoria.get_absolute_url }}" class="hover:text-gold-500 transition-colors">{{ product.categoria.nome }}</a></li>
     {% endif %}
-    <li class="sep" aria-hidden="true"><i class="bi bi-chevron-right"></i></li>
-    <li class="current" aria-current="page">{{ product.nome }}</li>
+    <li class="sep text-xs opacity-50" aria-hidden="true"><i class="bi bi-chevron-right"></i></li>
+    <li class="current text-ink font-medium" aria-current="page">{{ product.nome }}</li>
   </ol>
 
-  <!-- Layout detalhe -->
-  <div class="row g-5" style="padding-bottom: 80px;">
+  <!-- Estrutura Principal -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 pb-20">
 
-    <!-- Galeria -->
-    <div class="col-12 col-lg-6">
+    <!-- Galeria de Imagens -->
+    <div class="animate-fade-up" style="animation-delay: 0.1s">
       <div class="product-gallery">
-        <div class="product-gallery__main" id="galleryMain">
+        <div class="product-gallery__main rounded-2xl overflow-hidden shadow-soft bg-white mb-4" id="galleryMain">
           {% if product.imagem %}
-            <img src="{{ product.imagem.url }}" alt="{{ product.nome }}" id="mainImg" loading="eager">
+            <img src="{{ product.imagem.url }}" alt="{{ product.nome }}" id="mainImg" loading="eager" class="w-full h-auto object-cover aspect-square">
           {% else %}
-            <img src="{% static 'assets/landing_page/hero.png' %}" alt="{{ product.nome }}" id="mainImg" loading="eager">
+            <img src="{% static 'assets/landing_page/hero.png' %}" alt="{{ product.nome }}" id="mainImg" loading="eager" class="w-full h-auto object-cover aspect-square">
           {% endif %}
         </div>
 
-        <!-- Thumbnails (placeholder para galeria futura) -->
-        <div class="product-gallery__thumbs" id="thumbsContainer">
-          <button class="product-gallery__thumb active" data-src="{% if product.imagem %}{{ product.imagem.url }}{% else %}{% static 'assets/landing_page/hero.png' %}{% endif %}" aria-label="Imagem principal">
-            <img src="{% if product.imagem %}{{ product.imagem.url }}{% else %}{% static 'assets/landing_page/hero.png' %}{% endif %}" alt="{{ product.nome }}" loading="lazy">
+        <div class="product-gallery__thumbs flex gap-3 overflow-x-auto pb-2" id="thumbsContainer">
+          <button class="product-gallery__thumb active w-20 h-20 shrink-0 rounded-xl overflow-hidden border-2 border-gold-400 transition-all" data-src="{% if product.imagem %}{{ product.imagem.url }}{% else %}{% static 'assets/landing_page/hero.png' %}{% endif %}" aria-label="Imagem principal">
+            <img src="{% if product.imagem %}{{ product.imagem.url }}{% else %}{% static 'assets/landing_page/hero.png' %}{% endif %}" alt="{{ product.nome }}" loading="lazy" class="w-full h-full object-cover">
           </button>
+          <!-- Aqui você pode adicionar um loop for se o produto tiver múltiplas imagens no banco de dados futuramente -->
         </div>
       </div>
     </div>
 
-    <!-- Informações -->
-    <div class="col-12 col-lg-6">
-      <div style="padding-top: 8px;">
+    <!-- Informações do Produto -->
+    <div class="pt-2 animate-fade-up" style="animation-delay: 0.2s">
+      {% if product.categoria %}
+        <span class="product-info__cat text-xs tracking-widest uppercase text-gold-500 font-semibold mb-2 block">{{ product.categoria.nome }}</span>
+      {% endif %}
 
-        {% if product.categoria %}
-          <span class="product-info__cat">{{ product.categoria.nome }}</span>
-        {% endif %}
+      <h1 class="product-info__title text-3xl lg:text-4xl font-serif text-ink mb-4">{{ product.nome }}</h1>
 
-        <h1 class="product-info__title">{{ product.nome }}</h1>
-
-        {% if product.preco %}
-          <p class="product-info__price">
-            a partir de <strong>R$ {{ product.preco }}</strong>
-          </p>
-        {% endif %}
-
-        <hr class="product-info__divider">
-
-        {% if product.descricao %}
-          <p class="product-info__desc">{{ product.descricao }}</p>
-        {% endif %}
-
-        <!-- Especificações -->
-        <div class="row g-3" style="margin-bottom: 32px;">
-          {% if product.material %}
-            <div class="col-6">
-              <p class="product-info__label">Material</p>
-              <p class="product-info__value">{{ product.material }}</p>
-            </div>
-          {% endif %}
-          {% if product.peso %}
-            <div class="col-6">
-              <p class="product-info__label">Peso</p>
-              <p class="product-info__value">{{ product.peso }}g</p>
-            </div>
-          {% endif %}
-          {% if product.dimensoes %}
-            <div class="col-6">
-              <p class="product-info__label">Dimensões</p>
-              <p class="product-info__value">{{ product.dimensoes }}</p>
-            </div>
-          {% endif %}
-          {% if product.disponivel is not None %}
-            <div class="col-6">
-              <p class="product-info__label">Disponibilidade</p>
-              <p class="product-info__value">
-                {% if product.disponivel %}
-                  <span class="badge-gold"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Disponível</span>
-                {% else %}
-                  <span style="font-size:13px; color: var(--gray-400);">Indisponível no momento</span>
-                {% endif %}
-              </p>
-            </div>
-          {% endif %}
-        </div>
-
-        <!-- CTA WhatsApp -->
-        <a
-          href="https://wa.me/5537998623061?text=Olá!%20Tenho%20interesse%20na%20joia%20*{{ product.nome|urlencode }}*%20do%20portfólio%20da%20OuriPrata."
-          target="_blank"
-          rel="noopener"
-          class="btn-whatsapp"
-          id="product-whatsapp-cta"
-          aria-label="Entrar em contato sobre {{ product.nome }} via WhatsApp"
-        >
-          <i class="bi bi-whatsapp" aria-hidden="true"></i>
-          Tenho Interesse — WhatsApp
-        </a>
-
-        <p style="font-size:12px; color: var(--gray-400); text-align:center; margin-top:12px;">
-          Atendimento de segunda a sexta, das 9h às 17h
+      {% if product.preco %}
+        <p class="product-info__price text-xl text-ink-muted mb-6">
+          a partir de <strong class="text-ink font-medium">R$ {{ product.preco }}</strong>
         </p>
+      {% endif %}
 
-        <hr class="product-info__divider">
+      <hr class="product-info__divider border-cream-300 my-6">
 
-        <!-- Diferenciais inline -->
-        <div style="display:flex; flex-direction:column; gap:12px;">
-          <div style="display:flex; align-items:center; gap:12px;">
-            <i class="bi bi-shield-check" style="color: var(--gold-500); font-size:18px;" aria-hidden="true"></i>
-            <span style="font-size:14px; color: var(--gray-600);">Qualidade e procedência garantidas</span>
-          </div>
-          <div style="display:flex; align-items:center; gap:12px;">
-            <i class="bi bi-gem" style="color: var(--gold-500); font-size:18px;" aria-hidden="true"></i>
-            <span style="font-size:14px; color: var(--gray-600);">Materiais nobres — ouro e prata</span>
-          </div>
-          <div style="display:flex; align-items:center; gap:12px;">
-            <i class="bi bi-chat-heart" style="color: var(--gold-500); font-size:18px;" aria-hidden="true"></i>
-            <span style="font-size:14px; color: var(--gray-600);">Atendimento personalizado</span>
-          </div>
-        </div>
+      {% if product.descricao %}
+        <p class="product-info__desc text-ink-muted leading-relaxed font-light mb-8">{{ product.descricao }}</p>
+      {% endif %}
 
+      <div class="grid grid-cols-2 gap-x-4 gap-y-6 mb-8 bg-cream-50 p-6 rounded-2xl border border-cream-200">
+        {% if product.material %}
+          <div>
+            <p class="product-info__label text-xs tracking-wider uppercase text-ink-light mb-1">Material</p>
+            <p class="product-info__value text-ink font-medium">{{ product.material }}</p>
+          </div>
+        {% endif %}
+        {% if product.peso %}
+          <div>
+            <p class="product-info__label text-xs tracking-wider uppercase text-ink-light mb-1">Peso</p>
+            <p class="product-info__value text-ink font-medium">{{ product.peso }}g</p>
+          </div>
+        {% endif %}
+        {% if product.dimensoes %}
+          <div>
+            <p class="product-info__label text-xs tracking-wider uppercase text-ink-light mb-1">Dimensões</p>
+            <p class="product-info__value text-ink font-medium">{{ product.dimensoes }}</p>
+          </div>
+        {% endif %}
+        {% if product.disponivel is not None %}
+          <div>
+            <p class="product-info__label text-xs tracking-wider uppercase text-ink-light mb-1">Disponibilidade</p>
+            <p class="product-info__value">
+              {% if product.disponivel %}
+                <span class="inline-flex items-center gap-1.5 text-emerald-600 text-sm font-medium"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Disponível</span>
+              {% else %}
+                <span class="text-sm text-red-400 font-medium"><i class="bi bi-x-circle-fill mr-1"></i> Indisponível no momento</span>
+              {% endif %}
+            </p>
+          </div>
+        {% endif %}
       </div>
+
+      <a
+        href="https://wa.me/5537998623061?text=Olá!%20Tenho%20interesse%20na%20joia%20*{{ product.nome|urlencode }}*%20do%20portfólio%20da%20OuriPrata."
+        target="_blank"
+        rel="noopener"
+        class="flex items-center justify-center gap-2 w-full py-4 px-6 bg-[#25D366] hover:bg-[#1EBE57] text-white rounded-full font-medium transition-colors shadow-soft"
+        id="product-whatsapp-cta"
+        aria-label="Entrar em contato sobre {{ product.nome }} via WhatsApp"
+      >
+        <i class="bi bi-whatsapp text-lg" aria-hidden="true"></i>
+        Tenho Interesse — WhatsApp
+      </a>
+
+      <p class="text-xs text-ink-light text-center mt-4 font-light">
+        Atendimento de segunda a sexta, das 9h às 17h
+      </p>
+
+      <hr class="product-info__divider border-cream-300 my-8">
+
+      <!-- Benefícios da Marca -->
+      <div class="flex flex-col gap-4">
+        <div class="flex items-center gap-4">
+          <div class="w-10 h-10 rounded-full bg-gold-50 flex items-center justify-center shrink-0">
+            <i class="bi bi-shield-check text-gold-500 text-lg" aria-hidden="true"></i>
+          </div>
+          <span class="text-sm text-ink-muted font-light">Qualidade e procedência garantidas</span>
+        </div>
+        <div class="flex items-center gap-4">
+          <div class="w-10 h-10 rounded-full bg-gold-50 flex items-center justify-center shrink-0">
+            <i class="bi bi-gem text-gold-500 text-lg" aria-hidden="true"></i>
+          </div>
+          <span class="text-sm text-ink-muted font-light">Materiais nobres — ouro e prata</span>
+        </div>
+        <div class="flex items-center gap-4">
+          <div class="w-10 h-10 rounded-full bg-gold-50 flex items-center justify-center shrink-0">
+            <i class="bi bi-chat-heart text-gold-500 text-lg" aria-hidden="true"></i>
+          </div>
+          <span class="text-sm text-ink-muted font-light">Atendimento personalizado e especial</span>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
 
 <!-- Produtos Relacionados -->
 {% if related_products %}
-  <section class="related-section">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-header__eyebrow">Você pode gostar</span>
-        <h2 class="section-header__title">Peças Relacionadas</h2>
-        <span class="divider-gold"></span>
+  <section class="related-section bg-cream-50 py-16 border-t border-cream-200">
+    <div class="op-container">
+      <div class="section-header !mb-12">
+        <span class="section-header__eyebrow text-gold-500">Você pode gostar</span>
+        <h2 class="section-header__title font-serif text-3xl text-ink mt-2">Peças Relacionadas</h2>
+        <span class="divider-gold mt-4 mx-auto block w-12 h-0.5 bg-gold-400"></span>
       </div>
-      <div class="products-grid">
+      <div class="products-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-fade-up">
         {% for product in related_products %}
           {% include 'landing_page/partials/product_card.html' %}
         {% endfor %}
@@ -165,13 +166,21 @@
 
 {% block extra_js %}
 <script>
-  // Galeria de thumbs
+  // Lógica da Galeria
   document.querySelectorAll('.product-gallery__thumb').forEach(thumb => {
     thumb.addEventListener('click', () => {
+      // Troca a imagem principal
       document.getElementById('mainImg').src = thumb.dataset.src;
-      document.querySelectorAll('.product-gallery__thumb').forEach(t => t.classList.remove('active'));
-      thumb.classList.add('active');
+      
+      // Gerencia o estado 'ativo' e as bordas do Tailwind
+      document.querySelectorAll('.product-gallery__thumb').forEach(t => {
+        t.classList.remove('active', 'border-gold-400');
+        t.classList.add('border-transparent');
+      });
+      
+      thumb.classList.add('active', 'border-gold-400');
+      thumb.classList.remove('border-transparent');
     });
   });
 </script>
-{% endblock %}
+{% endblock %}j

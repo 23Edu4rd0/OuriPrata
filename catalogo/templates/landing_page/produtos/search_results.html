@@ -6,34 +6,34 @@
 
 {% block content %}
 
+<!-- Hero interno -->
 <div class="page-hero">
-  <div class="container">
+  <div class="op-container">
     <span class="page-hero__eyebrow">Busca</span>
     <h1 class="page-hero__title">{{ page_title }}</h1>
     {% if page_subtitle %}<p class="page-hero__sub">{{ page_subtitle }}</p>{% endif %}
   </div>
 </div>
 
-<div class="container" style="padding-top: 16px; padding-bottom: 80px;">
+<div class="op-container pt-8 pb-20">
 
   <!-- Barra de busca -->
-  <form method="get" action="{% url 'search_products' %}" role="search" style="max-width: 560px; margin: 32px auto 40px;">
-    <div class="search-wrap" style="max-width: 100%;">
-      <i class="bi bi-search search-icon" aria-hidden="true"></i>
+  <form method="get" action="{% url 'search_products' %}" role="search" class="max-w-xl mx-auto my-8 animate-fade-up">
+    <div class="search-wrap !max-w-full relative shadow-soft rounded-full overflow-hidden bg-white border border-cream-200 focus-within:border-gold-300 focus-within:ring-2 focus-within:ring-gold-100 transition-all">
+      <i class="bi bi-search search-icon absolute left-5 top-1/2 -translate-y-1/2 text-ink-light" aria-hidden="true"></i>
       <input
         type="search"
         name="q"
         id="searchInput"
         value="{{ search_query }}"
-        class="search-input"
+        class="search-input w-full bg-transparent border-none py-3.5 pl-12 pr-24 text-ink placeholder-ink-light/70 focus:outline-none focus:ring-0"
         placeholder="Ex: anel de ouro, colar prata..."
         autocomplete="off"
         aria-label="Buscar joias"
-        style="padding-right: 100px;"
       >
       <button
         type="submit"
-        style="position:absolute; right:6px; top:50%; transform:translateY(-50%); background: var(--gold-400); color:#fff; border:none; border-radius: var(--radius-xl); padding: 6px 18px; font-size:13px; cursor:pointer; font-weight:500; letter-spacing: 0.5px;"
+        class="absolute right-1.5 top-1/2 -translate-y-1/2 bg-gold-400 hover:bg-gold-500 text-white border-none rounded-full px-5 py-2 text-xs font-medium tracking-wide cursor-pointer transition-colors"
       >
         Buscar
       </button>
@@ -42,7 +42,7 @@
 
   <!-- Filtros por categoria -->
   {% if all_categories %}
-    <div class="catalog-toolbar" style="margin-bottom: 40px;" role="navigation" aria-label="Filtrar por categoria">
+    <div class="catalog-toolbar flex flex-wrap items-center justify-center gap-3 mb-10 animate-fade-up" style="animation-delay: 0.1s" role="navigation" aria-label="Filtrar por categoria">
       <a href="{% url 'search_products' %}?q={{ search_query }}"
          class="chip {% if not categoria_filter %}active{% endif %}">
         Todas
@@ -59,21 +59,26 @@
 
   <!-- Resultados -->
   {% if products %}
-    <div class="products-grid">
+    <div class="products-grid animate-fade-up" style="animation-delay: 0.2s">
       {% for product in products %}
         {% include 'landing_page/partials/product_card.html' %}
       {% endfor %}
     </div>
   {% else %}
-    <div class="empty-state">
-      <i class="bi bi-search empty-state__icon" aria-hidden="true"></i>
-      <h2 class="empty-state__title">Nenhum resultado</h2>
-      <p class="empty-state__text">
-        Não encontramos joias para "<strong>{{ search_query }}</strong>". Tente outra busca ou navegue pela coleção.
+    <!-- Estado Vazio (Empty State) -->
+    <div class="empty-state flex flex-col items-center justify-center text-center py-20 animate-fade-up" style="animation-delay: 0.2s">
+      <i class="bi bi-search text-5xl text-gold-300 mb-4" aria-hidden="true"></i>
+      <h2 class="text-2xl font-serif text-ink mb-2">Nenhum resultado</h2>
+      <p class="text-ink-muted mb-8 max-w-md">
+        Não encontramos joias para "<strong class="text-ink">{{ search_query }}</strong>". Tente outra busca ou navegue pela coleção.
       </p>
-      <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
-        <a href="{% url 'all_products' %}" class="btn-gold-outline" id="search-ver-colecao">Ver Coleção</a>
-        <a href="https://wa.me/5537998623061" target="_blank" rel="noopener" class="btn-ghost" id="search-whatsapp">WhatsApp</a>
+      <div class="flex flex-wrap gap-4 justify-center">
+        <a href="{% url 'all_products' %}" class="px-6 py-2.5 rounded-full border border-gold-400 text-gold-500 hover:bg-gold-50 transition-colors text-sm font-medium tracking-wide" id="search-ver-colecao">
+          Ver Coleção
+        </a>
+        <a href="https://wa.me/5537998623061" target="_blank" rel="noopener" class="px-6 py-2.5 rounded-full text-ink hover:text-gold-500 transition-colors text-sm font-medium tracking-wide flex items-center gap-2" id="search-whatsapp">
+          <i class="bi bi-whatsapp"></i> Falar Conosco
+        </a>
       </div>
     </div>
   {% endif %}

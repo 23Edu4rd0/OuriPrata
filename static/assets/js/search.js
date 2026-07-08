@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
                   
                   const imgHtml = item.imagem 
                     ? `<img src="${item.imagem}" alt="${item.nome}" class="search-suggestion-img">`
-                    : `<div class="search-suggestion-img d-flex align-items-center justify-content-center bg-light"><i class="bi bi-gem text-gold"></i></div>`;
+                    : `<div class="search-suggestion-img flex items-center justify-center bg-cream-100"><i class="bi bi-gem text-gold-500"></i></div>`;
                     
                   a.innerHTML = `
                     ${imgHtml}

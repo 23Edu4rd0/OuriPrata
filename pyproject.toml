@@ -1,0 +1,19 @@
+[project]
+name = "ouriprata"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "23Edu4rd0",email = "eduardo.vchaves23@gmail.com"}
+]
+requires-python = ">=3.14"
+dependencies = [
+    "django (>=6.0.7,<7.0.0)",
+    "django-jazzmin (>=3.0.5,<4.0.0)",
+    "django-tailwind (>=4.5.0,<5.0.0)",
+    "django-browser-reload (>=1.21.0,<2.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

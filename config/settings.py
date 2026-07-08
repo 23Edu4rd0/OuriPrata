@@ -36,16 +36,28 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    "catalogo.apps.CatalogoConfig",
+
+    'theme',
     'jazzmin',
+    'tailwind',
+    'django_browser_reload',
+    "colorfield",
+
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "catalogo.apps.CatalogoConfig",
-    "colorfield",
 ]
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
+
+TAILWIND_APP_NAME = 'theme'
+
 JAZZMIN_SETTINGS = {
     "theme": "cyborg",
     "site_title": "Administração do OuriPrata",
@@ -57,6 +69,7 @@ JAZZMIN_SETTINGS = {
 }
 
 MIDDLEWARE = [
+    "django_browser_reload.middleware.BrowserReloadMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",

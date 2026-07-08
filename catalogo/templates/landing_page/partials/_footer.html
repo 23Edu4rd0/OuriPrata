@@ -1,9 +1,8 @@
 {% load static %}
 <footer class="op-footer" role="contentinfo">
-  <div class="container">
+  <div class="op-container">
     <div class="op-footer__grid">
 
-      <!-- Brand -->
       <div class="op-footer__brand">
         <a href="{% url 'home' %}" class="op-footer__logo">
           <span>Ouri</span>Prata
@@ -24,7 +23,6 @@
         </div>
       </div>
 
-      <!-- Navegação -->
       <div>
         <h3 class="op-footer__col-title">Navegação</h3>
         <ul class="op-footer__links">
@@ -35,7 +33,6 @@
         </ul>
       </div>
 
-      <!-- Informações -->
       <div>
         <h3 class="op-footer__col-title">Informações</h3>
         <ul class="op-footer__links">
@@ -44,13 +41,12 @@
         </ul>
       </div>
 
-      <!-- Contato -->
       <div>
         <h3 class="op-footer__col-title">Contato</h3>
         <div class="op-footer__contact-item">
           <i class="bi bi-whatsapp op-footer__contact-icon"></i>
           <div>
-            <a href="https://wa.me/5537998623061" style="color:rgba(255,255,255,0.5); text-decoration:none;"
+            <a href="https://wa.me/5537998623061" class="text-white/50 hover:text-gold-400 transition-colors no-underline"
                target="_blank" rel="noopener">(37) 99862-3061</a>
           </div>
         </div>
@@ -69,11 +65,10 @@
 
     </div>
 
-    <!-- Bottom bar -->
     <div class="op-footer__bottom">
       <span>© {% now "Y" %} OuriPrata. Todos os direitos reservados.</span>
       <span>
-        Feito com <i class="bi bi-heart-fill" style="color: var(--gold-400);"></i> em Divinópolis&nbsp;·&nbsp;
+        Feito com <i class="bi bi-heart-fill text-gold-400"></i> em Divinópolis&nbsp;·&nbsp;
         <a href="{% url 'politica_privacidade' %}">Privacidade</a>
       </span>
     </div>

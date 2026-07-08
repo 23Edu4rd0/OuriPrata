@@ -1,230 +1,89 @@
 {% comment %} Partial para o menu de filtros do catálogo, reutilizável em várias páginas {% endcomment %}
-<div class="filters-sidebar mb-3 mb-md-4" style="background:#fff; border:1.5px solid #ffe082; box-shadow:0 2px 16px #ffc10722;">
-  <div class="mb-2 mb-md-3 text-center">
-    <span class="filter-title"><i class="bi bi-funnel me-2"></i>Filtros</span>
+<div class="bg-white rounded-2xl shadow-soft border border-cream-200 p-5 lg:p-6 mb-6 animate-fade-up">
+  
+  <!-- Cabeçalho do Filtro -->
+  <div class="mb-6 text-center">
+    <span class="text-ink font-serif text-xl font-medium tracking-wide flex items-center justify-center gap-2">
+      <i class="bi bi-funnel"></i> Filtros
+    </span>
   </div>
+
   <div>
     <!-- Filtro por Categoria -->
-    <div class="mb-4">
-      <div class="filter-title mb-2"><i class="bi bi-grid me-2 text-dark"></i>Categorias</div>
-      <div class="d-grid gap-2">
+    <div class="mb-6">
+      <div class="text-ink font-medium mb-3 flex items-center gap-2 text-sm uppercase tracking-wider">
+        <i class="bi bi-grid text-gold-500"></i> Categorias
+      </div>
+      <div class="flex flex-col gap-2">
         <a href="{% url 'catalogo' %}"
-           class="btn btn-outline-light border btn-sm text-start px-3 py-2 rounded-pill">
-          <div class="d-flex justify-content-between align-items-center">
-            <span><i class="bi bi-grid-3x3-gap me-2"></i>Todas as Categorias</span>
-          </div>
+           class="w-full flex items-center justify-between px-4 py-2.5 rounded-full border border-cream-200 text-ink-muted text-sm transition-all hover:border-gold-300 hover:text-ink">
+          <span class="flex items-center gap-2"><i class="bi bi-grid-3x3-gap"></i> Todas</span>
         </a>
+        
         {% for cat in all_categories %}
         <a href="{% url 'products_by_category' cat.slug %}"
-           class="btn btn-sm text-start px-3 py-2 rounded-pill category-btn {% if cat == categoria %}active{% endif %} {% if cat != categoria %}btn-outline-light border{% endif %}">
-          <div class="d-flex justify-content-between align-items-center">
-            <span>{{ cat.nome }}</span>
-            {% if cat == categoria %}
-              <i class="bi bi-check-circle-fill"></i>
-            {% endif %}
-          </div>
+           class="category-btn w-full flex items-center justify-between px-4 py-2.5 rounded-full border text-sm transition-all
+           {% if cat == categoria %} border-gold-400 bg-gold-50 text-ink font-medium shadow-sm {% else %} border-cream-200 text-ink-muted hover:border-gold-300 hover:text-ink {% endif %}">
+          <span>{{ cat.nome }}</span>
+          {% if cat == categoria %}
+            <i class="bi bi-check-circle-fill text-gold-500"></i>
+          {% endif %}
         </a>
         {% endfor %}
       </div>
     </div>
 
-    <div style="border-top: 1px solid #f3f3f3; margin: 1.2rem 0;"></div>
+    <hr class="border-cream-200 my-6">
 
     <!-- Filtro por Promoção -->
-    <div class="mb-4">
-      <div class="filter-title mb-2"><i class="bi bi-lightning me-2 text-dark"></i>Ofertas</div>
-      <div class="form-check form-switch d-flex align-items-center gap-2 w-100 ps-3 pe-3" style="margin:0;">
-        <input class="form-check-input minimal-input" type="checkbox" id="promocao" onchange="filterByPromotion()" style="margin-left:0;">
-        <label class="form-check-label mb-0" for="promocao" style="font-size:0.95rem; color:#444;">Apenas produtos em promoção</label>
+    <div class="mb-6">
+      <div class="text-ink font-medium mb-4 flex items-center gap-2 text-sm uppercase tracking-wider">
+        <i class="bi bi-lightning text-gold-500"></i> Ofertas
       </div>
+      <label class="relative flex items-center cursor-pointer px-2">
+        <input type="checkbox" id="promocao" onchange="filterByPromotion()" class="sr-only peer">
+        <div class="w-11 h-6 bg-cream-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[10px] after:bg-white after:border-cream-200 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gold-400"></div>
+        <span class="ml-3 text-sm font-medium text-ink-muted peer-checked:text-ink transition-colors">Apenas em promoção</span>
+      </label>
     </div>
 
-    <div style="border-top: 1px solid #f3f3f3; margin: 1.2rem 0;"></div>
+    <hr class="border-cream-200 my-6">
 
     <!-- Filtro por Avaliação -->
-    <div class="mb-4">
-      <div class="filter-title mb-2"><i class="bi bi-star me-2 text-dark"></i>Avaliação</div>
-      <div class="d-grid gap-2">
-        <button type="button" class="btn btn-sm text-start px-3 py-2 rounded-pill rating-filter-btn" data-rating="all">
-          <div class="d-flex justify-content-between align-items-center">
-            <span><i class="bi bi-star me-2"></i>Todas as Avaliações</span>
-          </div>
+    <div class="mb-6">
+      <div class="text-ink font-medium mb-3 flex items-center gap-2 text-sm uppercase tracking-wider">
+        <i class="bi bi-star text-gold-500"></i> Avaliação
+      </div>
+      <div class="flex flex-col gap-2">
+        <button type="button" class="rating-filter-btn active w-full flex items-center justify-between px-4 py-2.5 rounded-full border border-cream-200 text-ink-muted text-sm transition-all hover:border-gold-300 hover:text-ink [&.active]:border-gold-400 [&.active]:bg-gold-50 [&.active]:text-ink [&.active]:font-medium [&.active]:shadow-sm" data-rating="all">
+          <span class="flex items-center gap-2"><i class="bi bi-star"></i> Todas</span>
         </button>
-        <button type="button" class="btn btn-sm text-start px-3 py-2 rounded-pill rating-filter-btn" data-rating="4">
-          <div class="d-flex justify-content-between align-items-center">
-            <span><i class="bi bi-star-fill text-warning me-2"></i>4+ Estrelas</span>
-          </div>
+        <button type="button" class="rating-filter-btn w-full flex items-center justify-between px-4 py-2.5 rounded-full border border-cream-200 text-ink-muted text-sm transition-all hover:border-gold-300 hover:text-ink [&.active]:border-gold-400 [&.active]:bg-gold-50 [&.active]:text-ink [&.active]:font-medium [&.active]:shadow-sm" data-rating="4">
+          <span class="flex items-center gap-2"><i class="bi bi-star-fill text-gold-400"></i> 4+ Estrelas</span>
         </button>
-        <button type="button" class="btn btn-sm text-start px-3 py-2 rounded-pill rating-filter-btn" data-rating="3">
-          <div class="d-flex justify-content-between align-items-center">
-            <span><i class="bi bi-star-fill text-warning me-2"></i>3+ Estrelas</span>
-          </div>
+        <button type="button" class="rating-filter-btn w-full flex items-center justify-between px-4 py-2.5 rounded-full border border-cream-200 text-ink-muted text-sm transition-all hover:border-gold-300 hover:text-ink [&.active]:border-gold-400 [&.active]:bg-gold-50 [&.active]:text-ink [&.active]:font-medium [&.active]:shadow-sm" data-rating="3">
+          <span class="flex items-center gap-2"><i class="bi bi-star-fill text-gold-400"></i> 3+ Estrelas</span>
         </button>
       </div>
     </div>
 
-    <div style="border-top: 1px solid #f3f3f3; margin: 1.2rem 0;"></div>
+    <hr class="border-cream-200 my-6">
 
     <!-- Filtro por Preço -->
     <div class="mb-4">
-      <div class="filter-title mb-2"><i class="bi bi-currency-dollar me-2 text-dark"></i>Faixa de Preço</div>
-      <div class="row g-2 mb-3">
-        <div class="col-6">
-          <input type="number" class="form-control form-control-sm minimal-input" placeholder="Min" id="preco-min">
-        </div>
-        <div class="col-6">
-          <input type="number" class="form-control form-control-sm minimal-input" placeholder="Max" id="preco-max">
-        </div>
+      <div class="text-ink font-medium mb-3 flex items-center gap-2 text-sm uppercase tracking-wider">
+        <i class="bi bi-currency-dollar text-gold-500"></i> Faixa de Preço
       </div>
-      <button class="btn btn-outline-dark btn-sm w-100 rounded-pill" onclick="applyFilters()">
-        Aplicar Filtro
+      <div class="flex gap-2 mb-4">
+        <input type="number" id="preco-min" class="w-1/2 bg-cream-50 border border-cream-200 rounded-lg px-3 py-2 text-sm text-ink placeholder-ink-light focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400 transition-all" placeholder="Mínimo">
+        <input type="number" id="preco-max" class="w-1/2 bg-cream-50 border border-cream-200 rounded-lg px-3 py-2 text-sm text-ink placeholder-ink-light focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400 transition-all" placeholder="Máximo">
+      </div>
+      <button onclick="applyFilters()" class="w-full bg-ink hover:bg-gold-500 text-white rounded-full px-4 py-2.5 text-sm font-medium transition-colors">
+        Aplicar Filtros
       </button>
     </div>
   </div>
 </div>
-
-
-<style>
-.filters-sidebar {
-  background: #fff !important;
-  border-radius: 1rem;
-  box-shadow: 0 4px 24px #ffc10722 !important;
-  border: 1.5px solid #ffe082 !important;
-  padding: 1.3rem 1.1rem;
-}
-.filters-sidebar .filter-title {
-  font-size: 1.02rem;
-  color: #232323;
-  font-weight: 700;
-  margin-bottom: 0.7rem;
-  letter-spacing: 0.2px;
-  text-transform: uppercase;
-}
-.filters-sidebar label,
-.filters-sidebar .form-check-label {
-  font-size: 0.95rem;
-  color: #444;
-  font-weight: 400;
-  margin-bottom: 0.3rem;
-  cursor: pointer;
-  transition: color 0.2s;
-}
-.filters-sidebar .form-check-input,
-.filters-sidebar .minimal-input {
-  border-radius: 0.5rem;
-  border: 1.5px solid #e0e0e0;
-  margin-right: 0.5rem;
-  accent-color: #ffc107;
-  background: #fafafa;
-  box-shadow: none;
-}
-.filters-sidebar .form-check-input:checked {
-  border-color: #ffc107;
-  background-color: #ffc107;
-}
-.filters-sidebar .btn,
-.filters-sidebar button {
-  border-radius: 1.5rem;
-  font-size: 0.97rem;
-  padding: 0.45rem 1.2rem;
-  background: #fff;
-  border: 1.5px solid #232323;
-  color: #232323;
-  transition: background 0.2s, color 0.2s, border 0.2s;
-  font-weight: 500;
-}
-.filters-sidebar .btn:hover,
-.filters-sidebar button:hover {
-  background: #232323;
-  color: #fff;
-  border-color: #232323;
-}
-.filters-sidebar hr {
-  border: none;
-  border-top: 1px solid #f3f3f3;
-  margin: 1.2rem 0;
-}
-.category-btn.active {
-  background: #fff !important;
-  border: 2px solid #232323 !important;
-  color: #232323 !important;
-  font-weight: 600;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-}
-.category-btn {
-  color: #232323;
-  border: 1.5px solid #e0e0e0;
-  background: #fff;
-  transition: border 0.2s, box-shadow 0.2s;
-}
-.category-btn:hover {
-  border: 2px solid #232323;
-  color: #232323;
-  background: #f8f9fa;
-}
-/* Switch toggle animado minimalista */
-.filters-sidebar .form-switch .form-check-input {
-  width: 2.5em;
-  height: 1.3em;
-  background-color: #e0e0e0;
-  border: 1.5px solid #e0e0e0;
-  transition: background 0.2s, border 0.2s;
-  position: relative;
-  appearance: none;
-  outline: none;
-}
-.filters-sidebar .form-switch .form-check-input:before {
-  content: '';
-  position: absolute;
-  top: 0.13em;
-  left: 0.13em;
-  width: 1em;
-  height: 1em;
-  background: #fff;
-  border-radius: 50%;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-  transition: left 0.22s cubic-bezier(.4,0,.2,1), background 0.2s;
-}
-.filters-sidebar .form-switch .form-check-input:checked {
-  background-color: #232323;
-  border-color: #232323;
-}
-.filters-sidebar .form-switch .form-check-input:checked:before {
-  left: 1.37em;
-  background: #fff;
-}
-.filters-sidebar .form-switch .form-check-input:focus {
-  box-shadow: 0 0 0 0.15rem #23232333;
-}
-.filters-sidebar .form-switch .form-check-label {
-  transition: color 0.2s, font-weight 0.2s;
-}
-.filters-sidebar .form-switch .form-check-input:checked ~ .form-check-label {
-  color: #232323 !important;
-  font-weight: 600;
-}
-/* Filtro por Avaliação */
-.rating-filter-btn {
-  color: #232323;
-  border: 1.5px solid #e0e0e0;
-  background: #fff;
-  transition: border 0.2s, box-shadow 0.2s;
-}
-
-.rating-filter-btn:hover {
-  border: 2px solid #232323;
-  color: #232323;
-  background: #f8f9fa;
-}
-
-.rating-filter-btn.active {
-  background: #fff !important;
-  border: 2px solid #232323 !important;
-  color: #232323 !important;
-  font-weight: 600;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-}
-</style>
 
 <script>
   function parsePrice(val) {
@@ -241,21 +100,7 @@
     const ratingFilter = document.querySelector('.rating-filter-btn.active')?.dataset.rating || 'all';
     const products = document.querySelectorAll('.product-item');
     
-    console.log('Found products:', products.length);
-    console.log('Checkbox checked:', checkbox?.checked);
-    console.log('Min price:', minPrice);
-    console.log('Max price:', maxPrice);
-    console.log('Rating filter:', ratingFilter);
-    
     // Verificar se os produtos têm os atributos corretos
-    products.forEach((product, index) => {
-      console.log(`Product ${index}:`, {
-        price: product.dataset.price,
-        promotion: product.dataset.promotion,
-        rating: product.dataset.rating
-      });
-    });
-    
     products.forEach(product => {
       const isPromotion = product.dataset.promotion === 'true';
       const price = parsePrice(product.dataset.price);
