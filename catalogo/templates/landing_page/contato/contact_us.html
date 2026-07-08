@@ -1,91 +1,150 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Fale Conosco - OuriPrata{% endblock %}
-{% block meta_description %}<meta name="description" content="Entre em contato com a OuriPrata para dúvidas, sugestões ou suporte.">{% endblock %}
-{% block og_title %}Fale Conosco - OuriPrata{% endblock %}
-{% block og_description %}Entre em contato com a OuriPrata para dúvidas, sugestões ou suporte.{% endblock %}
-{% block og_image %}{% static 'assets/landing_page/logo.png' %}{% endblock %}
+{% block title %}Fale Conosco — OuriPrata{% endblock %}
+{% block meta_description %}<meta name="description" content="Entre em contato com a OuriPrata. WhatsApp, endereço e formulário de mensagem.">{% endblock %}
+{% block og_title %}Fale Conosco — OuriPrata{% endblock %}
 
 {% block content %}
-<main class="container py-3">
-  <section id="contato" class="bg-light py-3">
-    <div class="container">
 
-      <h1 class="fw-bold text-center mb-2" style="margin-top:0">Fale Conosco</h1>
+<!-- Hero -->
+<div class="page-hero">
+  <div class="container">
+    <span class="page-hero__eyebrow">Contato</span>
+    <h1 class="page-hero__title">Fale Conosco</h1>
+    <p class="page-hero__sub">Estamos prontos para atender você com carinho.</p>
+  </div>
+</div>
 
-      <div class="row g-4">
-        <!-- Formulário de Contato -->
-        <div class="col-12 col-lg-8">
-          <div class="card shadow-sm border-0">
-            <div class="card-body p-4 p-lg-5">
-              <h2 class="h4 mb-4 text-center">Envie sua Mensagem</h2>
-              <form method="post">
-                {% csrf_token %}
-                <div class="row g-3">
-                  <div class="col-md-6">
-                    <label for="nome" class="form-label fw-semibold">Nome Completo</label>
-                    <input type="text" class="form-control form-control-lg" id="nome" name="nome" required placeholder="Digite seu nome completo">
-                  </div>
-                  <div class="col-md-6">
-                    <label for="email" class="form-label fw-semibold">E-mail</label>
-                    <input type="email" class="form-control form-control-lg" id="email" name="email" required placeholder="seu@email.com">
-                  </div>
-                </div>
-                <div class="mb-4">
-                  <label for="mensagem" class="form-label fw-semibold">Mensagem</label>
-                  <textarea class="form-control form-control-lg" id="mensagem" name="mensagem" rows="6" required placeholder="Digite sua mensagem aqui..."></textarea>
-                </div>
-                <div class="text-center">
-                  <button type="submit" class="btn btn-warning btn-lg px-5 py-3 text-white fw-semibold">
-                    <i class="bi bi-send me-2"></i>
-                    Enviar Mensagem
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-        <!-- Informações de Contato -->
-        <div class="col-12 col-lg-4">
-          <div class="card shadow-sm border-0 mb-4">
-            <div class="card-body text-center p-4">
-              <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3 icon-60">
-                <i class="bi bi-whatsapp text-success fs-3"></i>
+<section style="padding: 72px 0 80px;">
+  <div class="container">
+    <div class="row g-5">
+
+      <!-- Formulário -->
+      <div class="col-12 col-lg-7">
+        <div style="background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-xl); padding: 40px;">
+          <h2 style="font-family: var(--font-serif); font-size: 1.75rem; color: var(--gray-800); margin-bottom: 8px;">
+            Envie sua Mensagem
+          </h2>
+          <p style="font-size:14px; color: var(--gray-500); margin-bottom: 32px;">
+            Preencheu o formulário? Respondemos em até 24h.
+          </p>
+
+          <form method="post" id="contactForm">
+            {% csrf_token %}
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="nome" style="font-size:12px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color: var(--gray-500); display:block; margin-bottom:6px;">Nome Completo</label>
+                <input
+                  type="text"
+                  id="nome"
+                  name="nome"
+                  required
+                  placeholder="Seu nome"
+                  class="search-input"
+                  style="max-width:100%; display:block; width:100%; padding: 12px 16px; border-radius: var(--radius);"
+                >
               </div>
-              <h4 class="fw-semibold text-dark mb-2">WhatsApp</h4>
-              <p class="text-muted mb-2">(37) 99862-3061</p>
-              <small class="text-muted">Atendimento das 8h às 17h</small>
-              <div class="mt-3">
-                <a href="https://wa.me/5537998623061?text=Olá!%20Gostaria%20de%20mais%20informações." target="_blank" rel="noopener" class="btn btn-outline-success btn-sm">
-                  <i class="bi bi-whatsapp me-1"></i>
-                  Abrir WhatsApp
-                </a>
+              <div class="col-md-6">
+                <label for="email" style="font-size:12px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color: var(--gray-500); display:block; margin-bottom:6px;">E-mail</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
+                  placeholder="seu@email.com"
+                  class="search-input"
+                  style="max-width:100%; display:block; width:100%; padding: 12px 16px; border-radius: var(--radius);"
+                >
               </div>
             </div>
-          </div>
-          <div class="card shadow-sm border-0">
-            <div class="card-body text-center p-4">
-              <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3 icon-60">
-                <i class="bi bi-geo-alt-fill text-primary fs-3"></i>
-              </div>
-              <h4 class="fw-semibold text-dark mb-2">Endereço</h4>
-              <p class="text-muted mb-2">
-                Av. 1° de Junho, 411 - 501, Centro<br>
-                Divinópolis, MG
-              </p>
-              <small class="text-muted">Visite-nos de segunda a sexta, 9h às 17h</small>
-              <div class="mt-3">
-                <a href="https://maps.app.goo.gl/EhoHJBKm7o2f9R4U7" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm">
-                  <i class="bi bi-map me-1"></i>
-                  Ver no Mapa
-                </a>
-              </div>
+            <div style="margin-top: 20px;">
+              <label for="mensagem" style="font-size:12px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color: var(--gray-500); display:block; margin-bottom:6px;">Mensagem</label>
+              <textarea
+                id="mensagem"
+                name="mensagem"
+                rows="6"
+                required
+                placeholder="Como podemos ajudar?"
+                class="search-input"
+                style="max-width:100%; display:block; width:100%; padding: 12px 16px; border-radius: var(--radius); resize: vertical; font-family: var(--font-sans);"
+              ></textarea>
             </div>
-          </div>
+            <div style="margin-top: 24px;">
+              <button type="submit" class="btn-gold" style="width:100%; justify-content:center;" id="contact-submit">
+                <i class="bi bi-send" aria-hidden="true"></i> Enviar Mensagem
+              </button>
+            </div>
+          </form>
         </div>
       </div>
+
+      <!-- Informações de Contato -->
+      <div class="col-12 col-lg-5">
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+
+          <!-- WhatsApp card -->
+          <div style="background: var(--gold-50); border: 1px solid var(--gold-200); border-radius: var(--radius-xl); padding: 28px 24px;">
+            <div style="display:flex; align-items:flex-start; gap: 16px;">
+              <div style="width:48px; height:48px; background: var(--gold-400); border-radius: 50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <i class="bi bi-whatsapp" style="color:#fff; font-size:20px;" aria-hidden="true"></i>
+              </div>
+              <div>
+                <h3 style="font-family: var(--font-serif); font-size:1.2rem; margin-bottom:4px; color: var(--gray-800);">WhatsApp</h3>
+                <p style="font-size:15px; color: var(--gray-600); margin-bottom: 4px;">(37) 99862-3061</p>
+                <p style="font-size:13px; color: var(--gray-400); margin-bottom: 16px;">Seg. a Sex., das 8h às 17h</p>
+                <a
+                  href="https://wa.me/5537998623061?text=Olá!%20Gostaria%20de%20mais%20informações."
+                  target="_blank"
+                  rel="noopener"
+                  class="btn-gold"
+                  id="contact-whatsapp"
+                  style="font-size:12px; padding: 10px 20px;"
+                >
+                  <i class="bi bi-whatsapp" aria-hidden="true"></i> Abrir WhatsApp
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Endereço card -->
+          <div style="background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-xl); padding: 28px 24px;">
+            <div style="display:flex; align-items:flex-start; gap: 16px;">
+              <div style="width:48px; height:48px; background: var(--gray-100); border-radius: 50%; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <i class="bi bi-geo-alt-fill" style="color: var(--gold-500); font-size:20px;" aria-hidden="true"></i>
+              </div>
+              <div>
+                <h3 style="font-family: var(--font-serif); font-size:1.2rem; margin-bottom:4px; color: var(--gray-800);">Endereço</h3>
+                <p style="font-size:15px; color: var(--gray-600); margin-bottom: 4px;">
+                  Av. 1° de Junho, 411 – 501<br>
+                  Centro, Divinópolis – MG
+                </p>
+                <p style="font-size:13px; color: var(--gray-400); margin-bottom: 16px;">Seg. a Sex., das 9h às 17h</p>
+                <a
+                  href="https://maps.app.goo.gl/EhoHJBKm7o2f9R4U7"
+                  target="_blank"
+                  rel="noopener"
+                  class="btn-ghost"
+                  id="contact-mapa"
+                  style="font-size:12px; padding: 9px 18px;"
+                >
+                  <i class="bi bi-map" aria-hidden="true"></i> Ver no Mapa
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dica -->
+          <div style="padding: 20px 24px; background: var(--gray-50); border-radius: var(--radius-lg); font-size:14px; color: var(--gray-500); line-height:1.65; border: 1px solid var(--gray-100);">
+            <i class="bi bi-lightbulb" style="color: var(--gold-400);" aria-hidden="true"></i>&nbsp;
+            Prefere falar pelo WhatsApp? É mais rápido! Respondemos em minutos durante o horário de atendimento.
+          </div>
+
+        </div>
+      </div>
+
     </div>
-  </section>
-</main>
+  </div>
+</section>
+
 {% endblock %}

@@ -1,55 +1,86 @@
 {% load static %}
-<header>
-  <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm py-3">
-    <div class="container">
-      <a href="{% url 'home' %}" class="navbar-brand text-decoration-none">
-        <h3 class="mb-0 fw-bold font-montserrat" style="font-size: 1.5rem; letter-spacing: 1px;">
-          <span class="text-warning">Ouri</span><span class="text-secondary">Prata</span>
-        </h3>
-      </a>
-      
-      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#portfolioNavbar" aria-controls="portfolioNavbar" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      
-      <div class="collapse navbar-collapse" id="portfolioNavbar">
-        <ul class="navbar-nav mx-auto mb-2 mb-md-0 gap-2 gap-lg-4">
-          <li class="nav-item">
-            <a class="nav-link fw-semibold {% if request.resolver_match.url_name == 'home' %}active text-warning{% endif %}" href="{% url 'home' %}">Início</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link fw-semibold {% if request.resolver_match.url_name == 'catalogo' or request.resolver_match.url_name == 'product_detail' or request.resolver_match.url_name == 'products_by_category' %}active text-warning{% endif %}" href="{% url 'catalogo' %}">Joias</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link fw-semibold {% if request.resolver_match.url_name == 'about' %}active text-warning{% endif %}" href="{% url 'about' %}">Quem Somos</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link fw-semibold {% if request.resolver_match.url_name == 'contact' %}active text-warning{% endif %}" href="{% url 'contact' %}">Contato</a>
-          </li>
-        </ul>
-        
-        <form class="d-flex position-relative ms-auto" method="get" action="{% url 'search_products' %}" style="max-width: 250px; width: 100%;">
-          <div class="input-group">
-            <input
-              type="text"
-              name="q"
-              placeholder="Buscar joias..."
-              class="form-control border-0 bg-light rounded-pill ps-3 pe-4"
-              id="search-input"
-              autocomplete="off"
-              value="{{ request.GET.q|default:'' }}"
-              style="font-size: 0.9rem;"
-            />
-            <button type="submit" class="btn btn-link position-absolute end-0 top-50 translate-middle-y text-muted p-0 pe-3" style="z-index: 5;">
-              <i class="bi bi-search"></i>
-            </button>
-          </div>
-          
-          <div id="search-suggestions" class="position-absolute w-100 bg-white shadow rounded-3 mt-5 d-none" style="z-index: 1050; max-height: 300px; overflow-y: auto; top: 0;">
-            <div id="suggestions-list"></div>
-          </div>
-        </form>
+<nav class="op-nav" id="opNav" role="navigation" aria-label="Navegação principal">
+  <div class="op-nav__inner">
+
+    <!-- Logo -->
+    <a href="{% url 'home' %}" class="op-nav__logo" aria-label="OuriPrata - Página inicial">
+      <span class="op-nav__logo-ouri">Ouri</span><span class="op-nav__logo-prata">Prata</span>
+    </a>
+
+    <!-- Links desktop -->
+    <ul class="op-nav__links" role="list">
+      <li>
+        <a href="{% url 'home' %}" class="op-nav__link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+          Início
+        </a>
+      </li>
+      <li>
+        <a href="{% url 'all_products' %}" class="op-nav__link {% if 'products' in request.path %}active{% endif %}">
+          Coleção
+        </a>
+      </li>
+      <li>
+        <a href="{% url 'about_us' %}" class="op-nav__link {% if 'sobre' in request.path %}active{% endif %}">
+          Sobre
+        </a>
+      </li>
+      <li>
+        <a href="{% url 'contact_us' %}" class="op-nav__link {% if 'contato' in request.path %}active{% endif %}">
+          Contato
+        </a>
+      </li>
+    </ul>
+
+    <!-- Ações -->
+    <div class="op-nav__actions">
+      <!-- Busca inline -->
+      <div class="search-wrap" style="max-width:240px;" role="search">
+        <i class="bi bi-search search-icon" aria-hidden="true"></i>
+        <input
+          type="search"
+          id="navSearch"
+          class="search-input"
+          placeholder="Buscar joias..."
+          autocomplete="off"
+          aria-label="Buscar joias"
+        >
+        <div class="search-suggestions" id="searchSuggestions" role="listbox"></div>
       </div>
     </div>
-  </nav>
-</header>
+
+    <!-- Toggle mobile -->
+    <button class="op-nav__toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="navDrawer">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+  </div>
+</nav>
+
+<!-- Drawer Mobile -->
+<div class="op-nav__drawer" id="navDrawer" role="dialog" aria-label="Menu de navegação" aria-modal="true">
+  <div class="op-nav__drawer-backdrop" id="drawerBackdrop"></div>
+  <div class="op-nav__drawer-panel">
+    <p class="op-nav__drawer-logo">
+      <span>Ouri</span>Prata
+    </p>
+    <a href="{% url 'home' %}"         class="op-nav__drawer-link">Início</a>
+    <a href="{% url 'all_products' %}" class="op-nav__drawer-link">Coleção</a>
+    <a href="{% url 'about_us' %}"     class="op-nav__drawer-link">Sobre</a>
+    <a href="{% url 'contact_us' %}"   class="op-nav__drawer-link">Contato</a>
+
+    <div style="margin-top: 24px;">
+      <div class="search-wrap" style="max-width:100%;">
+        <i class="bi bi-search search-icon" aria-hidden="true"></i>
+        <input type="search" class="search-input" placeholder="Buscar joias..." aria-label="Buscar no mobile">
+      </div>
+    </div>
+
+    <div style="margin-top: auto; padding-top: 32px; border-top: 1px solid var(--gray-100);">
+      <p style="font-size:12px; color: var(--gray-400); line-height:1.6; margin:0;">
+        Joias em ouro e prata, feitas com amor e cuidado para cada momento especial.
+      </p>
+    </div>
+  </div>
+</div>

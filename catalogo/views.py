@@ -37,6 +37,13 @@ def policy(request):
     return render(request, 'landing_page/politicas/privacy_policy.html')
 
 
+def terms(request):
+    """
+    Página de termos de uso
+    """
+    return render(request, 'landing_page/politicas/terms_of_use.html')
+
+
 def item_detail(request, slug):
     """
     Exibe detalhes de uma joia no portfólio

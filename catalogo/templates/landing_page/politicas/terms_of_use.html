@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Termos de Uso — OuriPrata{% endblock %}
+{% block meta_description %}<meta name="description" content="Termos e condições de uso do site OuriPrata.">{% endblock %}
+
+{% block content %}
+
+<div class="page-hero">
+  <div class="container">
+    <span class="page-hero__eyebrow">Legal</span>
+    <h1 class="page-hero__title">Termos de Uso</h1>
+    <p class="page-hero__sub">Regras e condições para uso do nosso portfólio.</p>
+  </div>
+</div>
+
+<section style="padding: 72px 0 80px;">
+  <div class="container">
+    <div style="max-width: 720px; margin: 0 auto;">
+      <div style="font-size:15px; line-height:1.8; color: var(--gray-600); display: flex; flex-direction: column; gap: 20px;">
+        <p>Ao acessar o portfólio da OuriPrata, você concorda com os seguintes termos e condições.</p>
+
+        <h2 style="font-family: var(--font-serif); font-size: 1.4rem; color: var(--gray-800);">Uso do Portfólio</h2>
+        <p>O conteúdo deste site, incluindo imagens e descrições de produtos, é de propriedade exclusiva da OuriPrata e não pode ser reproduzido sem autorização prévia.</p>
+
+        <h2 style="font-family: var(--font-serif); font-size: 1.4rem; color: var(--gray-800);">Imagens e Informações</h2>
+        <p>Procuramos manter todas as informações atualizadas e precisas. No entanto, podem ocorrer variações nas cores das peças devido à iluminação fotográfica. Para confirmação de detalhes, entre em contato conosco.</p>
+
+        <h2 style="font-family: var(--font-serif); font-size: 1.4rem; color: var(--gray-800);">Contato e Negociação</h2>
+        <p>Todos os pedidos e negociações são realizados exclusivamente via WhatsApp ou pessoalmente em nossa loja. O portfólio online tem caráter informativo e de exposição das peças.</p>
+
+        <div style="margin-top: 12px; padding: 20px 24px; background: var(--gold-50); border: 1px solid var(--gold-200); border-radius: var(--radius-lg);">
+          <p style="margin:0; font-size:14px; color: var(--gray-600);">
+            Dúvidas? <a href="{% url 'contact_us' %}" style="color: var(--gold-600); font-weight:500;">Entre em contato</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

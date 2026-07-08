@@ -1,34 +1,45 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Política de Segurança OuriPrata{% endblock %}
+
+{% block title %}Política de Privacidade — OuriPrata{% endblock %}
 {% block meta_description %}<meta name="description" content="Veja como a OuriPrata protege seus dados e sua privacidade.">{% endblock %}
-{% block og_title %}Política de Segurança OuriPrata{% endblock %}
-{% block og_description %}Veja como a OuriPrata protege seus dados e sua privacidade.{% endblock %}
-{% block og_image %}{% static 'assets/landing_page/logo.png' %}{% endblock %}
 
 {% block content %}
-<main>
-  <header class="container py-5">
-    <div class="row justify-content-center">
-      <div class="col-lg-8">
-        <h1 class="fw-bold mb-4">Política de Privacidade</h1>
+
+<div class="page-hero">
+  <div class="container">
+    <span class="page-hero__eyebrow">Legal</span>
+    <h1 class="page-hero__title">Política de Privacidade</h1>
+    <p class="page-hero__sub">Sua privacidade importa para nós.</p>
+  </div>
+</div>
+
+<section style="padding: 72px 0 80px;">
+  <div class="container">
+    <div style="max-width: 720px; margin: 0 auto;">
+      <div style="font-size:15px; line-height:1.8; color: var(--gray-600); display: flex; flex-direction: column; gap: 20px;">
+        <p>Sua privacidade é importante para nós da OuriPrata. Esta política descreve como coletamos, usamos e protegemos suas informações pessoais.</p>
+
+        <h2 style="font-family: var(--font-serif); font-size: 1.4rem; color: var(--gray-800);">Coleta de Dados</h2>
+        <p>Coletamos apenas as informações necessárias para o funcionamento do site e para oferecer um atendimento de qualidade. Isso pode incluir nome, e-mail e dados de contato fornecidos voluntariamente por você.</p>
+
+        <h2 style="font-family: var(--font-serif); font-size: 1.4rem; color: var(--gray-800);">Uso das Informações</h2>
+        <p>Suas informações são usadas exclusivamente para responder às suas dúvidas, melhorar nossos serviços e, com sua autorização, enviar novidades sobre nossa coleção.</p>
+
+        <h2 style="font-family: var(--font-serif); font-size: 1.4rem; color: var(--gray-800);">Proteção dos Dados</h2>
+        <p>Não compartilhamos seus dados pessoais com terceiros sem sua autorização. Adotamos medidas de segurança adequadas para proteger suas informações.</p>
+
+        <h2 style="font-family: var(--font-serif); font-size: 1.4rem; color: var(--gray-800);">Seus Direitos</h2>
+        <p>Você pode solicitar a exclusão, correção ou acesso aos seus dados a qualquer momento. Para isso, entre em contato conosco pelo WhatsApp ou pelo formulário de contato.</p>
+
+        <div style="margin-top: 12px; padding: 20px 24px; background: var(--gold-50); border: 1px solid var(--gold-200); border-radius: var(--radius-lg);">
+          <p style="margin:0; font-size:14px; color: var(--gray-600);">
+            Dúvidas? <a href="{% url 'contact_us' %}" style="color: var(--gold-600); font-weight:500;">Entre em contato</a> ou fale pelo <a href="https://wa.me/5537998623061" style="color: var(--gold-600); font-weight:500;" target="_blank" rel="noopener">WhatsApp</a>.
+          </p>
+        </div>
       </div>
     </div>
-  </header>
-  <section class="container pb-5">
-    <div class="row justify-content-center">
-      <div class="col-lg-8">
-        <p class="mb-3">
-          Sua privacidade é importante para nós. Todas as informações pessoais são tratadas com sigilo e segurança.
-        </p>
-        <ul class="list-group mb-3">
-          <li class="list-group-item">Coletamos apenas dados necessários para o funcionamento do site.</li>
-          <li class="list-group-item">Não compartilhamos seus dados com terceiros sem autorização.</li>
-          <li class="list-group-item">Você pode solicitar a exclusão dos seus dados a qualquer momento.</li>
-        </ul>
-        <p class="text-muted small">Para mais informações, entre em contato conosco.</p>
-      </div>
-    </div>
-  </section>
-</main>
+  </div>
+</section>
+
 {% endblock %}

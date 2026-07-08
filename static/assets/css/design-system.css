@@ -1,0 +1,412 @@
+/* =========================================
+   OuriPrata — Design System
+   Paleta: Dourado + Cinza Premium
+   Estilo: Clean, Delicado, Joalheria
+   ========================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+/* ---- Variáveis ---- */
+:root {
+  --gold-50:  #fdf9ee;
+  --gold-100: #f8efce;
+  --gold-200: #f0d98e;
+  --gold-300: #e8c65a;
+  --gold-400: #d4a843;
+  --gold-500: #b8922e;
+  --gold-600: #9a7821;
+  --gold-700: #7a5f18;
+
+  --gray-50:  #fafafa;
+  --gray-100: #f5f5f5;
+  --gray-200: #e8e8e8;
+  --gray-300: #d1d1d1;
+  --gray-400: #a8a8a8;
+  --gray-500: #737373;
+  --gray-600: #525252;
+  --gray-700: #3d3d3d;
+  --gray-800: #262626;
+  --gray-900: #171717;
+
+  --white: #ffffff;
+
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans:  'Inter', -apple-system, sans-serif;
+
+  --radius-sm:  4px;
+  --radius:     8px;
+  --radius-lg:  16px;
+  --radius-xl:  24px;
+
+  --shadow-sm:  0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow:     0 4px 12px rgba(0,0,0,0.08);
+  --shadow-lg:  0 16px 40px rgba(0,0,0,0.10);
+
+  --transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ---- Reset & Base ---- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--gray-700);
+  background: var(--white);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- Tipografia ---- */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  line-height: 1.25;
+  color: var(--gray-800);
+}
+
+.serif { font-family: var(--font-serif); }
+.sans  { font-family: var(--font-sans);  }
+
+/* ---- Paleta de Cores ---- */
+.text-gold    { color: var(--gold-500); }
+.text-gold-lt { color: var(--gold-300); }
+.bg-gold      { background-color: var(--gold-400); }
+.bg-gold-lt   { background-color: var(--gold-50);  }
+.bg-gray-lt   { background-color: var(--gray-50);  }
+.border-gold  { border-color: var(--gold-300) !important; }
+
+/* ---- Linha Decorativa ---- */
+.divider-gold {
+  display: block;
+  width: 48px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold-400), var(--gold-200));
+  margin: 12px auto 0;
+  border-radius: 2px;
+}
+
+.divider-gold.left { margin-left: 0; }
+
+/* ---- Botões ---- */
+.btn-gold {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  background: var(--gold-400);
+  color: var(--white);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: none;
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-gold:hover {
+  background: var(--gold-500);
+  color: var(--white);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(184, 146, 46, 0.35);
+}
+
+.btn-gold-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 28px;
+  background: transparent;
+  color: var(--gold-500);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1.5px solid var(--gold-400);
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-gold-outline:hover {
+  background: var(--gold-400);
+  color: var(--white);
+  transform: translateY(-1px);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 28px;
+  background: transparent;
+  color: var(--gray-700);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1.5px solid var(--gray-300);
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-ghost:hover {
+  border-color: var(--gold-400);
+  color: var(--gold-500);
+}
+
+/* ---- Cards ---- */
+.card-joia {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--gray-200);
+  transition: var(--transition);
+}
+
+.card-joia:hover {
+  border-color: var(--gold-200);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+}
+
+.card-joia__image {
+  aspect-ratio: 3/4;
+  overflow: hidden;
+  background: var(--gray-100);
+  position: relative;
+}
+
+.card-joia__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.card-joia:hover .card-joia__image img {
+  transform: scale(1.04);
+}
+
+.card-joia__badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: var(--gold-50);
+  color: var(--gold-600);
+  border: 1px solid var(--gold-200);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: var(--radius-xl);
+}
+
+.card-joia__body {
+  padding: 20px;
+}
+
+.card-joia__cat {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--gold-500);
+  margin-bottom: 6px;
+  display: block;
+}
+
+.card-joia__title {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: var(--gray-800);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.card-joia__price {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--gray-500);
+  margin-bottom: 16px;
+}
+
+.card-joia__price strong {
+  color: var(--gray-800);
+  font-size: 15px;
+}
+
+.card-joia__cta {
+  display: block;
+  text-align: center;
+  padding: 10px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--gold-500);
+  text-decoration: none;
+  border-top: 1px solid var(--gray-200);
+  margin: 0 -20px -20px;
+  transition: var(--transition);
+  background: transparent;
+}
+
+.card-joia__cta:hover {
+  background: var(--gold-50);
+  color: var(--gold-600);
+}
+
+/* ---- Section Header ---- */
+.section-header {
+  text-align: center;
+  margin-bottom: 56px;
+}
+
+.section-header__eyebrow {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold-500);
+  margin-bottom: 12px;
+}
+
+.section-header__title {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 400;
+  color: var(--gray-800);
+  margin-bottom: 0;
+}
+
+.section-header__sub {
+  font-size: 15px;
+  color: var(--gray-500);
+  margin-top: 12px;
+}
+
+/* ---- Input / Busca ---- */
+.search-wrap {
+  position: relative;
+  max-width: 360px;
+  width: 100%;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 16px 10px 40px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-xl);
+  background: var(--gray-50);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--gray-700);
+  outline: none;
+  transition: var(--transition);
+}
+
+.search-input:focus {
+  border-color: var(--gold-300);
+  background: var(--white);
+  box-shadow: 0 0 0 3px rgba(212, 168, 67, 0.12);
+}
+
+.search-input::placeholder { color: var(--gray-400); }
+
+.search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gray-400);
+  pointer-events: none;
+  font-size: 15px;
+}
+
+/* ---- Chips / Filtros ---- */
+.chip {
+  display: inline-block;
+  padding: 7px 18px;
+  border-radius: var(--radius-xl);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  border: 1.5px solid var(--gray-200);
+  color: var(--gray-600);
+  text-decoration: none;
+  transition: var(--transition);
+  cursor: pointer;
+  background: var(--white);
+  white-space: nowrap;
+}
+
+.chip:hover, .chip.active {
+  border-color: var(--gold-400);
+  color: var(--gold-600);
+  background: var(--gold-50);
+}
+
+/* ---- Badges ---- */
+.badge-gold {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 12px;
+  background: var(--gold-50);
+  color: var(--gold-600);
+  border: 1px solid var(--gold-200);
+  border-radius: var(--radius-xl);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+/* ---- Utilitários ---- */
+.mt-auto { margin-top: auto !important; }
+.text-truncate-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ---- Responsivo ---- */
+@media (max-width: 768px) {
+  .section-header { margin-bottom: 36px; }
+}
+
+/* ---- Animações suaves ---- */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0);     }
+}
+
+.fade-up {
+  animation: fadeUp 0.6s ease both;
+}
+
+/* ---- Scroll hint na grade ---- */
+.grid-scroll {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  scrollbar-width: none;
+}
+.grid-scroll::-webkit-scrollbar { display: none; }
