@@ -1,12 +1,11 @@
-// ===== SEARCH.JS - Funcionalidade de Busca Rápida =====
+// ===== SEARCH.JS - Funcionalidade de Busca Rápida com novo Design System =====
 
 document.addEventListener('DOMContentLoaded', function() {
-  const searchInput = document.getElementById('search-input');
-  const suggestionsContainer = document.getElementById('search-suggestions');
-  const suggestionsList = document.getElementById('suggestions-list');
+  const searchInput = document.getElementById('navSearch');
+  const suggestionsContainer = document.getElementById('searchSuggestions');
   let searchTimeout;
 
-  if (searchInput && suggestionsContainer && suggestionsList) {
+  if (searchInput && suggestionsContainer) {
     searchInput.addEventListener('input', function() {
       const query = this.value.trim();
       clearTimeout(searchTimeout);
@@ -17,42 +16,40 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(data => {
               if (data.suggestions && data.suggestions.length > 0) {
-                suggestionsList.innerHTML = '';
+                suggestionsContainer.innerHTML = '';
                 data.suggestions.forEach(item => {
-                  const div = document.createElement('div');
-                  div.className = 'p-2 border-bottom suggestion-item';
-                  div.style.cursor = 'pointer';
+                  const a = document.createElement('a');
+                  a.href = `/item/${item.slug}/`;
+                  a.className = 'search-suggestion-item';
                   
                   const imgHtml = item.imagem 
-                    ? `<img src="${item.imagem}" alt="${item.nome}" class="rounded me-2" style="width: 30px; height: 30px; object-fit: cover;">`
-                    : `<i class="bi bi-gem text-warning me-2" style="font-size: 1.2rem;"></i>`;
+                    ? `<img src="${item.imagem}" alt="${item.nome}" class="search-suggestion-img">`
+                    : `<div class="search-suggestion-img d-flex align-items-center justify-content-center bg-light"><i class="bi bi-gem text-gold"></i></div>`;
                     
-                  div.innerHTML = `
-                    <a href="/item/${item.slug}/" class="d-flex align-items-center text-decoration-none text-dark p-1">
-                      ${imgHtml}
-                      <span class="small fw-semibold">${item.nome}</span>
-                    </a>
+                  a.innerHTML = `
+                    ${imgHtml}
+                    <span style="font-weight: 500;">${item.nome}</span>
                   `;
-                  suggestionsList.appendChild(div);
+                  suggestionsContainer.appendChild(a);
                 });
-                suggestionsContainer.classList.remove('d-none');
+                suggestionsContainer.classList.add('show');
               } else {
-                suggestionsContainer.classList.add('d-none');
+                suggestionsContainer.classList.remove('show');
               }
             })
             .catch(() => {
-              suggestionsContainer.classList.add('d-none');
+              suggestionsContainer.classList.remove('show');
             });
         }, 300);
       } else {
-        suggestionsContainer.classList.add('d-none');
+        suggestionsContainer.classList.remove('show');
       }
     });
 
     // Fechar ao clicar fora
     document.addEventListener('click', function(e) {
       if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
-        suggestionsContainer.classList.add('d-none');
+        suggestionsContainer.classList.remove('show');
       }
     });
   }

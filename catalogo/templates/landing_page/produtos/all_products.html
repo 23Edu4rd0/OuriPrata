@@ -1,41 +1,79 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}{{ page_title }} - OuriPrata{% endblock %}
-{% block meta_description %}<meta name="description" content="{{ page_subtitle }}">{% endblock %}
+{% block title %}Coleção Completa — OuriPrata{% endblock %}
+{% block meta_description %}<meta name="description" content="Explore todas as joias da OuriPrata. Anéis, colares, brincos e pulseiras em ouro e prata.">{% endblock %}
+{% block og_title %}Coleção Completa — OuriPrata{% endblock %}
+{% block og_description %}Explore nossa coleção completa de joias em ouro e prata.{% endblock %}
 
 {% block content %}
-<main class="py-5">
-  <div class="container">
-    <!-- Header -->
-    <div class="text-center mb-5">
-      <h1 class="fw-bold font-montserrat text-warning mb-2" style="font-size: 2rem;">{{ page_title }}</h1>
-      <p class="text-muted lead">{{ page_subtitle }}</p>
-      <div class="mx-auto rounded-pill" style="height: 3px; width: 60px; background: #ffc107;"></div>
-    </div>
 
-    <!-- Filtro de Categorias Rápido -->
-    <div class="d-flex flex-wrap justify-content-center gap-2 mb-5">
-      <a href="{% url 'catalogo' %}" class="btn btn-sm {% if current_page == 'catalogo' %}btn-warning text-white{% else %}btn-outline-secondary{% endif %} rounded-pill px-3 py-2 fw-semibold">Todos</a>
-      {% for cat in all_categories %}
-        <a href="{% url 'products_by_category' cat.slug %}" class="btn btn-sm {% if categoria.slug == cat.slug %}btn-warning text-white{% else %}btn-outline-secondary{% endif %} rounded-pill px-3 py-2 fw-semibold">{{ cat.nome }}</a>
+<!-- Hero interno -->
+<div class="page-hero">
+  <div class="container">
+    <span class="page-hero__eyebrow">Portfólio</span>
+    <h1 class="page-hero__title">Nossa Coleção</h1>
+    <p class="page-hero__sub">{{ total_products }} peça{{ total_products|pluralize:"s" }} esperando por você</p>
+  </div>
+</div>
+
+<div class="container" style="padding-top: 16px; padding-bottom: 80px;">
+
+  <!-- Toolbar de filtros -->
+  <div class="catalog-toolbar" role="navigation" aria-label="Filtrar por categoria">
+    <a href="{% url 'all_products' %}"
+       class="chip {% if not request.GET.categoria %}active{% endif %}"
+       id="filter-todas">
+      Todas
+    </a>
+    {% for cat in all_categories %}
+      <a href="{{ cat.get_absolute_url }}"
+         class="chip"
+         id="filter-{{ cat.slug }}">
+        {{ cat.nome }}
+      </a>
+    {% endfor %}
+
+    <span class="catalog-count" aria-live="polite">
+      {{ total_products }} peça{{ total_products|pluralize:"s" }}
+    </span>
+  </div>
+
+  <!-- Grade de produtos -->
+  {% if products %}
+    <div class="products-grid" id="productGrid">
+      {% for product in products %}
+        {% include 'landing_page/partials/product_card.html' %}
       {% endfor %}
     </div>
+  {% else %}
+    <div class="empty-state">
+      <i class="bi bi-gem empty-state__icon" aria-hidden="true"></i>
+      <h2 class="empty-state__title">Nenhuma peça encontrada</h2>
+      <p class="empty-state__text">Nossa coleção está sendo atualizada. Volte em breve ou entre em contato.</p>
+      <a href="https://wa.me/5537998623061" target="_blank" rel="noopener" class="btn-gold" id="empty-whatsapp">
+        <i class="bi bi-whatsapp" aria-hidden="true"></i> Falar Conosco
+      </a>
+    </div>
+  {% endif %}
 
-    <!-- Grid de Peças -->
-    {% if products %}
-      <div class="row g-4">
-        {% for product in products %}
-          {% include 'landing_page/produtos/partials/_product_card.html' %}
-        {% endfor %}
-      </div>
-    {% else %}
-      <div class="text-center py-5">
-        <i class="bi bi-gem text-muted mb-3" style="font-size: 3rem;"></i>
-        <h5 class="text-muted">Nenhuma joia cadastrada</h5>
-        <p class="text-muted">Em breve traremos novas peças exclusivas nesta categoria!</p>
-      </div>
-    {% endif %}
+</div>
+
+<!-- CTA final -->
+<div class="cta-banner" style="padding: 72px 0;">
+  <div class="container">
+    <div class="cta-banner__content">
+      <h2 class="cta-banner__title" style="font-size: clamp(1.5rem, 3vw, 2.25rem);">
+        Interesse em alguma peça?
+      </h2>
+      <p class="cta-banner__text">Converse conosco pelo WhatsApp e tire todas as suas dúvidas.</p>
+      <a href="https://wa.me/5537998623061?text=Olá!%20Tenho%20interesse%20em%20uma%20peça%20da%20OuriPrata."
+         target="_blank" rel="noopener"
+         class="btn-gold" id="catalog-cta-whatsapp">
+        <i class="bi bi-whatsapp" aria-hidden="true"></i> WhatsApp
+      </a>
+    </div>
   </div>
-</main>
+</div>
+
 {% endblock %}

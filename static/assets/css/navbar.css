@@ -1,31 +1,221 @@
-/* Navbar - CSS */
+/* =========================================
+   OuriPrata — Navbar & Header
+   ========================================= */
 
-/* Garantir que a navbar fique sempre no topo */
-.navbar {
-  position: sticky !important;
-  top: 0 !important;
-  z-index: 1030 !important;
-  background-color: white !important;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+.op-nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--gray-200);
+  transition: box-shadow 0.3s ease;
 }
 
-/* Mobile navbar mais compacta */
+.op-nav.scrolled {
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+}
+
+.op-nav__inner {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  height: 72px;
+  padding: 0 24px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+/* Logo */
+.op-nav__logo {
+  text-decoration: none;
+  display: flex;
+  align-items: baseline;
+  gap: 1px;
+  flex-shrink: 0;
+}
+
+.op-nav__logo-ouri {
+  font-family: var(--font-serif);
+  font-size: 1.7rem;
+  font-weight: 500;
+  color: var(--gold-500);
+  letter-spacing: 0.5px;
+}
+
+.op-nav__logo-prata {
+  font-family: var(--font-serif);
+  font-size: 1.7rem;
+  font-weight: 300;
+  color: var(--gray-500);
+  letter-spacing: 0.5px;
+}
+
+/* Links desktop */
+.op-nav__links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.op-nav__link {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--gray-600);
+  text-decoration: none;
+  padding-bottom: 2px;
+  border-bottom: 2px solid transparent;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.op-nav__link:hover,
+.op-nav__link.active {
+  color: var(--gold-500);
+  border-bottom-color: var(--gold-400);
+}
+
+/* Ações (busca) */
+.op-nav__actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Hamburguer Mobile */
+.op-nav__toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  margin-left: auto;
+}
+
+.op-nav__toggle span {
+  display: block;
+  width: 22px;
+  height: 1.5px;
+  background: var(--gray-700);
+  transition: var(--transition);
+  border-radius: 2px;
+}
+
+/* Drawer Mobile */
+.op-nav__drawer {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+}
+
+.op-nav__drawer-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+}
+
+.op-nav__drawer-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(300px, 85vw);
+  background: var(--white);
+  padding: 32px 28px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.op-nav__drawer.open {
+  display: block;
+}
+
+.op-nav__drawer.open .op-nav__drawer-panel {
+  transform: translateX(0);
+}
+
+.op-nav__drawer-logo {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  color: var(--gray-800);
+  margin-bottom: 24px;
+}
+
+.op-nav__drawer-logo span { color: var(--gold-500); }
+
+.op-nav__drawer-link {
+  display: block;
+  padding: 14px 0;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--gray-700);
+  text-decoration: none;
+  border-bottom: 1px solid var(--gray-100);
+  transition: color 0.2s;
+}
+
+.op-nav__drawer-link:hover { color: var(--gold-500); }
+
+/* Sugestões de busca */
+.search-suggestions {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: var(--white);
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  z-index: 1050;
+  display: none;
+}
+
+.search-suggestions.show { display: block; }
+
+.search-suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  text-decoration: none;
+  color: var(--gray-700);
+  border-bottom: 1px solid var(--gray-100);
+  transition: background 0.2s;
+  font-size: 14px;
+}
+
+.search-suggestion-item:last-child { border-bottom: none; }
+
+.search-suggestion-item:hover { background: var(--gold-50); }
+
+.search-suggestion-img {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  background: var(--gray-100);
+  flex-shrink: 0;
+}
+
+/* Responsivo */
 @media (max-width: 768px) {
-  .navbar {
-    padding-top: 0.5rem !important;
-    padding-bottom: 0.5rem !important;
-  }
-  
-  .navbar-brand {
-    font-size: 1.1rem !important;
-  }
-  
-  .navbar-nav .nav-link {
-    padding: 0.5rem 0.75rem !important;
-    font-size: 0.9rem !important;
-  }
+  .op-nav__links,
+  .op-nav__actions { display: none; }
+  .op-nav__toggle  { display: flex; }
 }
-
-
-
- 

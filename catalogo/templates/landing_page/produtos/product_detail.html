@@ -1,157 +1,177 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}{{ product.nome }} - OuriPrata{% endblock %}
-{% block meta_description %}<meta name="description" content="{{ product.descricao|default:product.nome|truncatewords:20 }}">{% endblock %}
-{% block og_title %}{{ product.nome }} - OuriPrata{% endblock %}
-{% block og_description %}{{ product.descricao|default:product.nome|truncatewords:20 }}{% endblock %}
-{% block og_image %}{% if product.imagem %}{{ product.imagem.url }}{% endif %}{% endblock %}
+{% block title %}{{ product.nome }} — OuriPrata{% endblock %}
+{% block meta_description %}<meta name="description" content="{{ product.descricao|truncatewords:25 }}">{% endblock %}
+{% block og_title %}{{ product.nome }} — OuriPrata{% endblock %}
+{% block og_description %}{{ product.descricao|truncatewords:20 }}{% endblock %}
+{% block og_image %}{% if product.imagem %}{{ product.imagem.url }}{% else %}{% static 'assets/landing_page/hero.png' %}{% endif %}{% endblock %}
 
 {% block content %}
-<main class="py-5">
-  <div class="container">
-    <!-- Breadcrumb -->
-    <nav aria-label="breadcrumb" class="mb-4">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-decoration-none text-muted">Início</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'catalogo' %}" class="text-decoration-none text-muted">Joias</a></li>
-        {% if product.categoria %}
-          <li class="breadcrumb-item"><a href="{% url 'products_by_category' product.categoria.slug %}" class="text-decoration-none text-muted">{{ product.categoria.nome }}</a></li>
-        {% endif %}
-        <li class="breadcrumb-item active text-warning" aria-current="page">{{ product.nome }}</li>
-      </ol>
-    </nav>
 
-    <!-- Detalhes da Joia -->
-    <div class="row g-5">
-      <!-- Imagens (Esquerda) -->
-      <div class="col-md-6">
-        <div class="main-image-container mb-3 bg-white p-3 rounded-3 shadow-sm text-center">
+<div class="container">
+
+  <!-- Breadcrumb -->
+  <ol class="breadcrumb-clean" aria-label="Caminho de navegação">
+    <li><a href="{% url 'home' %}">Início</a></li>
+    <li class="sep" aria-hidden="true"><i class="bi bi-chevron-right"></i></li>
+    <li><a href="{% url 'all_products' %}">Coleção</a></li>
+    {% if product.categoria %}
+      <li class="sep" aria-hidden="true"><i class="bi bi-chevron-right"></i></li>
+      <li><a href="{{ product.categoria.get_absolute_url }}">{{ product.categoria.nome }}</a></li>
+    {% endif %}
+    <li class="sep" aria-hidden="true"><i class="bi bi-chevron-right"></i></li>
+    <li class="current" aria-current="page">{{ product.nome }}</li>
+  </ol>
+
+  <!-- Layout detalhe -->
+  <div class="row g-5" style="padding-bottom: 80px;">
+
+    <!-- Galeria -->
+    <div class="col-12 col-lg-6">
+      <div class="product-gallery">
+        <div class="product-gallery__main" id="galleryMain">
           {% if product.imagem %}
-            <img id="mainJewelImage" src="{{ product.imagem.url }}" alt="{{ product.nome }}" class="img-fluid rounded-3" style="max-height: 450px; object-fit: contain;">
+            <img src="{{ product.imagem.url }}" alt="{{ product.nome }}" id="mainImg" loading="eager">
           {% else %}
-            <div class="bg-light rounded-3 d-flex align-items-center justify-content-center" style="height: 400px;">
-              <i class="bi bi-gem text-muted" style="font-size: 4rem;"></i>
-            </div>
+            <img src="{% static 'assets/landing_page/hero.png' %}" alt="{{ product.nome }}" id="mainImg" loading="eager">
           {% endif %}
         </div>
 
-        <!-- Miniaturas (Imagens extras) -->
-        {% if product.imagens %}
-          <div class="row g-2 justify-content-center">
-            {% if product.imagem %}
-              <div class="col-2">
-                <img src="{{ product.imagem.url }}" class="img-thumbnail thumbnail-img active" style="cursor: pointer; height: 70px; object-fit: cover;" onclick="switchMainImage('{{ product.imagem.url }}', this)">
-              </div>
-            {% endif %}
-            {% for img in product.imagens %}
-              <div class="col-2">
-                <img src="{{ img.imagem.url }}" class="img-thumbnail thumbnail-img" style="cursor: pointer; height: 70px; object-fit: cover;" onclick="switchMainImage('{{ img.imagem.url }}', this)">
-              </div>
-            {% endfor %}
-          </div>
-        {% endif %}
-      </div>
-
-      <!-- Informações (Direita) -->
-      <div class="col-md-6">
-        <div class="ps-md-3">
-          <span class="badge bg-warning-subtle text-warning fw-semibold px-3 py-2 rounded-pill mb-3" style="font-size: 0.8rem;">
-            {{ product.categoria.nome }}
-          </span>
-          <h1 class="fw-bold font-montserrat text-dark mb-2" style="font-size: 2.2rem;">{{ product.nome }}</h1>
-          
-          <div class="mb-4">
-            {% if product.preco %}
-              <h3 class="fw-bold text-secondary">R$ {{ product.preco }}</h3>
-            {% else %}
-              <h3 class="text-muted font-monospace fs-5">Preço sob consulta</h3>
-            {% endif %}
-          </div>
-
-          <hr class="my-4">
-
-          <div class="mb-4">
-            <h5 class="fw-semibold text-secondary mb-2">Descrição</h5>
-            <p class="text-muted" style="line-height: 1.6; white-space: pre-line;">{{ product.descricao|default:"Nenhuma descrição disponível para esta peça." }}</p>
-          </div>
-
-          <div class="mb-4 bg-light p-3 rounded-3">
-            <div class="row">
-              <div class="col-6 mb-2">
-                <span class="text-muted d-block small">Material</span>
-                <span class="fw-semibold text-dark">{{ product.material.nome }}</span>
-              </div>
-              {% if product.ocasiao %}
-                <div class="col-6 mb-2">
-                  <span class="text-muted d-block small">Sugestão de Ocasião</span>
-                  <span class="fw-semibold text-dark">{{ product.ocasiao.nome }}</span>
-                </div>
-              {% endif %}
-            </div>
-          </div>
-
-          <!-- Botão WhatsApp de Interesse -->
-          <a href="https://wa.me/5537998623061?text=Ol%C3%A1!%20Gostaria%20de%20saber%20mais%20detalhes%20sobre%20a%20joia%20{{ product.nome|urlencode }}%20que%20vi%20no%20portf%C3%B3lio." 
-             target="_blank" 
-             class="btn btn-warning btn-lg w-100 rounded-pill py-3 fw-bold text-uppercase d-flex align-items-center justify-content-center gap-2" 
-             style="font-size: 0.9rem; letter-spacing: 0.5px;">
-            <i class="bi bi-whatsapp fs-5"></i>
-            Tenho Interesse nesta Peça
-          </a>
+        <!-- Thumbnails (placeholder para galeria futura) -->
+        <div class="product-gallery__thumbs" id="thumbsContainer">
+          <button class="product-gallery__thumb active" data-src="{% if product.imagem %}{{ product.imagem.url }}{% else %}{% static 'assets/landing_page/hero.png' %}{% endif %}" aria-label="Imagem principal">
+            <img src="{% if product.imagem %}{{ product.imagem.url }}{% else %}{% static 'assets/landing_page/hero.png' %}{% endif %}" alt="{{ product.nome }}" loading="lazy">
+          </button>
         </div>
       </div>
     </div>
 
-    <!-- Seção Relacionados -->
-    {% if related_products %}
-      <hr class="my-5">
-      <section class="py-4">
-        <h3 class="fw-bold font-montserrat text-dark text-center mb-4">Outras Peças Relacionadas</h3>
-        <div class="row g-4 justify-content-center">
-          {% for r_product in related_products %}
-            <div class="col-6 col-md-3">
-              <div class="card border-0 h-100 product-card rounded-3 shadow-sm text-center" style="transition: all 0.3s ease;">
-                <div class="position-relative overflow-hidden">
-                  {% if r_product.imagem %}
-                    <img src="{{ r_product.imagem.url }}" class="card-img-top rounded-top-3" alt="{{ r_product.nome }}" style="height: 180px; object-fit: cover; background: #fff;">
-                  {% else %}
-                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center rounded-top-3" style="height: 180px;">
-                      <i class="bi bi-gem text-muted" style="font-size: 2rem;"></i>
-                    </div>
-                  {% endif %}
-                </div>
-                <div class="card-body d-flex flex-column p-3">
-                  <h6 class="card-title mb-2 text-dark font-montserrat fw-semibold text-truncate">{{ r_product.nome }}</h6>
-                  <a href="{% url 'product_detail' r_product.slug %}" class="btn btn-outline-warning btn-sm rounded-pill w-100 mt-auto fw-semibold" style="font-size: 0.75rem;">
-                    Ver Detalhes
-                  </a>
-                </div>
-              </div>
+    <!-- Informações -->
+    <div class="col-12 col-lg-6">
+      <div style="padding-top: 8px;">
+
+        {% if product.categoria %}
+          <span class="product-info__cat">{{ product.categoria.nome }}</span>
+        {% endif %}
+
+        <h1 class="product-info__title">{{ product.nome }}</h1>
+
+        {% if product.preco %}
+          <p class="product-info__price">
+            a partir de <strong>R$ {{ product.preco }}</strong>
+          </p>
+        {% endif %}
+
+        <hr class="product-info__divider">
+
+        {% if product.descricao %}
+          <p class="product-info__desc">{{ product.descricao }}</p>
+        {% endif %}
+
+        <!-- Especificações -->
+        <div class="row g-3" style="margin-bottom: 32px;">
+          {% if product.material %}
+            <div class="col-6">
+              <p class="product-info__label">Material</p>
+              <p class="product-info__value">{{ product.material }}</p>
             </div>
-          {% endfor %}
+          {% endif %}
+          {% if product.peso %}
+            <div class="col-6">
+              <p class="product-info__label">Peso</p>
+              <p class="product-info__value">{{ product.peso }}g</p>
+            </div>
+          {% endif %}
+          {% if product.dimensoes %}
+            <div class="col-6">
+              <p class="product-info__label">Dimensões</p>
+              <p class="product-info__value">{{ product.dimensoes }}</p>
+            </div>
+          {% endif %}
+          {% if product.disponivel is not None %}
+            <div class="col-6">
+              <p class="product-info__label">Disponibilidade</p>
+              <p class="product-info__value">
+                {% if product.disponivel %}
+                  <span class="badge-gold"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Disponível</span>
+                {% else %}
+                  <span style="font-size:13px; color: var(--gray-400);">Indisponível no momento</span>
+                {% endif %}
+              </p>
+            </div>
+          {% endif %}
         </div>
-      </section>
-    {% endif %}
+
+        <!-- CTA WhatsApp -->
+        <a
+          href="https://wa.me/5537998623061?text=Olá!%20Tenho%20interesse%20na%20joia%20*{{ product.nome|urlencode }}*%20do%20portfólio%20da%20OuriPrata."
+          target="_blank"
+          rel="noopener"
+          class="btn-whatsapp"
+          id="product-whatsapp-cta"
+          aria-label="Entrar em contato sobre {{ product.nome }} via WhatsApp"
+        >
+          <i class="bi bi-whatsapp" aria-hidden="true"></i>
+          Tenho Interesse — WhatsApp
+        </a>
+
+        <p style="font-size:12px; color: var(--gray-400); text-align:center; margin-top:12px;">
+          Atendimento de segunda a sexta, das 9h às 17h
+        </p>
+
+        <hr class="product-info__divider">
+
+        <!-- Diferenciais inline -->
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <i class="bi bi-shield-check" style="color: var(--gold-500); font-size:18px;" aria-hidden="true"></i>
+            <span style="font-size:14px; color: var(--gray-600);">Qualidade e procedência garantidas</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <i class="bi bi-gem" style="color: var(--gold-500); font-size:18px;" aria-hidden="true"></i>
+            <span style="font-size:14px; color: var(--gray-600);">Materiais nobres — ouro e prata</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <i class="bi bi-chat-heart" style="color: var(--gold-500); font-size:18px;" aria-hidden="true"></i>
+            <span style="font-size:14px; color: var(--gray-600);">Atendimento personalizado</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
   </div>
-</main>
+</div>
 
+<!-- Produtos Relacionados -->
+{% if related_products %}
+  <section class="related-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-header__eyebrow">Você pode gostar</span>
+        <h2 class="section-header__title">Peças Relacionadas</h2>
+        <span class="divider-gold"></span>
+      </div>
+      <div class="products-grid">
+        {% for product in related_products %}
+          {% include 'landing_page/partials/product_card.html' %}
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
 <script>
-  function switchMainImage(imgUrl, element) {
-    document.getElementById('mainJewelImage').src = imgUrl;
-    document.querySelectorAll('.thumbnail-img').forEach(el => el.classList.remove('active'));
-    element.classList.add('active');
-  }
+  // Galeria de thumbs
+  document.querySelectorAll('.product-gallery__thumb').forEach(thumb => {
+    thumb.addEventListener('click', () => {
+      document.getElementById('mainImg').src = thumb.dataset.src;
+      document.querySelectorAll('.product-gallery__thumb').forEach(t => t.classList.remove('active'));
+      thumb.classList.add('active');
+    });
+  });
 </script>
-
-<style>
-  .thumbnail-img.active {
-    border-color: #ffc107 !important;
-    border-width: 2px;
-  }
-  .product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.08) !important;
-  }
-</style>
 {% endblock %}
