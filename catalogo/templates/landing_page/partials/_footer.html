@@ -11,13 +11,13 @@
             Joias exclusivas que contam histórias. Tradição, qualidade e elegância em cada peça.
           </p>
           <div class="d-flex gap-2 gap-md-3">
-            <a href="#" class="text-white-50 fs-5 fs-md-5">
+            <a href="#" class="text-white-50 fs-5">
               <i class="bi bi-instagram"></i>
             </a>
-            <a href="#" class="text-white-50 fs-5 fs-md-5">
+            <a href="#" class="text-white-50 fs-5">
               <i class="bi bi-facebook"></i>
             </a>
-            <a href="https://wa.me/5537998623061" class="text-success fs-5 fs-md-5">
+            <a href="https://wa.me/5537998623061" target="_blank" class="text-success fs-5">
               <i class="bi bi-whatsapp"></i>
             </a>
           </div>
@@ -31,13 +31,13 @@
             <a href="{% url 'home' %}" class="text-white-50 text-decoration-none" style="font-size: 0.75rem;">Início</a>
           </li>
           <li class="mb-1 mb-md-2">
-            <a href="#" class="text-white-50 text-decoration-none" style="font-size: 0.75rem;">Produtos</a>
+            <a href="{% url 'catalogo' %}" class="text-white-50 text-decoration-none" style="font-size: 0.75rem;">Joias</a>
           </li>
           <li class="mb-1 mb-md-2">
-            <a href="#" class="text-white-50 text-decoration-none" style="font-size: 0.75rem;">Categorias</a>
+            <a href="{% url 'about' %}" class="text-white-50 text-decoration-none" style="font-size: 0.75rem;">Quem Somos</a>
           </li>
           <li class="mb-1 mb-md-2">
-            <a href="#" class="text-white-50 text-decoration-none" style="font-size: 0.75rem;">Promoções</a>
+            <a href="{% url 'contact' %}" class="text-white-50 text-decoration-none" style="font-size: 0.75rem;">Contato</a>
           </li>
         </ul>
       </div>
@@ -47,12 +47,6 @@
         <ul class="list-unstyled">
           <li class="mb-1 mb-md-2">
             <a href="{% url 'policy' %}" class="text-white-50 text-decoration-none" style="font-size: 0.75rem;">Política de Privacidade</a>
-          </li>
-          <li class="mb-1 mb-md-2">
-            <a href="#" class="text-white-50 text-decoration-none" style="font-size: 0.75rem;">Trocas e Devoluções</a>
-          </li>
-          <li class="mb-1 mb-md-2">
-            <a href="#" class="text-white-50 text-decoration-none" style="font-size: 0.75rem;">FAQ</a>
           </li>
         </ul>
       </div>
@@ -82,24 +76,11 @@
     
     <hr class="my-3 my-md-4 border-secondary">
     
-    
     <div class="row align-items-center">
-      <div class="col-md-6">
+      <div class="col-md-12 text-center">
         <p class="text-white-50 mb-0 small" style="font-size: 0.7rem;">
-          &copy; 2025 OuriPrata. Todos os direitos reservados.
+          &copy; 2026 OuriPrata. Todos os direitos reservados.
         </p>
-      </div>
-      <div class="col-md-6 text-md-end">
-        <div class="d-flex justify-content-md-end gap-2 gap-md-3 mt-2 mt-md-0">
-          <span class="text-white-50 small" style="font-size: 0.7rem;">
-            <i class="bi bi-shield-check text-success me-1"></i>
-            Compra Segura
-          </span>
-          <span class="text-white-50 small" style="font-size: 0.7rem;">
-            <i class="bi bi-truck text-warning me-1"></i>
-            Frete Grátis*
-          </span>
-        </div>
       </div>
     </div>
   </div>
