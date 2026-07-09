@@ -1,186 +1,180 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}{{ product.nome }} — OuriPrata{% endblock %}
-{% block meta_description %}<meta name="description" content="{{ product.descricao|truncatewords:25 }}">{% endblock %}
-{% block og_title %}{{ product.nome }} — OuriPrata{% endblock %}
-{% block og_description %}{{ product.descricao|truncatewords:20 }}{% endblock %}
-{% block og_image %}{% if product.imagem %}{{ product.imagem.url }}{% else %}{% static 'assets/landing_page/hero.png' %}{% endif %}{% endblock %}
+{% block title %}{{ product.name }} — OuriPrata{% endblock %}
+{% block meta_description %}
+<meta name="description" content="{{ product.description|truncatewords:25 }}">{% endblock %}
 
 {% block content %}
+<main class="bg-white pt-10 pb-10 md:pt-16">
+  <div class="max-w-6xl mx-auto px-6 lg:px-12">
 
-<div class="op-container py-8 lg:py-12">
+    <nav class="flex items-center gap-3 text-[10px] tracking-[0.2em] uppercase text-ink/40 mb-10 md:mb-16">
+      <a href="{% url 'home' %}" class="hover:text-ink transition-colors">Início</a>
+      <span>/</span>
+      <a href="{% url 'all_products' %}" class="hover:text-ink transition-colors">Coleção</a>
+      {% if product.category %}
+      <span>/</span>
+      <a href="{{ product.category.get_absolute_url }}" class="hover:text-ink transition-colors">{{ product.category.name }}</a>
+      {% endif %}
+    </nav>
 
-  <!-- Breadcrumb -->
-  <ol class="breadcrumb-clean flex flex-wrap items-center gap-2 text-sm text-ink-light mb-8 lg:mb-12 animate-fade-up" aria-label="Caminho de navegação">
-    <li><a href="{% url 'home' %}" class="hover:text-gold-500 transition-colors">Início</a></li>
-    <li class="sep text-xs opacity-50" aria-hidden="true"><i class="bi bi-chevron-right"></i></li>
-    <li><a href="{% url 'all_products' %}" class="hover:text-gold-500 transition-colors">Coleção</a></li>
-    {% if product.categoria %}
-      <li class="sep text-xs opacity-50" aria-hidden="true"><i class="bi bi-chevron-right"></i></li>
-      <li><a href="{{ product.categoria.get_absolute_url }}" class="hover:text-gold-500 transition-colors">{{ product.categoria.nome }}</a></li>
-    {% endif %}
-    <li class="sep text-xs opacity-50" aria-hidden="true"><i class="bi bi-chevron-right"></i></li>
-    <li class="current text-ink font-medium" aria-current="page">{{ product.nome }}</li>
-  </ol>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
 
-  <!-- Estrutura Principal -->
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 pb-20">
+      <!-- GALERIA -->
+      <div class="lg:col-span-7">
+        <div class="flex gap-4">
 
-    <!-- Galeria de Imagens -->
-    <div class="animate-fade-up" style="animation-delay: 0.1s">
-      <div class="product-gallery">
-        <div class="product-gallery__main rounded-2xl overflow-hidden shadow-soft bg-white mb-4" id="galleryMain">
-          {% if product.imagem %}
-            <img src="{{ product.imagem.url }}" alt="{{ product.nome }}" id="mainImg" loading="eager" class="w-full h-auto object-cover aspect-square">
-          {% else %}
-            <img src="{% static 'assets/landing_page/hero.png' %}" alt="{{ product.nome }}" id="mainImg" loading="eager" class="w-full h-auto object-cover aspect-square">
-          {% endif %}
-        </div>
+          <div class="flex flex-col gap-3 shrink-0" id="thumbsContainer">
+            <button class="product-gallery__thumb border-b-2 border-ink w-16 h-16 shrink-0 bg-stone-50"
+              data-src="{% if product.image %}{{ product.image.url }}{% endif %}">
+              <img src="{% if product.image %}{{ product.image.url }}{% endif %}"
+                class="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity">
+            </button>
+            {% for extra in product.extra_images %}
+            <button class="product-gallery__thumb border-b-2 border-transparent w-16 h-16 shrink-0 bg-stone-50"
+              data-src="{{ extra.image.url }}">
+              <img src="{{ extra.image.url }}"
+                class="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity">
+            </button>
+            {% endfor %}
+          </div>
 
-        <div class="product-gallery__thumbs flex gap-3 overflow-x-auto pb-2" id="thumbsContainer">
-          <button class="product-gallery__thumb active w-20 h-20 shrink-0 rounded-xl overflow-hidden border-2 border-gold-400 transition-all" data-src="{% if product.imagem %}{{ product.imagem.url }}{% else %}{% static 'assets/landing_page/hero.png' %}{% endif %}" aria-label="Imagem principal">
-            <img src="{% if product.imagem %}{{ product.imagem.url }}{% else %}{% static 'assets/landing_page/hero.png' %}{% endif %}" alt="{{ product.nome }}" loading="lazy" class="w-full h-full object-cover">
-          </button>
-          <!-- Aqui você pode adicionar um loop for se o produto tiver múltiplas imagens no banco de dados futuramente -->
+          <div class="bg-stone-50 aspect-[4/5] w-full max-h-[560px] relative">
+            {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" id="mainImg" class="w-full h-full object-contain">
+            {% else %}
+            <div class="w-full h-full flex items-center justify-center text-ink/20">Sem imagem</div>
+            {% endif %}
+          </div>
+
         </div>
       </div>
-    </div>
 
-    <!-- Informações do Produto -->
-    <div class="pt-2 animate-fade-up" style="animation-delay: 0.2s">
-      {% if product.categoria %}
-        <span class="product-info__cat text-xs tracking-widest uppercase text-gold-500 font-semibold mb-2 block">{{ product.categoria.nome }}</span>
-      {% endif %}
+      <!-- INFORMAÇÕES -->
+      <div class="lg:col-span-5 flex flex-col pt-2">
 
-      <h1 class="product-info__title text-3xl lg:text-4xl font-serif text-ink mb-4">{{ product.nome }}</h1>
-
-      {% if product.preco %}
-        <p class="product-info__price text-xl text-ink-muted mb-6">
-          a partir de <strong class="text-ink font-medium">R$ {{ product.preco }}</strong>
+        {% if product.category %}
+        <p class="font-serif italic text-[11px] tracking-[0.3em] text-gold-500 uppercase mb-3">
+          {{ product.category.name }}
         </p>
-      {% endif %}
+        {% endif %}
 
-      <hr class="product-info__divider border-cream-300 my-6">
+        <h1 class="font-serif text-3xl md:text-4xl text-ink font-light leading-snug mb-5">
+          {{ product.name }}
+        </h1>
 
-      {% if product.descricao %}
-        <p class="product-info__desc text-ink-muted leading-relaxed font-light mb-8">{{ product.descricao }}</p>
-      {% endif %}
+        {% if product.price %}
+        <p class="text-2xl text-ink font-light tracking-wide mb-8">
+          R$ {{ product.price }}
+        </p>
+        {% else %}
+        <p class="text-[11px] uppercase tracking-widest text-ink/40 mb-8">Consulte o valor</p>
+        {% endif %}
 
-      <div class="grid grid-cols-2 gap-x-4 gap-y-6 mb-8 bg-cream-50 p-6 rounded-2xl border border-cream-200">
-        {% if product.material %}
-          <div>
-            <p class="product-info__label text-xs tracking-wider uppercase text-ink-light mb-1">Material</p>
-            <p class="product-info__value text-ink font-medium">{{ product.material }}</p>
-          </div>
+        {% if product.description %}
+        <div class="font-serif text-[15px] leading-relaxed text-ink/70 font-light mb-10 pb-10 border-b border-ink/10">
+          {{ product.description }}
+        </div>
+        {% else %}
+        <div class="mb-10 pb-10 border-b border-ink/10"></div>
         {% endif %}
-        {% if product.peso %}
-          <div>
-            <p class="product-info__label text-xs tracking-wider uppercase text-ink-light mb-1">Peso</p>
-            <p class="product-info__value text-ink font-medium">{{ product.peso }}g</p>
+
+        <div class="space-y-4 mb-10">
+          <h3 class="text-[10px] tracking-[0.2em] uppercase text-ink/40 mb-2">Detalhes da Peça</h3>
+          <ul class="text-[13px] text-ink/80 font-light space-y-3">
+            {% if product.material %}
+            <li class="flex justify-between border-b border-ink/5 pb-2">
+              <span>Material</span> <span class="font-medium">{{ product.material }}</span>
+            </li>
+            {% endif %}
+            {% if product.peso %}
+            <li class="flex justify-between border-b border-ink/5 pb-2">
+              <span>Peso</span> <span class="font-medium">{{ product.peso }}g</span>
+            </li>
+            {% endif %}
+            {% if product.dimensoes %}
+            <li class="flex justify-between border-b border-ink/5 pb-2">
+              <span>Dimensões</span> <span class="font-medium">{{ product.dimensoes }}</span>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+
+        <a href="https://wa.me/5537998623061?text=Olá!%20Tenho%20interesse%20na%20joia%20*{{ product.name|urlencode }}*%20do%20portfólio%20da%20OuriPrata."
+          target="_blank" rel="noopener"
+          class="flex items-center justify-center gap-3 w-full border border-ink bg-ink text-white px-8 py-4 uppercase tracking-[0.2em] text-[11px] hover:bg-transparent hover:text-ink transition-all duration-300 mb-8">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.44.79 3.06 1.2 4.71 1.2h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm5.83 14.13c-.25.7-1.23 1.28-2.02 1.45-.54.11-1.24.2-3.6-.77-2.99-1.24-4.91-4.27-5.06-4.47-.15-.2-1.21-1.61-1.21-3.08 0-1.46.75-2.18 1.02-2.47.25-.28.55-.35.73-.35.18 0 .37 0 .53.01.17.01.4-.06.62.48.25.6.85 2.06.92 2.21.07.15.12.33.02.53-.1.2-.15.32-.29.5-.15.17-.31.39-.44.52-.15.15-.3.31-.13.6.17.3.75 1.24 1.62 2.01 1.11.99 2.05 1.3 2.35 1.44.3.15.47.13.65-.08.18-.2.75-.87.95-1.17.2-.3.4-.25.67-.15.28.1 1.75.83 2.05.98.3.15.5.22.57.35.08.13.08.72-.17 1.42z"/>
+          </svg>
+          <span>Consultar Disponibilidade</span>
+        </a>
+
+        <!-- Selos de confiança -->
+        <div class="grid grid-cols-3 gap-4 py-6 border-y border-ink/10 mb-8">
+          <div class="flex flex-col items-center text-center gap-2">
+            <i class="bi bi-shield-check text-lg text-gold-500" aria-hidden="true"></i>
+            <span class="text-[10px] uppercase tracking-wider text-ink/60 leading-tight">Garantia<br>de 90 dias</span>
           </div>
-        {% endif %}
-        {% if product.dimensoes %}
-          <div>
-            <p class="product-info__label text-xs tracking-wider uppercase text-ink-light mb-1">Dimensões</p>
-            <p class="product-info__value text-ink font-medium">{{ product.dimensoes }}</p>
+          <div class="flex flex-col items-center text-center gap-2">
+            <i class="bi bi-truck text-lg text-gold-500" aria-hidden="true"></i>
+            <span class="text-[10px] uppercase tracking-wider text-ink/60 leading-tight">Envio para<br>todo o Brasil</span>
           </div>
-        {% endif %}
-        {% if product.disponivel is not None %}
-          <div>
-            <p class="product-info__label text-xs tracking-wider uppercase text-ink-light mb-1">Disponibilidade</p>
-            <p class="product-info__value">
-              {% if product.disponivel %}
-                <span class="inline-flex items-center gap-1.5 text-emerald-600 text-sm font-medium"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Disponível</span>
-              {% else %}
-                <span class="text-sm text-red-400 font-medium"><i class="bi bi-x-circle-fill mr-1"></i> Indisponível no momento</span>
-              {% endif %}
-            </p>
+          <div class="flex flex-col items-center text-center gap-2">
+            <i class="bi bi-arrow-repeat text-lg text-gold-500" aria-hidden="true"></i>
+            <span class="text-[10px] uppercase tracking-wider text-ink/60 leading-tight">Troca fácil<br>em até 7 dias</span>
           </div>
-        {% endif %}
+        </div>
+
+        <!-- Compartilhar -->
+        <div class="flex items-center gap-4">
+          <span class="text-[10px] tracking-[0.2em] uppercase text-ink/40">Compartilhar</span>
+          <div class="flex items-center gap-3">
+            <a href="https://api.whatsapp.com/send?text={{ request.build_absolute_uri|urlencode }}" target="_blank" rel="noopener" aria-label="Compartilhar no WhatsApp" class="text-ink/50 hover:text-gold-500 transition-colors">
+              <i class="bi bi-whatsapp text-base" aria-hidden="true"></i>
+            </a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri|urlencode }}" target="_blank" rel="noopener" aria-label="Compartilhar no Facebook" class="text-ink/50 hover:text-gold-500 transition-colors">
+              <i class="bi bi-facebook text-base" aria-hidden="true"></i>
+            </a>
+            <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri|urlencode }}&text={{ product.name|urlencode }}" target="_blank" rel="noopener" aria-label="Compartilhar no X" class="text-ink/50 hover:text-gold-500 transition-colors">
+              <i class="bi bi-twitter-x text-base" aria-hidden="true"></i>
+            </a>
+            <a href="https://pinterest.com/pin/create/button/?url={{ request.build_absolute_uri|urlencode }}&media={{ product.image.url|urlencode }}&description={{ product.name|urlencode }}" target="_blank" rel="noopener" aria-label="Compartilhar no Pinterest" class="text-ink/50 hover:text-gold-500 transition-colors">
+              <i class="bi bi-pinterest text-base" aria-hidden="true"></i>
+            </a>
+          </div>
+        </div>
+
       </div>
-
-      <a
-        href="https://wa.me/5537998623061?text=Olá!%20Tenho%20interesse%20na%20joia%20*{{ product.nome|urlencode }}*%20do%20portfólio%20da%20OuriPrata."
-        target="_blank"
-        rel="noopener"
-        class="flex items-center justify-center gap-2 w-full py-4 px-6 bg-[#25D366] hover:bg-[#1EBE57] text-white rounded-full font-medium transition-colors shadow-soft"
-        id="product-whatsapp-cta"
-        aria-label="Entrar em contato sobre {{ product.nome }} via WhatsApp"
-      >
-        <i class="bi bi-whatsapp text-lg" aria-hidden="true"></i>
-        Tenho Interesse — WhatsApp
-      </a>
-
-      <p class="text-xs text-ink-light text-center mt-4 font-light">
-        Atendimento de segunda a sexta, das 9h às 17h
-      </p>
-
-      <hr class="product-info__divider border-cream-300 my-8">
-
-      <!-- Benefícios da Marca -->
-      <div class="flex flex-col gap-4">
-        <div class="flex items-center gap-4">
-          <div class="w-10 h-10 rounded-full bg-gold-50 flex items-center justify-center shrink-0">
-            <i class="bi bi-shield-check text-gold-500 text-lg" aria-hidden="true"></i>
-          </div>
-          <span class="text-sm text-ink-muted font-light">Qualidade e procedência garantidas</span>
-        </div>
-        <div class="flex items-center gap-4">
-          <div class="w-10 h-10 rounded-full bg-gold-50 flex items-center justify-center shrink-0">
-            <i class="bi bi-gem text-gold-500 text-lg" aria-hidden="true"></i>
-          </div>
-          <span class="text-sm text-ink-muted font-light">Materiais nobres — ouro e prata</span>
-        </div>
-        <div class="flex items-center gap-4">
-          <div class="w-10 h-10 rounded-full bg-gold-50 flex items-center justify-center shrink-0">
-            <i class="bi bi-chat-heart text-gold-500 text-lg" aria-hidden="true"></i>
-          </div>
-          <span class="text-sm text-ink-muted font-light">Atendimento personalizado e especial</span>
-        </div>
-      </div>
-
     </div>
-  </div>
-</div>
 
-<!-- Produtos Relacionados -->
-{% if related_products %}
-  <section class="related-section bg-cream-50 py-16 border-t border-cream-200">
-    <div class="op-container">
-      <div class="section-header !mb-12">
-        <span class="section-header__eyebrow text-gold-500">Você pode gostar</span>
-        <h2 class="section-header__title font-serif text-3xl text-ink mt-2">Peças Relacionadas</h2>
-        <span class="divider-gold mt-4 mx-auto block w-12 h-0.5 bg-gold-400"></span>
+    <!-- PRODUTOS RELACIONADOS -->
+    {% if related_products %}
+    <section class="mt-24 pt-16 border-t border-ink/10">
+      <div class="text-center mb-12">
+        <p class="font-serif italic text-[11px] tracking-[0.3em] text-gold-500 uppercase mb-3">Você também pode gostar</p>
+        <h2 class="font-serif text-2xl md:text-3xl text-ink font-light">Peças relacionadas</h2>
       </div>
-      <div class="products-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-fade-up">
-        {% for product in related_products %}
-          {% include 'landing_page/partials/product_card.html' %}
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-12">
+        {% for related in related_products %}
+          {% include 'landing_page/partials/product_card.html' with product=related %}
         {% endfor %}
       </div>
-    </div>
-  </section>
-{% endif %}
+    </section>
+    {% endif %}
 
+  </div>
+</main>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-  // Lógica da Galeria
   document.querySelectorAll('.product-gallery__thumb').forEach(thumb => {
     thumb.addEventListener('click', () => {
-      // Troca a imagem principal
       document.getElementById('mainImg').src = thumb.dataset.src;
-      
-      // Gerencia o estado 'ativo' e as bordas do Tailwind
-      document.querySelectorAll('.product-gallery__thumb').forEach(t => {
-        t.classList.remove('active', 'border-gold-400');
-        t.classList.add('border-transparent');
-      });
-      
-      thumb.classList.add('active', 'border-gold-400');
-      thumb.classList.remove('border-transparent');
+      document.querySelectorAll('.product-gallery__thumb').forEach(t => t.classList.remove('border-ink'));
+      thumb.classList.add('border-ink');
     });
   });
 </script>
-{% endblock %}j
+{% endblock %}

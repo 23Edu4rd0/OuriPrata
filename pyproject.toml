@@ -2,18 +2,45 @@
 name = "ouriprata"
 version = "0.1.0"
 description = ""
-authors = [
-    {name = "23Edu4rd0",email = "eduardo.vchaves23@gmail.com"}
-]
-requires-python = ">=3.14"
+authors = [{ name = "23Edu4rd0", email = "eduardo.vchaves23@gmail.com" }]
+requires-python = ">=3.14,<4.0"
 dependencies = [
     "django (>=6.0.7,<7.0.0)",
     "django-jazzmin (>=3.0.5,<4.0.0)",
     "django-tailwind (>=4.5.0,<5.0.0)",
-    "django-browser-reload (>=1.21.0,<2.0.0)"
+    "django-browser-reload (>=1.21.0,<2.0.0)",
 ]
 
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+dev = ["taskipy (>=1.14.1,<2.0.0)", "ruff (>=0.15.20,<0.16.0)"]
+
+[tool.taskipy.tasks]
+run = 'python manage.py runserver'
+migrate = 'python manage.py migrate'
+migrations = 'python manage.py makemigrations'
+test = 'python manage.py test'
+
+style = 'python manage.py tailwind start'
+build = 'python manage.py tailwind build'
+
+lint = 'ruff lint .'
+format = 'ruff format .'
+pos_format = 'ruff check . --fix'
+
+[tool.ruff]
+line-length = 79
+extend-exclude = ['migrations']
+
+
+[tool.ruff.lint]
+preview = true
+select = ['I', 'F', 'E', 'W', 'PL', 'PT']
+
+[tool.ruff.format]
+preview = true
+quote-style = 'single'

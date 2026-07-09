@@ -4,69 +4,29 @@
 {% block title %}OuriPrata | Joias com alma e propósito{% endblock %}
 
 {% block content %}
-<!-- Hero Section: Apenas imagem clicável -->
+
+
 <section class="w-full">
   <a href="{% url 'all_products' %}" class="block w-full h-[50vh] md:h-[65vh] overflow-hidden group">
-    <img src="{% static 'assets/joias/aliança.jpg' %}" 
-         alt="Coleção OuriPrata" 
-         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+    <picture>
+      <!-- Desktop Photo -->
+      <source media="(min-width: 768px)" srcset="{% static 'assets/images/desktop.jpg' %}">
+      <!-- Mobile Photo -->
+      <img src="{% static 'assets/images/mobile.png' %}"
+           alt="Coleção OuriPrata"
+           class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+    </picture>
   </a>
 </section>
 
+
 {% include 'landing_page/partials/_trust_bar.html' %}
 
-<!-- Grid de Destaques -->
-<section class="py-16">
-  <div class="op-container">
-    <div class="text-center mb-12">
-      <h2 class="font-serif text-3xl text-ink">Nossos Destaques</h2>
-      <span class="block w-16 h-0.5 bg-gold-400 mx-auto mt-4"></span>
-    </div>
+{% include 'landing_page/partials/_new_products.html' %}
 
-    <!-- Grid de Produtos -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      {% for produto in destaques %}
-      <div class="group bg-white rounded-2xl p-4 shadow-card hover:shadow-soft transition-all">
-        <a href="{% url 'product_detail' produto.slug %}">
-          <div class="aspect-square overflow-hidden rounded-xl mb-4">
-            {% if produto.imagem %}
-            <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}"
-              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-            {% else %}
-            <div class="w-full h-full bg-cream-100 flex items-center justify-center text-ink-light">Sem foto</div>
-            {% endif %}
-          </div>
-          <h3 class="font-serif text-lg text-ink">{{ produto.nome }}</h3>
-          <p class="text-gold-500 font-medium">R$ {{ produto.preco }}</p>
-        </a>
-      </div>
-      {% empty %}
-      <p class="col-span-full text-center text-ink-muted">Nenhum produto em destaque no momento.</p>
-      {% endfor %}
-    </div>
-  </div>
-</section>
+{% include 'landing_page/partials/_highlight.html' %}
 
-<!-- Categorias -->
-<section class="py-16 bg-white">
-  <div class="op-container">
-    <div class="text-center mb-12">
-      <h2 class="font-serif text-3xl text-ink">Explore por Categoria</h2>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <a href="{% url 'products_by_category' 'aneis' %}" class="group block overflow-hidden rounded-2xl">
-        <img src="{% static 'assets/landing_page/cat-aneis.png' %}"
-          class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-      </a>
-      <a href="{% url 'products_by_category' 'brincos' %}" class="group block overflow-hidden rounded-2xl">
-        <img src="{% static 'assets/landing_page/cat-brincos.png' %}"
-          class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-      </a>
-      <a href="{% url 'products_by_category' 'colares' %}" class="group block overflow-hidden rounded-2xl">
-        <img src="{% static 'assets/landing_page/cat-colares.png' %}"
-          class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-      </a>
-    </div>
-  </div>
-</section>
+{% include 'landing_page/partials/_categories.html' %}
+
+
 {% endblock %}

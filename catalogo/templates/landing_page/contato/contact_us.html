@@ -1,105 +1,94 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Fale Conosco — OuriPrata{% endblock %}
-{% block meta_description %}<meta name="description" content="Entre em contato com a OuriPrata. WhatsApp, endereço e formulário de mensagem.">{% endblock %}
-{% block og_title %}Fale Conosco — OuriPrata{% endblock %}
+{% block title %}Atendimento — OuriPrata{% endblock %}
+{% block meta_description %}<meta name="description" content="Entre em contato com a OuriPrata. Atendimento exclusivo via WhatsApp, formulário ou em nosso ateliê.">{% endblock %}
 
 {% block content %}
+<main class="bg-cream-50 min-h-screen py-16 md:py-24">
+  <div class="max-w-6xl mx-auto px-6 lg:px-12">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-start">
+      
+      <div class="lg:col-span-5 flex flex-col justify-center space-y-12">
+        <header>
+          <p class="font-serif italic text-[11px] tracking-[0.3em] text-gold-500 uppercase mb-4">Atendimento</p>
+          <h1 class="font-serif text-4xl md:text-5xl text-ink font-light tracking-wide leading-tight mb-6">
+            Como podemos <br class="hidden md:block">ajudar?
+          </h1>
+          <p class="text-[15px] leading-relaxed text-ink/70 font-light">
+            Seja para tirar dúvidas sobre uma joia, acompanhar um pedido ou conversar sobre um projeto especial, nosso ateliê está à sua disposição.
+          </p>
+        </header>
 
-<div class="page-hero">
-  <div class="op-container">
-    <span class="page-hero__eyebrow">Contato</span>
-    <h1 class="page-hero__title">Fale Conosco</h1>
-    <p class="page-hero__sub">Estamos prontos para atender você com carinho.</p>
-  </div>
-</div>
+        <div class="space-y-10">
+          <div class="flex items-start gap-4">
+            <i class="bi bi-whatsapp text-gold-400 text-xl mt-1"></i>
+            <div>
+              <h3 class="font-serif text-xl text-ink font-normal mb-2">WhatsApp</h3>
+              <p class="text-[15px] text-ink/80 font-light mb-1">(37) 99862-3061</p>
+              <p class="text-[13px] text-ink/50 font-light mb-3">Segunda a Sexta, das 8h às 17h</p>
+              <a href="https://wa.me/5537998623061?text=Olá!%20Gostaria%20de%20mais%20informações." target="_blank" rel="noopener" class="inline-block border-b border-gold-400 pb-0.5 text-[11px] tracking-[0.2em] uppercase text-ink hover:text-gold-500 hover:border-gold-500 transition-colors">
+                Iniciar Conversa
+              </a>
+            </div>
+          </div>
 
-<section class="py-18 pb-20">
-  <div class="op-container">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
+          <div class="flex items-start gap-4">
+            <i class="bi bi-geo-alt text-gold-400 text-xl mt-1"></i>
+            <div>
+              <h3 class="font-serif text-xl text-ink font-normal mb-2">Nosso Ateliê</h3>
+              <p class="text-[15px] text-ink/80 font-light leading-relaxed mb-1">
+                Av. 1° de Junho, 411 – Sala 501<br>
+                Centro, Divinópolis – MG
+              </p>
+              <p class="text-[13px] text-ink/50 font-light mb-3">Segunda a Sexta, das 9h às 17h</p>
+              <a href="https://maps.app.goo.gl/EhoHJBKm7o2f9R4U7" target="_blank" rel="noopener" class="inline-block border-b border-gold-400 pb-0.5 text-[11px] tracking-[0.2em] uppercase text-ink hover:text-gold-500 hover:border-gold-500 transition-colors">
+                Como Chegar
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div class="lg:col-span-7">
-        <div class="form-card">
-          <h2 class="font-serif text-3xl text-ink mb-2">Envie sua Mensagem</h2>
-          <p class="text-sm text-gray-500 font-light mb-8">
-            Preencheu o formulário? Respondemos em até 24h.
+        <div class="bg-white p-8 md:p-12 shadow-sm border border-ink/5">
+          <h2 class="font-serif text-2xl text-ink font-light mb-2">Envie um e-mail</h2>
+          <p class="text-[14px] text-ink/50 font-light mb-10">
+            Prefere escrever? Preencha os dados abaixo e retornaremos em até 24 horas.
           </p>
 
-          <form method="post" id="contactForm" class="space-y-5">
+          <form method="post" id="contactForm" class="space-y-6">
             {% csrf_token %}
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label for="nome" class="form-label">Nome Completo</label>
-                <input type="text" id="nome" name="nome" required placeholder="Seu nome"
-                  class="search-input !max-w-none !block !w-full !py-3 !rounded-xl">
+                <label for="nome" class="block text-[10px] tracking-[0.2em] uppercase text-ink/40 mb-1">Nome Completo</label>
+                <input type="text" id="nome" name="nome" required
+                       class="w-full bg-transparent border-0 border-b border-ink/20 py-2 px-0 text-[15px] text-ink focus:ring-0 focus:border-gold-400 transition-colors">
               </div>
               <div>
-                <label for="email" class="form-label">E-mail</label>
-                <input type="email" id="email" name="email" required placeholder="seu@email.com"
-                  class="search-input !max-w-none !block !w-full !py-3 !rounded-xl">
+                <label for="email" class="block text-[10px] tracking-[0.2em] uppercase text-ink/40 mb-1">E-mail</label>
+                <input type="email" id="email" name="email" required
+                       class="w-full bg-transparent border-0 border-b border-ink/20 py-2 px-0 text-[15px] text-ink focus:ring-0 focus:border-gold-400 transition-colors">
               </div>
             </div>
-            <div>
-              <label for="mensagem" class="form-label">Mensagem</label>
-              <textarea id="mensagem" name="mensagem" rows="6" required placeholder="Como podemos ajudar?"
-                class="search-input !max-w-none !block !w-full !py-3 !rounded-xl resize-y font-sans"></textarea>
+
+            <div class="pt-2">
+              <label for="mensagem" class="block text-[10px] tracking-[0.2em] uppercase text-ink/40 mb-1">Sua Mensagem</label>
+              <textarea id="mensagem" name="mensagem" rows="3" required
+                        class="w-full bg-transparent border-0 border-b border-ink/20 py-2 px-0 text-[15px] text-ink focus:ring-0 focus:border-gold-400 transition-colors resize-none"></textarea>
             </div>
-            <button type="submit" class="btn-gold w-full !justify-center" id="contact-submit">
-              <i class="bi bi-send" aria-hidden="true"></i> Enviar Mensagem
-            </button>
+
+            <div class="pt-8">
+              <button type="submit" id="contact-submit" class="w-full border border-ink bg-ink text-white px-10 py-4 uppercase tracking-[0.2em] text-[11px] hover:bg-transparent hover:text-ink transition-all duration-300">
+                Enviar Mensagem
+              </button>
+            </div>
           </form>
         </div>
       </div>
 
-      <div class="lg:col-span-5 flex flex-col gap-5">
-
-        <div class="contact-card contact-card--gold">
-          <div class="flex items-start gap-4">
-            <div class="contact-card__icon contact-card__icon--gold">
-              <i class="bi bi-whatsapp text-xl" aria-hidden="true"></i>
-            </div>
-            <div>
-              <h3 class="font-serif text-xl text-ink mb-1">WhatsApp</h3>
-              <p class="text-[15px] text-gray-600 mb-1">(37) 99862-3061</p>
-              <p class="text-sm text-gray-400 mb-4">Seg. a Sex., das 8h às 17h</p>
-              <a href="https://wa.me/5537998623061?text=Olá!%20Gostaria%20de%20mais%20informações."
-                target="_blank" rel="noopener" class="btn-gold !text-xs !py-2.5 !px-5" id="contact-whatsapp">
-                <i class="bi bi-whatsapp" aria-hidden="true"></i> Abrir WhatsApp
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div class="contact-card contact-card--white">
-          <div class="flex items-start gap-4">
-            <div class="contact-card__icon contact-card__icon--muted">
-              <i class="bi bi-geo-alt-fill text-xl" aria-hidden="true"></i>
-            </div>
-            <div>
-              <h3 class="font-serif text-xl text-ink mb-1">Endereço</h3>
-              <p class="text-[15px] text-gray-600 mb-1">
-                Av. 1° de Junho, 411 – 501<br>
-                Centro, Divinópolis – MG
-              </p>
-              <p class="text-sm text-gray-400 mb-4">Seg. a Sex., das 9h às 17h</p>
-              <a href="https://maps.app.goo.gl/EhoHJBKm7o2f9R4U7"
-                target="_blank" rel="noopener" class="btn-ghost !text-xs !py-2 !px-4" id="contact-mapa">
-                <i class="bi bi-map" aria-hidden="true"></i> Ver no Mapa
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div class="contact-tip">
-          <i class="bi bi-lightbulb text-gold-400" aria-hidden="true"></i>&nbsp;
-          Prefere falar pelo WhatsApp? É mais rápido! Respondemos em minutos durante o horário de atendimento.
-        </div>
-
-      </div>
-
     </div>
   </div>
-</section>
-
+</main>
 {% endblock %}

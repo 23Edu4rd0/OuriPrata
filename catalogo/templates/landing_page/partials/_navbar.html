@@ -7,9 +7,11 @@
   <div class="max-w-[1200px] mx-auto px-6 lg:px-10 h-[80px] flex items-center justify-between">
 
     <!-- Logo -->
-    <a href="{% url 'home' %}" class="flex-shrink-0 group flex items-center gap-3" aria-label="OuriPrata - Página inicial">
+    <a href="{% url 'home' %}" class="flex-shrink-0 group flex items-center gap-3"
+      aria-label="OuriPrata - Página inicial">
       <span class="text-[22px] lg:text-2xl font-serif tracking-[0.02em] leading-none">
-        <span class="text-gray-800 font-medium transition-colors duration-500 group-hover:text-gray-500">Ouri</span><span
+        <span
+          class="text-gray-800 font-medium transition-colors duration-500 group-hover:text-gray-500">Ouri</span><span
           class="text-gold-500 italic font-light transition-colors duration-500 group-hover:text-gold-600">Prata</span>
       </span>
       <span class="h-3.5 w-px bg-gold-300"></span>
@@ -21,7 +23,8 @@
     <!-- Links desktop -->
     <ul class="hidden md:flex items-center gap-10 lg:gap-14" role="list">
       <li>
-        <a href="{% url 'home' %}" class="relative pb-1 text-[11px] font-medium uppercase tracking-[0.2em] transition-colors duration-300
+        <a href="{% url 'home' %}"
+          class="relative pb-1 text-[11px] font-medium uppercase tracking-[0.2em] transition-colors duration-300
           {% if request.resolver_match.url_name == 'home' %} text-gold-600 {% else %} text-gray-500 hover:text-gray-800 {% endif %}
           after:content-[''] after:absolute after:left-0 after:-bottom-0 after:h-px after:bg-gold-500 after:transition-all after:duration-300
           {% if request.resolver_match.url_name == 'home' %} after:w-full {% else %} after:w-0 hover:after:w-full {% endif %}">
@@ -55,29 +58,31 @@
     </ul>
 
     <!-- Ações Desktop -->
-    <div class="hidden md:flex items-center gap-6">
-      <!-- Busca: pill claro integrado à navbar, botão circular neutro (sem dourado) -->
-      <div class="relative group flex items-center h-10 pl-4 pr-1 bg-gray-50 rounded-full border border-gray-200 overflow-hidden hover:border-gray-300 focus-within:border-gray-400 focus-within:bg-white transition-colors duration-300" role="search">
-        <input type="text" id="navSearch"
-          class="w-[150px] lg:w-[180px] bg-transparent border-0 shadow-none appearance-none p-0 text-xs text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-0"
-          placeholder="Buscar joias..." autocomplete="off" aria-label="Buscar joias">
-        <button type="submit"
-          class="flex items-center justify-center w-8 h-8 rounded-full bg-gray-800 group-hover:bg-gray-700 transition-colors duration-300 shrink-0"
-          aria-label="Buscar">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 text-white">
-            <circle cx="11" cy="11" r="7"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-        </button>
-        <!-- Sugestões da busca -->
-        <div
-          class="absolute top-full left-0 right-0 mt-2 bg-white shadow-lg shadow-gray-200/60 border border-gray-200 rounded-2xl overflow-hidden hidden empty:hidden"
-          id="searchSuggestions" role="listbox"></div>
-      </div>
-    </div>
+    <!-- Busca: pill claro integrado à navbar, botão circular neutro (sem dourado) -->
+    <form method="get" action="{% url 'search_products' %}"
+      class="relative group flex items-center h-10 pl-4 pr-1 bg-gray-50 rounded-full border border-gray-200 overflow-hidden hover:border-gray-300 focus-within:border-gray-400 focus-within:bg-white transition-colors duration-300"
+      role="search">
+      <input type="text" name="q" id="navSearch"
+        class="w-[150px] lg:w-[180px] bg-transparent border-0 shadow-none appearance-none p-0 text-xs text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-0"
+        placeholder="Buscar joias..." autocomplete="off" aria-label="Buscar joias">
+      <button type="submit"
+        class="flex items-center justify-center w-8 h-8 rounded-full bg-gray-800 group-hover:bg-gray-700 transition-colors duration-300 shrink-0"
+        aria-label="Buscar">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 text-white">
+          <circle cx="11" cy="11" r="7"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </button>
+      <!-- Sugestões da busca -->
+      <div
+        class="absolute top-full left-0 right-0 mt-2 bg-white shadow-lg shadow-gray-200/60 border border-gray-200 rounded-2xl overflow-hidden hidden empty:hidden"
+        id="searchSuggestions" role="listbox"></div>
+    </form>
 
     <!-- Toggle Mobile (Hamburger) -->
-    <button class="md:hidden flex flex-col justify-center items-center gap-[6px] w-10 h-10 text-gray-700 focus:outline-none"
+    <button
+      class="md:hidden flex flex-col justify-center items-center gap-[6px] w-10 h-10 text-gray-700 focus:outline-none"
       id="navToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="navDrawer">
       <span class="w-6 h-px bg-current"></span>
       <span class="w-6 h-px bg-current"></span>
@@ -136,12 +141,15 @@
     <!-- Busca Mobile -->
     <div class="mt-6 pt-8 border-t border-gray-100">
       <p class="text-[10px] font-medium uppercase tracking-[0.3em] text-gray-400 mb-4">Procurando algo?</p>
-      <form method="get" action="{% url 'search_products' %}" class="flex items-center h-11 pl-4 pr-1 bg-gray-50 rounded-full border border-gray-200 overflow-hidden focus-within:border-gray-400 focus-within:bg-white transition-colors duration-300">
+      <form method="get" action="{% url 'search_products' %}"
+        class="flex items-center h-11 pl-4 pr-1 bg-gray-50 rounded-full border border-gray-200 overflow-hidden focus-within:border-gray-400 focus-within:bg-white transition-colors duration-300">
         <input type="text" name="q"
           class="flex-1 bg-transparent border-0 shadow-none appearance-none p-0 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-0"
           placeholder="Buscar joias..." aria-label="Buscar no mobile">
-        <button type="submit" class="flex items-center justify-center w-9 h-9 rounded-full bg-gray-800 shrink-0" aria-label="Buscar">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-white">
+        <button type="submit" class="flex items-center justify-center w-9 h-9 rounded-full bg-gray-800 shrink-0"
+          aria-label="Buscar">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-white">
             <circle cx="11" cy="11" r="7"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>

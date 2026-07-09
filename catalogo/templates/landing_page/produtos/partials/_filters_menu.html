@@ -1,89 +1,14 @@
 {% comment %} Partial para o menu de filtros do catálogo, reutilizável em várias páginas {% endcomment %}
-<div class="bg-white rounded-2xl shadow-soft border border-cream-200 p-5 lg:p-6 mb-6 animate-fade-up">
-  
-  <!-- Cabeçalho do Filtro -->
-  <div class="mb-6 text-center">
-    <span class="text-ink font-serif text-xl font-medium tracking-wide flex items-center justify-center gap-2">
-      <i class="bi bi-funnel"></i> Filtros
-    </span>
-  </div>
-
-  <div>
-    <!-- Filtro por Categoria -->
-    <div class="mb-6">
-      <div class="text-ink font-medium mb-3 flex items-center gap-2 text-sm uppercase tracking-wider">
-        <i class="bi bi-grid text-gold-500"></i> Categorias
-      </div>
-      <div class="flex flex-col gap-2">
-        <a href="{% url 'catalogo' %}"
-           class="w-full flex items-center justify-between px-4 py-2.5 rounded-full border border-cream-200 text-ink-muted text-sm transition-all hover:border-gold-300 hover:text-ink">
-          <span class="flex items-center gap-2"><i class="bi bi-grid-3x3-gap"></i> Todas</span>
-        </a>
-        
-        {% for cat in all_categories %}
-        <a href="{% url 'products_by_category' cat.slug %}"
-           class="category-btn w-full flex items-center justify-between px-4 py-2.5 rounded-full border text-sm transition-all
-           {% if cat == categoria %} border-gold-400 bg-gold-50 text-ink font-medium shadow-sm {% else %} border-cream-200 text-ink-muted hover:border-gold-300 hover:text-ink {% endif %}">
-          <span>{{ cat.nome }}</span>
-          {% if cat == categoria %}
-            <i class="bi bi-check-circle-fill text-gold-500"></i>
-          {% endif %}
-        </a>
-        {% endfor %}
-      </div>
-    </div>
-
-    <hr class="border-cream-200 my-6">
-
-    <!-- Filtro por Promoção -->
-    <div class="mb-6">
-      <div class="text-ink font-medium mb-4 flex items-center gap-2 text-sm uppercase tracking-wider">
-        <i class="bi bi-lightning text-gold-500"></i> Ofertas
-      </div>
-      <label class="relative flex items-center cursor-pointer px-2">
-        <input type="checkbox" id="promocao" onchange="filterByPromotion()" class="sr-only peer">
-        <div class="w-11 h-6 bg-cream-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[10px] after:bg-white after:border-cream-200 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gold-400"></div>
-        <span class="ml-3 text-sm font-medium text-ink-muted peer-checked:text-ink transition-colors">Apenas em promoção</span>
-      </label>
-    </div>
-
-    <hr class="border-cream-200 my-6">
-
-    <!-- Filtro por Avaliação -->
-    <div class="mb-6">
-      <div class="text-ink font-medium mb-3 flex items-center gap-2 text-sm uppercase tracking-wider">
-        <i class="bi bi-star text-gold-500"></i> Avaliação
-      </div>
-      <div class="flex flex-col gap-2">
-        <button type="button" class="rating-filter-btn active w-full flex items-center justify-between px-4 py-2.5 rounded-full border border-cream-200 text-ink-muted text-sm transition-all hover:border-gold-300 hover:text-ink [&.active]:border-gold-400 [&.active]:bg-gold-50 [&.active]:text-ink [&.active]:font-medium [&.active]:shadow-sm" data-rating="all">
-          <span class="flex items-center gap-2"><i class="bi bi-star"></i> Todas</span>
-        </button>
-        <button type="button" class="rating-filter-btn w-full flex items-center justify-between px-4 py-2.5 rounded-full border border-cream-200 text-ink-muted text-sm transition-all hover:border-gold-300 hover:text-ink [&.active]:border-gold-400 [&.active]:bg-gold-50 [&.active]:text-ink [&.active]:font-medium [&.active]:shadow-sm" data-rating="4">
-          <span class="flex items-center gap-2"><i class="bi bi-star-fill text-gold-400"></i> 4+ Estrelas</span>
-        </button>
-        <button type="button" class="rating-filter-btn w-full flex items-center justify-between px-4 py-2.5 rounded-full border border-cream-200 text-ink-muted text-sm transition-all hover:border-gold-300 hover:text-ink [&.active]:border-gold-400 [&.active]:bg-gold-50 [&.active]:text-ink [&.active]:font-medium [&.active]:shadow-sm" data-rating="3">
-          <span class="flex items-center gap-2"><i class="bi bi-star-fill text-gold-400"></i> 3+ Estrelas</span>
-        </button>
-      </div>
-    </div>
-
-    <hr class="border-cream-200 my-6">
-
-    <!-- Filtro por Preço -->
-    <div class="mb-4">
-      <div class="text-ink font-medium mb-3 flex items-center gap-2 text-sm uppercase tracking-wider">
-        <i class="bi bi-currency-dollar text-gold-500"></i> Faixa de Preço
-      </div>
-      <div class="flex gap-2 mb-4">
-        <input type="number" id="preco-min" class="w-1/2 bg-cream-50 border border-cream-200 rounded-lg px-3 py-2 text-sm text-ink placeholder-ink-light focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400 transition-all" placeholder="Mínimo">
-        <input type="number" id="preco-max" class="w-1/2 bg-cream-50 border border-cream-200 rounded-lg px-3 py-2 text-sm text-ink placeholder-ink-light focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400 transition-all" placeholder="Máximo">
-      </div>
-      <button onclick="applyFilters()" class="w-full bg-ink hover:bg-gold-500 text-white rounded-full px-4 py-2.5 text-sm font-medium transition-colors">
-        Aplicar Filtros
-      </button>
-    </div>
-  </div>
-</div>
+{% for cat in all_categories %}
+<a href="{% url 'products_by_category' cat.slug %}"
+  class="category-btn w-full flex items-center justify-between px-4 py-2.5 rounded-full border text-sm transition-all
+   {% if cat == category %} border-gold-400 bg-gold-50 text-ink font-medium shadow-sm {% else %} border-cream-200 text-ink-muted hover:border-gold-300 hover:text-ink {% endif %}">
+  <span>{{ cat.name }}</span>
+  {% if cat == category %}
+  <i class="bi bi-check-circle-fill text-gold-500"></i>
+  {% endif %}
+</a>
+{% endfor %}
 
 <script>
   function parsePrice(val) {
@@ -99,36 +24,36 @@
     const maxPrice = parsePrice(document.getElementById('preco-max').value) || Infinity;
     const ratingFilter = document.querySelector('.rating-filter-btn.active')?.dataset.rating || 'all';
     const products = document.querySelectorAll('.product-item');
-    
+
     // Verificar se os produtos têm os atributos corretos
     products.forEach(product => {
       const isPromotion = product.dataset.promotion === 'true';
       const price = parsePrice(product.dataset.price);
       const rating = parseFloat(product.dataset.rating) || 0;
-      
+
       let show = true;
-      
+
       // Filtro de promoção
       if (checkbox.checked && !isPromotion) show = false;
-      
+
       // Filtro de preço
       if (price < minPrice || price > maxPrice) show = false;
-      
+
       // Filtro de avaliação
       if (ratingFilter !== 'all') {
         const minRating = parseInt(ratingFilter);
         if (rating < minRating) show = false;
       }
-      
+
       product.style.display = show ? 'block' : 'none';
     });
-    
+
     console.log('Filters applied');
   }
 
   // Configurar filtros de avaliação
   document.querySelectorAll('.rating-filter-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
+    btn.addEventListener('click', function () {
       // Remover classe active de todos os botões
       document.querySelectorAll('.rating-filter-btn').forEach(b => b.classList.remove('active'));
       // Adicionar classe active ao botão clicado
@@ -142,26 +67,26 @@
   function filterByPromotion() {
     const checkbox = document.getElementById('promocao');
     const currentUrl = new URL(window.location);
-    
+
     if (checkbox.checked) {
       currentUrl.searchParams.set('promocoes', 'true');
     } else {
       currentUrl.searchParams.delete('promocoes');
     }
-    
+
     // Aplicar filtro local
     applyFilters();
-    
+
     // Atualizar URL sem recarregar a página
     window.history.pushState({}, '', currentUrl);
   }
 
   // Configurar event listeners quando o DOM estiver pronto
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function () {
     const precoMin = document.getElementById('preco-min');
     const precoMax = document.getElementById('preco-max');
     const applyButton = document.querySelector('button[onclick="applyFilters()"]');
-    
+
     if (precoMin) {
       precoMin.addEventListener('input', applyFilters);
     }
@@ -171,7 +96,7 @@
     if (applyButton) {
       applyButton.addEventListener('click', applyFilters);
     }
-    
+
     // Configurar checkbox de promoção
     const promoCheckbox = document.getElementById('promocao');
     if (promoCheckbox) {

@@ -1,22 +1,25 @@
 from django.contrib import admin
-from .models import Categoria, SubCategoria, Material, Ocasiao, Joia, JoiaImagem
+from .models import Category, Subcategory, Material, Occasion, Product, ProductImage
 
-admin.site.register(Categoria)
-admin.site.register(SubCategoria)
+admin.site.register(Category)
+admin.site.register(Subcategory)
 admin.site.register(Material)
-admin.site.register(Ocasiao)
+admin.site.register(Occasion)
 
-class JoiaImagemInline(admin.StackedInline):
-    model = JoiaImagem
+
+class ProductImageInline(admin.StackedInline):
+    model = ProductImage
     extra = 1
-    fields = ('imagem', 'descricao', 'ordem')
-    fk_name = 'joia'
+    fields = ('image', 'description', 'order')
+    fk_name = 'product'
 
-class JoiaAdmin(admin.ModelAdmin):
-    inlines = [JoiaImagemInline]
-    list_display = ('nome', 'preco', 'destaque', 'categoria', 'material')
-    search_fields = ('nome', 'descricao')
-    list_filter = ('categoria', 'material', 'destaque')
-    prepopulated_fields = {'slug': ('nome',)}
 
-admin.site.register(Joia, JoiaAdmin)
+class ProductAdmin(admin.ModelAdmin):
+    inlines = [ProductImageInline]
+    list_display = ('name', 'price', 'featured', 'category', 'material')
+    search_fields = ('name', 'description')
+    list_filter = ('category', 'material', 'featured')
+    prepopulated_fields = {'slug': ('name',)}
+
+
+admin.site.register(Product, ProductAdmin)

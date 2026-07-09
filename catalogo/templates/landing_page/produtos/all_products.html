@@ -3,79 +3,49 @@
 
 {% block title %}Coleção Completa — OuriPrata{% endblock %}
 {% block meta_description %}<meta name="description" content="Explore todas as joias da OuriPrata. Anéis, colares, brincos e pulseiras em ouro e prata.">{% endblock %}
-{% block og_title %}Coleção Completa — OuriPrata{% endblock %}
-{% block og_description %}Explore nossa coleção completa de joias em ouro e prata.{% endblock %}
 
 {% block content %}
+<main class="bg-cream-50 min-h-screen py-16 md:py-24">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
 
-<!-- Hero da Página -->
-<div class="page-hero">
-  <div class="op-container">
-    <span class="page-hero__eyebrow">Portfólio</span>
-    <h1 class="page-hero__title">Nossa Coleção</h1>
-    <p class="page-hero__sub">{{ total_products }} peça{{ total_products|pluralize:"s" }} esperando por você</p>
-  </div>
-</div>
+    <header class="text-center mb-16 md:mb-20">
+      <p class="font-serif italic text-[11px] tracking-[0.3em] text-gold-500 uppercase mb-4">Portfólio</p>
+      <h1 class="font-serif text-4xl md:text-5xl text-ink font-light tracking-wide mb-4">Nossa Coleção</h1>
+      <p class="text-[13px] text-ink/50 tracking-widest uppercase">
+        {{ total_products }} peça{{ total_products|pluralize:"s" }}
+      </p>
+    </header>
 
-<div class="op-container pt-8 pb-20">
+    <nav class="flex flex-wrap items-center justify-center gap-6 md:gap-10 mb-16 border-b border-ink/5 pb-6" aria-label="Filtrar por categoria">
 
-  <!-- Toolbar de Filtros -->
-  <div class="catalog-toolbar flex flex-wrap items-center gap-3 mb-8 animate-fade-up" role="navigation" aria-label="Filtrar por categoria">
-    <a href="{% url 'all_products' %}"
-       class="chip {% if not request.GET.categoria %}active{% endif %}"
-       id="filter-todas">
-      Todas
-    </a>
-    {% for cat in all_categories %}
-      <a href="{{ cat.get_absolute_url }}"
-         class="chip"
-         id="filter-{{ cat.slug }}">
-        {{ cat.nome }}
+      <a href="{% url 'all_products' %}"
+         class="text-[11px] tracking-[0.2em] uppercase transition-colors pb-1
+                {% if not current_category %}text-ink border-b border-ink{% else %}text-ink/40 hover:text-ink{% endif %}">
+        Todas
       </a>
-    {% endfor %}
 
-    <!-- Contador alinhado à direita no desktop -->
-    <span class="catalog-count ml-auto text-sm text-ink-light tracking-wide" aria-live="polite">
-      {{ total_products }} peça{{ total_products|pluralize:"s" }}
-    </span>
-  </div>
-
-  <!-- Grid de Produtos -->
-  {% if products %}
-    <div class="products-grid animate-fade-up" style="animation-delay: 0.1s" id="productGrid">
-      {% for product in products %}
-        {% include 'landing_page/partials/product_card.html' %}
+      {% for cat in all_categories %}
+        <a href="{% url 'products_by_category' cat.slug %}"
+           class="text-[11px] tracking-[0.2em] uppercase transition-colors pb-1
+                  {% if current_category.slug == cat.slug %}text-ink border-b border-ink{% else %}text-ink/40 hover:text-ink{% endif %}">
+          {{ cat.name }}
+        </a>
       {% endfor %}
-    </div>
-  {% else %}
-    <!-- Estado Vazio (Empty State) refatorado com Tailwind -->
-    <div class="empty-state flex flex-col items-center justify-center text-center py-24 animate-fade-up" style="animation-delay: 0.1s">
-      <i class="bi bi-gem text-5xl text-gold-300 mb-4" aria-hidden="true"></i>
-      <h2 class="text-2xl font-serif text-ink mb-2">Nenhuma peça encontrada</h2>
-      <p class="text-ink-muted mb-6 max-w-md">Nossa coleção está sendo atualizada. Volte em breve ou entre em contato para encomendas personalizadas.</p>
-      <a href="https://wa.me/5537998623061" target="_blank" rel="noopener" class="btn-gold" id="empty-whatsapp">
-        <i class="bi bi-whatsapp" aria-hidden="true"></i> Falar Conosco
-      </a>
-    </div>
-  {% endif %}
 
-</div>
+    </nav>
 
-<!-- CTA Footer Banner -->
-<div class="cta-banner !py-18">
-  <div class="op-container">
-    <div class="cta-banner__content animate-fade-up">
-      <h2 class="cta-banner__title !text-[clamp(1.5rem,3vw,2.25rem)]">
-        Interesse em alguma peça?
-      </h2>
-      <p class="cta-banner__text">Converse conosco pelo WhatsApp e tire todas as suas dúvidas.</p>
-      <a href="https://wa.me/5537998623061?text=Olá!%20Tenho%20interesse%20em%20uma%20peça%20da%20OuriPrata."
-         target="_blank" rel="noopener"
-         class="btn-gold" id="catalog-cta-whatsapp">
-        <i class="bi bi-whatsapp" aria-hidden="true"></i> WhatsApp
-      </a>
-    </div>
+    {% if products %}
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-6 gap-y-14">
+        {% for product in products %}
+          {% include 'landing_page/partials/product_card.html' %}
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="text-center py-32">
+        <p class="font-serif text-2xl text-ink font-light mb-4">Nenhuma peça disponível no momento.</p>
+      </div>
+    {% endif %}
+
   </div>
-</div>
-
+</main>
 {% endblock %}

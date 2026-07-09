@@ -1,14 +1,12 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from django.db.models import Q
-from .models import Joia, Categoria
+from .models import Product, Category
+
 
 def home(request):
-    """
-    Página inicial do portfólio
-    """
-    featured_products = Joia.objects.filter(destaque=True)[:8]
-    categories = Categoria.objects.all()
+    featured_products = Product.objects.filter(featured=True)[:8]
+    categories = Category.objects.all()
     context = {
         'featured_products': featured_products,
         'categories': categories,
@@ -17,173 +15,131 @@ def home(request):
 
 
 def about(request):
-    """
-    Página 'Quem Somos'
-    """
     return render(request, 'landing_page/sobre/about_us.html')
 
 
 def contact(request):
-    """
-    Página de contato
-    """
     return render(request, 'landing_page/contato/contact_us.html')
 
 
 def policy(request):
-    """
-    Página de política de privacidade
-    """
     return render(request, 'landing_page/politicas/privacy_policy.html')
 
 
 def terms(request):
-    """
-    Página de termos de uso
-    """
     return render(request, 'landing_page/politicas/terms_of_use.html')
 
 
-def item_detail(request, slug):
-    """
-    Exibe detalhes de uma joia no portfólio
-    """
-    product = get_object_or_404(Joia, slug=slug)
-    related_products = Joia.objects.filter(categoria=product.categoria).exclude(id=product.id)[:4]
-    
+def product_detail(request, slug):
+    product = get_object_or_404(Product, slug=slug)
+    related_products = Product.objects.filter(
+        category=product.category
+    ).exclude(id=product.id)[:4]
+
     context = {
         'product': product,
         'related_products': related_products,
     }
-    return render(request, 'landing_page/produtos/product_detail.html', context)
-
-
-def products_by_category(request, categoria_slug):
-    """
-    Lista produtos filtrados por uma categoria
-    """
-    categoria = get_object_or_404(Categoria, slug=categoria_slug)
-    products = Joia.objects.filter(categoria=categoria)
-    total_products = products.count()
-    all_categories = Categoria.objects.all()
-    
-    page_title = categoria.nome
-    page_subtitle = f"{total_products} joia{'' if total_products == 1 else 's'} encontrada{'' if total_products == 1 else 's'} nesta categoria"
-    
-    breadcrumbs = [
-        {'name': 'Portfólio', 'url': '/catalogo/'},
-        {'name': categoria.nome, 'url': None}
-    ]
-    
-    context = {
-        'products': products,
-        'total_products': total_products,
-        'all_categories': all_categories,
-        'current_page': 'categoria',
-        'categoria': categoria,
-        'page_title': page_title,
-        'page_subtitle': page_subtitle,
-        'breadcrumbs': breadcrumbs,
-    }
-    return render(request, 'landing_page/produtos/products_by_category.html', context)
+    return render(
+        request, 'landing_page/produtos/product_detail.html', context
+    )
 
 
 def all_products(request):
-    """
-    Mostra todas as joias do portfólio
-    """
-    products = Joia.objects.all()
+    products = Product.objects.all()
     total_products = products.count()
-    all_categories = Categoria.objects.all()
-    
-    page_title = "Portfólio de Joias"
-    page_subtitle = f"{total_products} joia{'' if total_products == 1 else 's'} para você se inspirar"
-    
-    breadcrumbs = [
-        {'name': 'Portfólio', 'url': None}
-    ]
-    
+    all_categories = Category.objects.all()
+
     context = {
         'products': products,
         'total_products': total_products,
         'all_categories': all_categories,
         'current_page': 'catalogo',
-        'page_title': page_title,
-        'page_subtitle': page_subtitle,
-        'breadcrumbs': breadcrumbs,
+        'current_category': None,
+        'page_title': 'Full Collection',
+        'page_subtitle': f'{total_products} piece{"" if total_products == 1 else "s"} to inspire you',
+        'breadcrumbs': [{'name': 'Portfolio', 'url': None}],
+    }
+    return render(request, 'landing_page/produtos/all_products.html', context)
+
+
+def products_by_category(request, category_slug):
+    category = get_object_or_404(Category, slug=category_slug)
+    products = Product.objects.filter(category=category)
+    total_products = products.count()
+    all_categories = Category.objects.all()
+
+    context = {
+        'products': products,
+        'total_products': total_products,
+        'all_categories': all_categories,
+        'current_page': 'categoria',
+        'current_category': category,
+        'page_title': category.name,
+        'page_subtitle': f'{total_products} piece{"" if total_products == 1 else "s"} found in this category',
+        'breadcrumbs': [
+            {'name': 'Portfolio', 'url': '/catalogo/'},
+            {'name': category.name, 'url': None},
+        ],
     }
     return render(request, 'landing_page/produtos/all_products.html', context)
 
 
 def search_products(request):
-    """
-    Pesquisa joias por nome ou descrição com filtros
-    """
     query = request.GET.get('q', '').strip()
-    categoria_filter = request.GET.get('categoria', '').strip()
-    
-    products = Joia.objects.all()
-    
+    category_filter = request.GET.get('categoria', '').strip()
+
+    products = Product.objects.all()
+
     if query:
         products = products.filter(
-            Q(nome__icontains=query) | 
-            Q(descricao__icontains=query)
+            Q(name__icontains=query) | Q(description__icontains=query)
         ).distinct()
-    
-    if categoria_filter:
+
+    if category_filter:
         try:
-            categoria = Categoria.objects.get(slug=categoria_filter)
-            products = products.filter(categoria=categoria)
-        except Categoria.DoesNotExist:
+            category = Category.objects.get(slug=category_filter)
+            products = products.filter(category=category)
+        except Category.DoesNotExist:
             pass
-            
+
     total_products = products.count()
-    all_categories = Categoria.objects.all()
-    
+    all_categories = Category.objects.all()
+
     if query:
-        page_title = "Resultados da Busca"
-        page_subtitle = f"{total_products} joia{'' if total_products == 1 else 's'} encontrada{'' if total_products == 1 else 's'} para \"{query}\""
+        page_title = 'Resultados da Busca'
+        page_subtitle = f'{total_products} peça{"" if total_products == 1 else "s"} encontrada{"" if total_products == 1 else "s"} para "{query}"'
     else:
-        page_title = "Buscar no Portfólio"
-        page_subtitle = "Encontre a joia perfeita para você"
-        
-    breadcrumbs = [
-        {'name': 'Busca', 'url': None}
-    ]
-    
+        page_title = 'Buscar no Portfólio'
+        page_subtitle = 'Encontre a peça perfeita para você'
+
     context = {
         'products': products,
         'total_products': total_products,
         'search_query': query,
-        'categoria_filter': categoria_filter,
+        'category_filter': category_filter,
         'all_categories': all_categories,
         'current_page': 'search',
         'page_title': page_title,
         'page_subtitle': page_subtitle,
-        'breadcrumbs': breadcrumbs,
+        'breadcrumbs': [{'name': 'Busca', 'url': None}],
     }
-    return render(request, 'landing_page/produtos/search_results.html', context)
-
+    return render(
+        request, 'landing_page/produtos/search_results.html', context
+    )
 
 def search_suggestions(request):
-    """
-    Retorna sugestões de joias via AJAX para a busca rápida
-    """
     query = request.GET.get('q', '').strip()
     suggestions = []
     if query and len(query) >= 2:
-        products = Joia.objects.filter(
-            Q(nome__icontains=query) | 
-            Q(descricao__icontains=query)
+        products = Product.objects.filter(
+            Q(name__icontains=query) | Q(description__icontains=query)
         ).distinct()[:8]
         for product in products:
             suggestions.append({
                 'id': product.id,
-                'nome': product.nome,
+                'name': product.name,
                 'slug': product.slug,
-                'imagem': product.imagem.url if product.imagem else None,
+                'image': product.image.url if product.image else None,
             })
-    return JsonResponse({
-        'suggestions': suggestions,
-        'query': query
-    })
+    return JsonResponse({'suggestions': suggestions, 'query': query})

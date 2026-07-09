@@ -1,0 +1,31 @@
+{% load static %}
+<section class="pt-6 pb-8 md:pt-8 md:pb-10 bg-white">
+  <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+
+    <div class="text-center mb-10">
+      <h2 class="font-serif text-3xl text-ink">Nossos Destaques</h2>
+      <span class="block w-12 h-px bg-gold-400 mx-auto mt-4"></span>
+    </div>
+
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+      {% for produto in destaques %}
+      <div class="group">
+        <a href="{% url 'product_detail' produto.slug %}" class="block">
+          <div class="aspect-square overflow-hidden rounded-2xl bg-stone-100 mb-4">
+            {% if produto.imagem %}
+            <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}"
+              class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105">
+            {% else %}
+            <div class="w-full h-full flex items-center justify-center text-ink/30 text-sm">Sem foto</div>
+            {% endif %}
+          </div>
+          <h3 class="font-serif text-base sm:text-lg text-ink mb-1">{{ produto.nome }}</h3>
+          <p class="text-sm text-gold-500 tracking-wide">R$ {{ produto.preco }}</p>
+        </a>
+      </div>
+      {% empty %}
+      <p class="col-span-full text-center text-ink/50">Nenhum produto em destaque no momento.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>

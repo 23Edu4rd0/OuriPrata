@@ -1,118 +1,57 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Sobre Nós — OuriPrata{% endblock %}
-{% block meta_description %}<meta name="description" content="Conheça a história e os valores da OuriPrata. Joias artesanais em ouro e prata com amor e cuidado.">{% endblock %}
-{% block og_title %}Sobre Nós — OuriPrata{% endblock %}
-{% block og_description %}Conheça a história e valores da OuriPrata.{% endblock %}
+{% block title %}Nossos Pensamentos — OuriPrata{% endblock %}
+{% block meta_description %}
+<meta name="description" content="Conheça as ideias, rituais e a filosofia por trás da OuriPrata.">{% endblock %}
 
 {% block content %}
+<main class="bg-cream-50 min-h-screen py-16 md:py-24">
+  <div class="max-w-6xl mx-auto px-6 lg:px-12">
 
-<!-- Hero da Página -->
-<div class="page-hero">
-  <div class="op-container">
-    <span class="page-hero__eyebrow">Nossa Essência</span>
-    <h1 class="page-hero__title">Quem Somos</h1>
-    <p class="page-hero__sub">Joias com propósito, feitas para durar.</p>
-  </div>
-</div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-24 items-center">
 
-<!-- Seção Principal de Sobre -->
-<section class="py-20">
-  <div class="op-container">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
 
-      <!-- Imagem -->
-      <div class="lg:col-span-5 animate-fade-up">
-        <div class="brand-section__image">
-          <img src="{% static 'assets/landing_page/cat-aneis.png' %}" alt="OuriPrata — nossa história" loading="lazy">
+      <div class="order-2 md:order-1">
+        <div class="aspect-[3/4] md:aspect-[4/5] overflow-hidden shadow-sm bg-stone-100">
+          <img src="{% static 'assets/landing_page/cat-aneis.png' %}" alt="A atmosfera de criação da OuriPrata"
+            loading="lazy" class="w-full h-full object-cover opacity-95">
         </div>
       </div>
 
-      <!-- Conteúdo de Texto -->
-      <div class="lg:col-span-7 animate-fade-up" style="animation-delay: 0.1s">
-        <span class="brand-section__eyebrow">Nossa Essência</span>
-        <h2 class="brand-section__title mb-5">
-          Feitas com amor,<br>escolhidas com cuidado
-        </h2>
 
-        <!-- Ajustado para usar text-ink-muted (Design System) no lugar de text-gray-600 -->
-        <div class="flex flex-col gap-5 text-[15px] leading-relaxed text-ink-muted font-light">
+      <div class="order-1 md:order-2 flex flex-col justify-center">
+
+        <header class="mb-8 md:mb-10">
+          <p class="font-serif italic text-[11px] tracking-[0.3em] text-gold-500 uppercase mb-4">A Filosofia</p>
+          <h1 class="font-serif text-4xl md:text-5xl text-ink font-light tracking-wide leading-tight">
+            A beleza mora <br class="hidden md:block">na calmaria
+          </h1>
+        </header>
+
+        <article class="font-serif text-[15px] md:text-lg leading-relaxed text-ink/70 space-y-6 font-light">
           <p>
-            Somos a <strong class="text-ink font-medium">OuriPrata</strong>, uma marca criada com carinho para quem ama joias que têm significado. Cada peça do nosso portfólio é selecionada com atenção especial à beleza, qualidade e ao simbolismo que ela carrega.
+            Acreditamos que as coisas que escolhemos carregar junto ao corpo dizem muito sobre o ritmo que desejamos
+            para os nossos dias. Em um mundo que se move rápido demais, a OuriPrata nasce como uma busca por espaço,
+            silêncio e intenção.
           </p>
           <p>
-            Trabalhamos com prata e ouro de alta qualidade, buscando sempre oferecer joias lindas, duráveis e que combinam com todos os estilos. Acreditamos que uma joia pode marcar um momento, contar uma história ou simplesmente fazer você se sentir especial.
+            Para nós, o design é uma forma de afeto. Traços puros de prata e o calor discreto do ouro desenhados não
+            para ostentar, mas para se fundirem à sua rotina de forma orgânica, quase invisível, mas profundamente
+            presente.
           </p>
           <p>
-            Por isso, colocamos amor em cada detalhe — desde a escolha dos materiais até o atendimento personalizado a cada cliente.
+            Não nos interessam as tendências passageiras. Criamos pensando em rituais, na poesia do cotidiano e em
+            objetos que ganham vida própria à medida que acompanham as suas próprias histórias e atravessam gerações.
           </p>
-        </div>
+          <p class="pt-4 text-ink italic opacity-80">
+            "Um convite para notar a sutileza nos pequenos detalhes."
+          </p>
+        </article>
 
-        <!-- Estatísticas / Highlights -->
-        <div class="grid grid-cols-3 gap-4 mt-9">
-          <div class="text-center">
-            <p class="font-serif text-4xl text-gold-500 mb-1">10+</p>
-            <!-- Ajustado para text-ink-light -->
-            <p class="text-xs tracking-widest uppercase text-ink-light">Anos</p>
-          </div>
-          <div class="text-center">
-            <p class="font-serif text-4xl text-gold-500 mb-1">500+</p>
-            <p class="text-xs tracking-widest uppercase text-ink-light">Peças</p>
-          </div>
-          <div class="text-center">
-            <p class="font-serif text-4xl text-gold-500 mb-1">♥</p>
-            <p class="text-xs tracking-widest uppercase text-ink-light">Com amor</p>
-          </div>
-        </div>
-
-        <!-- Ações -->
-        <div class="mt-9 flex flex-wrap gap-3">
-          <a href="{% url 'all_products' %}" class="btn-gold" id="sobre-ver-colecao">
-            Ver Coleção <i class="bi bi-arrow-right" aria-hidden="true"></i>
-          </a>
-          <a href="{% url 'contact_us' %}" class="btn-ghost" id="sobre-contato">
-            Falar Conosco
-          </a>
-        </div>
       </div>
 
     </div>
   </div>
-</section>
-
-<!-- Diferenciais / Valores -->
-<section class="perks-section">
-  <div class="op-container">
-    <div class="section-header !mb-12">
-      <span class="section-header__eyebrow">Nossos Valores</span>
-      <h2 class="section-header__title">O que nos guia</h2>
-      <span class="divider-gold"></span>
-    </div>
-    
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-fade-up" style="animation-delay: 0.2s">
-      <div class="perk-item">
-        <i class="bi bi-heart perk-item__icon" aria-hidden="true"></i>
-        <h3 class="perk-item__title">Paixão</h3>
-        <p class="perk-item__text text-ink-muted">Amor genuíno pelo que fazemos, em cada detalhe de cada peça.</p>
-      </div>
-      <div class="perk-item">
-        <i class="bi bi-shield-check perk-item__icon" aria-hidden="true"></i>
-        <h3 class="perk-item__title">Qualidade</h3>
-        <p class="perk-item__text text-ink-muted">Materiais nobres e processos cuidadosos para durar gerações.</p>
-      </div>
-      <div class="perk-item">
-        <i class="bi bi-people perk-item__icon" aria-hidden="true"></i>
-        <h3 class="perk-item__title">Relacionamento</h3>
-        <p class="perk-item__text text-ink-muted">Cada cliente é único — atendimento personalizado e especial.</p>
-      </div>
-      <div class="perk-item">
-        <i class="bi bi-stars perk-item__icon" aria-hidden="true"></i>
-        <h3 class="perk-item__title">Exclusividade</h3>
-        <p class="perk-item__text text-ink-muted">Peças com design único, pensadas para quem valoriza o especial.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
+</main>
 {% endblock %}
