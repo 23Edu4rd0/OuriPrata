@@ -16,7 +16,7 @@
       </p>
     </header>
 
-    <nav class="flex flex-wrap items-center justify-center gap-6 md:gap-10 mb-12 border-b border-ink/5 pb-6" aria-label="Filtrar por categoria">
+    <nav class="flex flex-wrap items-center justify-center gap-6 md:gap-10 mb-12" aria-label="Filtrar por categoria">
 
       <a href="{% url 'all_products' %}"
          class="text-[11px] tracking-[0.2em] uppercase transition-colors pb-1
@@ -34,30 +34,22 @@
 
     </nav>
 
-    <div class="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-10">
+    {% include 'landing_page/partials/filters_menu.html' %}
 
-      <aside class="lg:sticky lg:top-24 h-fit">
-        {% include 'landing_page/partials/filters_menu.html' %}
-      </aside>
-
-      <div>
-        {% if products %}
-          <div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-14">
-            {% for product in products %}
-              {% include 'landing_page/partials/product_card.html' %}
-            {% endfor %}
-          </div>
-          <div id="filtersEmptyState" class="hidden text-center py-32">
-            <p class="font-serif text-2xl text-ink font-light mb-4">Nenhuma peça encontrada nessa faixa de preço.</p>
-          </div>
-        {% else %}
-          <div class="text-center py-32">
-            <p class="font-serif text-2xl text-ink font-light mb-4">Nenhuma peça disponível no momento.</p>
-          </div>
-        {% endif %}
+    {% if products %}
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-6 gap-y-14">
+        {% for product in products %}
+          {% include 'landing_page/partials/product_card.html' %}
+        {% endfor %}
       </div>
-
-    </div>
+      <div id="filtersEmptyState" class="hidden text-center py-32">
+        <p class="font-serif text-2xl text-ink font-light mb-4">Nenhuma peça encontrada nessa faixa de preço.</p>
+      </div>
+    {% else %}
+      <div class="text-center py-32">
+        <p class="font-serif text-2xl text-ink font-light mb-4">Nenhuma peça disponível no momento.</p>
+      </div>
+    {% endif %}
 
   </div>
 </main>

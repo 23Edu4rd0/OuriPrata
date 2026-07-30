@@ -1,52 +1,27 @@
-{% comment %} Partial de filtros do catálogo — filtro por categoria e faixa de preço {% endcomment %}
-<div class="bg-white rounded-2xl shadow-sm border border-cream-200 p-5 lg:p-6 mb-6">
+{% comment %} Barra de filtro por preço — discreta, acima do grid de produtos {% endcomment %}
+<div class="flex flex-wrap items-center justify-between gap-4 mb-10 pb-6 border-b border-ink/5">
 
-  <div class="mb-6 text-center">
-    <span class="text-ink font-serif text-xl font-medium tracking-wide flex items-center justify-center gap-2">
-      <i class="bi bi-funnel"></i> Filtros
-    </span>
-  </div>
+  <p class="text-[11px] tracking-[0.15em] uppercase text-ink/40">
+    <span id="resultsCount">{{ total_products }}</span> peça{{ total_products|pluralize:"s" }}
+  </p>
 
-  <div>
-    <!-- Filtro por Categoria -->
-    <div class="mb-6">
-      <div class="text-ink font-medium mb-3 flex items-center gap-2 text-sm uppercase tracking-wider">
-        <i class="bi bi-grid text-gold-500"></i> Categorias
-      </div>
-      <div class="flex flex-col gap-2">
-        <a href="{% url 'all_products' %}"
-           class="w-full flex items-center justify-between px-4 py-2.5 rounded-full border border-cream-200 text-ink-muted text-sm transition-all hover:border-gold-300 hover:text-ink">
-          <span class="flex items-center gap-2"><i class="bi bi-grid-3x3-gap"></i> Todas</span>
-        </a>
-
-        {% for cat in all_categories %}
-        <a href="{% url 'products_by_category' cat.slug %}"
-           class="w-full flex items-center justify-between px-4 py-2.5 rounded-full border text-sm transition-all
-           {% if current_category and cat.slug == current_category.slug %} border-gold-400 bg-gold-50 text-ink font-medium shadow-sm {% else %} border-cream-200 text-ink-muted hover:border-gold-300 hover:text-ink {% endif %}">
-          <span>{{ cat.name }}</span>
-          {% if current_category and cat.slug == current_category.slug %}
-            <i class="bi bi-check-circle-fill text-gold-500"></i>
-          {% endif %}
-        </a>
-        {% endfor %}
-      </div>
+  <div class="flex items-center gap-3">
+    <span class="text-[10px] tracking-[0.2em] uppercase text-ink/40 hidden sm:inline">Preço</span>
+    <div class="flex items-center gap-2">
+      <input type="number" id="preco-min" placeholder="Mín."
+        class="w-20 bg-transparent border-b border-ink/15 px-1 py-1.5 text-sm text-ink placeholder-ink/30 focus:outline-none focus:border-gold-400 transition-colors">
+      <span class="text-ink/20">—</span>
+      <input type="number" id="preco-max" placeholder="Máx."
+        class="w-20 bg-transparent border-b border-ink/15 px-1 py-1.5 text-sm text-ink placeholder-ink/30 focus:outline-none focus:border-gold-400 transition-colors">
     </div>
-
-    <hr class="border-cream-200 my-6">
-
-    <!-- Filtro por Preço -->
-    <div class="mb-4">
-      <div class="text-ink font-medium mb-3 flex items-center gap-2 text-sm uppercase tracking-wider">
-        <i class="bi bi-currency-dollar text-gold-500"></i> Faixa de Preço
-      </div>
-      <div class="flex gap-2 mb-4">
-        <input type="number" id="preco-min" class="w-1/2 bg-cream-50 border border-cream-200 rounded-lg px-3 py-2 text-sm text-ink placeholder-ink-light focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400 transition-all" placeholder="Mínimo">
-        <input type="number" id="preco-max" class="w-1/2 bg-cream-50 border border-cream-200 rounded-lg px-3 py-2 text-sm text-ink placeholder-ink-light focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400 transition-all" placeholder="Máximo">
-      </div>
-      <button type="button" onclick="applyLocalFilters()" class="w-full bg-ink hover:bg-gold-500 text-white rounded-full px-4 py-2.5 text-sm font-medium transition-colors">
-        Aplicar Filtros
-      </button>
-    </div>
+    <button type="button" onclick="applyLocalFilters()"
+      class="text-[10px] tracking-[0.2em] uppercase text-white bg-ink px-5 py-2.5 rounded-full hover:bg-gold-500 transition-colors">
+      Aplicar
+    </button>
+    <button type="button" onclick="clearLocalFilters()"
+      class="text-[10px] tracking-[0.2em] uppercase text-ink/40 hover:text-ink transition-colors">
+      Limpar
+    </button>
   </div>
 </div>
 
@@ -69,8 +44,17 @@
       if (show) visibleCount++;
     });
 
+    const countEl = document.getElementById('resultsCount');
+    if (countEl) countEl.textContent = visibleCount;
+
     const emptyMsg = document.getElementById('filtersEmptyState');
     if (emptyMsg) emptyMsg.classList.toggle('hidden', visibleCount !== 0);
+  }
+
+  function clearLocalFilters() {
+    document.getElementById('preco-min').value = '';
+    document.getElementById('preco-max').value = '';
+    applyLocalFilters();
   }
 
   document.addEventListener('DOMContentLoaded', function() {
