@@ -1,4 +1,4 @@
-{% comment %} Partial para o menu de filtros do catálogo, reutilizável em várias páginas {% endcomment %}
+{% comment %} Partial de filtros do catálogo — filtro por categoria e faixa de preço {% endcomment %}
 <div class="bg-white rounded-2xl shadow-sm border border-cream-200 p-5 lg:p-6 mb-6">
 
   <div class="mb-6 text-center">
@@ -34,40 +34,6 @@
 
     <hr class="border-cream-200 my-6">
 
-    <!-- Filtro por Promoção -->
-    <div class="mb-6">
-      <div class="text-ink font-medium mb-4 flex items-center gap-2 text-sm uppercase tracking-wider">
-        <i class="bi bi-lightning text-gold-500"></i> Ofertas
-      </div>
-      <label class="relative flex items-center cursor-pointer px-2">
-        <input type="checkbox" id="promocao" class="sr-only peer">
-        <div class="w-11 h-6 bg-cream-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[10px] after:bg-white after:border-cream-200 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gold-400"></div>
-        <span class="ml-3 text-sm font-medium text-ink-muted peer-checked:text-ink transition-colors">Apenas em promoção</span>
-      </label>
-    </div>
-
-    <hr class="border-cream-200 my-6">
-
-    <!-- Filtro por Avaliação -->
-    <div class="mb-6">
-      <div class="text-ink font-medium mb-3 flex items-center gap-2 text-sm uppercase tracking-wider">
-        <i class="bi bi-star text-gold-500"></i> Avaliação
-      </div>
-      <div class="flex flex-col gap-2">
-        <button type="button" class="rating-filter-btn active w-full flex items-center justify-between px-4 py-2.5 rounded-full border border-cream-200 text-ink-muted text-sm transition-all hover:border-gold-300 hover:text-ink [&.active]:border-gold-400 [&.active]:bg-gold-50 [&.active]:text-ink [&.active]:font-medium [&.active]:shadow-sm" data-rating="all">
-          <span class="flex items-center gap-2"><i class="bi bi-star"></i> Todas</span>
-        </button>
-        <button type="button" class="rating-filter-btn w-full flex items-center justify-between px-4 py-2.5 rounded-full border border-cream-200 text-ink-muted text-sm transition-all hover:border-gold-300 hover:text-ink [&.active]:border-gold-400 [&.active]:bg-gold-50 [&.active]:text-ink [&.active]:font-medium [&.active]:shadow-sm" data-rating="4">
-          <span class="flex items-center gap-2"><i class="bi bi-star-fill text-gold-400"></i> 4+ Estrelas</span>
-        </button>
-        <button type="button" class="rating-filter-btn w-full flex items-center justify-between px-4 py-2.5 rounded-full border border-cream-200 text-ink-muted text-sm transition-all hover:border-gold-300 hover:text-ink [&.active]:border-gold-400 [&.active]:bg-gold-50 [&.active]:text-ink [&.active]:font-medium [&.active]:shadow-sm" data-rating="3">
-          <span class="flex items-center gap-2"><i class="bi bi-star-fill text-gold-400"></i> 3+ Estrelas</span>
-        </button>
-      </div>
-    </div>
-
-    <hr class="border-cream-200 my-6">
-
     <!-- Filtro por Preço -->
     <div class="mb-4">
       <div class="text-ink font-medium mb-3 flex items-center gap-2 text-sm uppercase tracking-wider">
@@ -77,7 +43,7 @@
         <input type="number" id="preco-min" class="w-1/2 bg-cream-50 border border-cream-200 rounded-lg px-3 py-2 text-sm text-ink placeholder-ink-light focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400 transition-all" placeholder="Mínimo">
         <input type="number" id="preco-max" class="w-1/2 bg-cream-50 border border-cream-200 rounded-lg px-3 py-2 text-sm text-ink placeholder-ink-light focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400 transition-all" placeholder="Máximo">
       </div>
-      <button onclick="applyLocalFilters()" class="w-full bg-ink hover:bg-gold-500 text-white rounded-full px-4 py-2.5 text-sm font-medium transition-colors">
+      <button type="button" onclick="applyLocalFilters()" class="w-full bg-ink hover:bg-gold-500 text-white rounded-full px-4 py-2.5 text-sm font-medium transition-colors">
         Aplicar Filtros
       </button>
     </div>
@@ -91,33 +57,21 @@
   }
 
   function applyLocalFilters() {
-    const checkbox = document.getElementById('promocao');
     const minPrice = parsePrice(document.getElementById('preco-min').value);
     const maxPrice = parsePrice(document.getElementById('preco-max').value) || Infinity;
-    const ratingFilter = document.querySelector('.rating-filter-btn.active')?.dataset.rating || 'all';
     const products = document.querySelectorAll('.product-item');
+    let visibleCount = 0;
 
     products.forEach(product => {
-      const isPromotion = product.dataset.promotion === 'true';
       const price = parsePrice(product.dataset.price);
-      const rating = parseFloat(product.dataset.rating) || 0;
-
-      let show = true;
-      if (checkbox && checkbox.checked && !isPromotion) show = false;
-      if (price < minPrice || price > maxPrice) show = false;
-      if (ratingFilter !== 'all' && rating < parseInt(ratingFilter)) show = false;
-
-      product.style.display = show ? 'block' : 'none';
+      const show = price >= minPrice && price <= maxPrice;
+      product.style.display = show ? '' : 'none';
+      if (show) visibleCount++;
     });
+
+    const emptyMsg = document.getElementById('filtersEmptyState');
+    if (emptyMsg) emptyMsg.classList.toggle('hidden', visibleCount !== 0);
   }
-
-  document.querySelectorAll('.rating-filter-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      document.querySelectorAll('.rating-filter-btn').forEach(b => b.classList.remove('active'));
-      this.classList.add('active');
-      applyLocalFilters();
-    });
-  });
 
   document.addEventListener('DOMContentLoaded', function() {
     const precoMin = document.getElementById('preco-min');

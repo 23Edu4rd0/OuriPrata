@@ -7,9 +7,11 @@ from .models import Product, Category
 def home(request):
     featured_products = Product.objects.filter(featured=True)[:8]
     categories = Category.objects.all()
+    new_arrivals = Product.objects.order_by("-created_at")[:8]
     context = {
         'featured_products': featured_products,
         'categories': categories,
+        'new_arrivals': new_arrivals
     }
     return render(request, 'landing_page/home.html', context)
 
@@ -43,6 +45,10 @@ def product_detail(request, slug):
     return render(
         request, 'landing_page/produtos/product_detail.html', context
     )
+
+
+def wishlist(request):
+    return render(request, 'landing_page/produtos/wishlist.html')
 
 
 def all_products(request):

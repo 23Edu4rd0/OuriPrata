@@ -1,11 +1,9 @@
 {% comment %} Card de produto — usado em grids e listagens {% endcomment %}
 <div class="product-item group cursor-pointer border border-cream-200 bg-white rounded-2xl overflow-hidden shadow-soft"
   data-price="{% if product.price %}{{ product.price|floatformat:2 }}{% else %}0{% endif %}"
-  data-promotion="{% if product.em_promocao %}true{% else %}false{% endif %}"
-  data-rating="{% if product.avaliacao %}{{ product.avaliacao }}{% else %}0{% endif %}">
 
-  <a href="{% url 'product_detail' product.slug %}" class="block">
-    <div class="relative w-full aspect-square overflow-hidden bg-stone-50">
+  <div class="relative w-full aspect-square overflow-hidden bg-stone-50">
+    <a href="{% url 'product_detail' product.slug %}" class="block w-full h-full">
       {% if product.image %}
       <img src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy"
         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
@@ -14,8 +12,41 @@
         <i class="bi bi-gem text-2xl text-ink/20"></i>
       </div>
       {% endif %}
+    </a>
+
+    <!-- Selos -->
+    <div class="absolute top-3 left-3 flex flex-col gap-1.5 pointer-events-none">
+      {% if product.is_new %}
+      <span class="bg-ink/90 text-white text-[9px] uppercase tracking-[0.15em] px-2.5 py-1 rounded-full">Novo</span>
+      {% endif %}
+      {% if product.featured %}
+      <span class="bg-gold-500 text-white text-[9px] uppercase tracking-[0.15em] px-2.5 py-1 rounded-full">Destaque</span>
+      {% endif %}
     </div>
 
+    <!-- Wishlist -->
+    <button type="button" data-wishlist-toggle data-slug="{{ product.slug }}" data-name="{{ product.name }}"
+      data-image="{% if product.image %}{{ product.image.url }}{% endif %}"
+      data-price="{% if product.price %}{{ product.price|floatformat:2 }}{% endif %}"
+      data-url="{% url 'product_detail' product.slug %}"
+      aria-label="Adicionar aos favoritos"
+      class="wishlist-btn absolute top-3 right-3 w-9 h-9 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm text-ink/60 shadow-soft hover:text-gold-500 transition-colors [&.is-active]:text-gold-500">
+      <i class="bi bi-heart text-base" aria-hidden="true"></i>
+    </button>
+
+    <!-- Quick view -->
+    <button type="button" data-quick-view
+      data-slug="{{ product.slug }}" data-name="{{ product.name }}"
+      data-image="{% if product.image %}{{ product.image.url }}{% endif %}"
+      data-price="{% if product.price %}R$ {{ product.price|floatformat:2 }}{% else %}Consulte{% endif %}"
+      data-url="{% url 'product_detail' product.slug %}"
+      data-category="{% if product.category %}{{ product.category.name }}{% endif %}"
+      class="absolute inset-x-3 bottom-3 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 bg-white/95 backdrop-blur-sm text-ink text-[10px] uppercase tracking-[0.15em] py-2.5 rounded-full shadow-soft hover:bg-ink hover:text-white">
+      Ver rápido
+    </button>
+  </div>
+
+  <a href="{% url 'product_detail' product.slug %}" class="block">
     <div class="px-4 pt-4 pb-3 text-center">
       <h3 class="font-serif text-[15px] text-ink font-light leading-snug mb-1 truncate">
         {{ product.name }}

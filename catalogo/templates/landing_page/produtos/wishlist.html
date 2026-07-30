@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Favoritos — OuriPrata{% endblock %}
+
+{% block content %}
+<main class="bg-cream-50 min-h-screen py-16 md:py-24">
+  <div class="max-w-6xl mx-auto px-6 lg:px-12">
+
+    <header class="text-center mb-16">
+      <p class="font-serif italic text-[11px] tracking-[0.3em] text-gold-500 uppercase mb-4">Sua seleção</p>
+      <h1 class="font-serif text-4xl md:text-5xl text-ink font-light tracking-wide mb-4">Favoritos</h1>
+      <p class="text-[13px] text-ink/50 tracking-widest uppercase" id="wishlistCountLabel">Carregando…</p>
+    </header>
+
+    <div id="wishlistGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-6 gap-y-14"></div>
+
+    <div id="wishlistEmpty" class="hidden text-center py-32">
+      <i class="bi bi-heart text-3xl text-ink/20 mb-4 block"></i>
+      <p class="font-serif text-2xl text-ink font-light mb-4">Você ainda não guardou nenhuma peça.</p>
+      <a href="{% url 'all_products' %}" class="inline-block mt-2 text-[11px] uppercase tracking-[0.2em] text-gold-500 border-b border-gold-300 pb-1 hover:text-gold-600">
+        Explorar coleção
+      </a>
+    </div>
+
+  </div>
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  function renderWishlistPage() {
+    const items = getWishlist();
+    const grid = document.getElementById('wishlistGrid');
+    const empty = document.getElementById('wishlistEmpty');
+    const countLabel = document.getElementById('wishlistCountLabel');
+    if (!grid) return;
+
+    countLabel.textContent = `${items.length} peça${items.length === 1 ? '' : 's'} salva${items.length === 1 ? '' : 's'}`;
+
+    if (items.length === 0) {
+      grid.innerHTML = '';
+      empty.classList.remove('hidden');
+      return;
+    }
+    empty.classList.add('hidden');
+
+    grid.innerHTML = items.map(item => `
+      <div class="product-item group cursor-pointer border border-cream-200 bg-white rounded-2xl overflow-hidden shadow-soft">
+        <div class="relative w-full aspect-square overflow-hidden bg-stone-50">
+          <a href="${item.url}" class="block w-full h-full">
+            ${item.image
+              ? `<img src="${item.image}" alt="${item.name}" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">`
+              : `<div class="w-full h-full flex items-center justify-center"><i class="bi bi-gem text-2xl text-ink/20"></i></div>`}
+          </a>
+          <button type="button" data-wishlist-toggle data-slug="${item.slug}" data-name="${item.name}"
+            data-image="${item.image}" data-price="${item.price}" data-url="${item.url}"
+            aria-label="Remover dos favoritos"
+            class="wishlist-btn is-active absolute top-3 right-3 w-9 h-9 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm text-gold-500 shadow-soft hover:text-red-400 transition-colors">
+            <i class="bi bi-heart-fill text-base" aria-hidden="true"></i>
+          </button>
+        </div>
+        <a href="${item.url}" class="block">
+          <div class="px-4 pt-4 pb-3 text-center">
+            <h3 class="font-serif text-[15px] text-ink font-light leading-snug mb-1 truncate">${item.name}</h3>
+            <span class="text-[13px] text-ink/60 tracking-wider">${item.price ? 'R$ ' + item.price : 'Consulte'}</span>
+          </div>
+        </a>
+      </div>
+    `).join('');
+  }
+
+  document.addEventListener('DOMContentLoaded', renderWishlistPage);
+</script>
+{% endblock %}

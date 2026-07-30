@@ -11,6 +11,7 @@ urlpatterns = [
         name='search_suggestions',
     ),
     path('product/<slug:slug>/', views.product_detail, name='product_detail'),
+    path('favoritos/', views.wishlist, name='wishlist'),
     path(
         'categoria/<slug:category_slug>/',
         views.products_by_category,

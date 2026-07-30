@@ -80,6 +80,12 @@
         id="searchSuggestions" role="listbox"></div>
     </form>
 
+    <!-- Favoritos -->
+    <a href="{% url 'wishlist' %}" aria-label="Favoritos" class="relative hidden md:flex items-center justify-center w-9 h-9 text-gray-600 hover:text-gold-500 transition-colors">
+      <i class="bi bi-heart text-lg"></i>
+      <span data-wishlist-count class="hidden absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 rounded-full bg-gold-500 text-white text-[9px] leading-4 text-center font-medium">0</span>
+    </a>
+
     <!-- Toggle Mobile (Hamburger) -->
     <button
       class="md:hidden flex flex-col justify-center items-center gap-[6px] w-10 h-10 text-gray-700 focus:outline-none"
@@ -136,6 +142,14 @@
       class="text-lg font-serif text-gray-800 hover:text-gold-600 transition-colors duration-300 flex items-center justify-between group">
       Contato
       <span class="w-5 h-px bg-gray-300 group-hover:w-8 group-hover:bg-gold-500 transition-all duration-300"></span>
+    </a>
+    <a href="{% url 'wishlist' %}"
+      class="text-lg font-serif text-gray-800 hover:text-gold-600 transition-colors duration-300 flex items-center justify-between group">
+      Favoritos
+      <span class="flex items-center gap-2">
+        <span data-wishlist-count class="hidden text-xs font-sans text-gold-500">0</span>
+        <span class="w-5 h-px bg-gray-300 group-hover:w-8 group-hover:bg-gold-500 transition-all duration-300"></span>
+      </span>
     </a>
 
     <!-- Busca Mobile -->

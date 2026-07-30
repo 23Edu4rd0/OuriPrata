@@ -40,12 +40,22 @@
             {% endfor %}
           </div>
 
-          <div class="bg-stone-50 aspect-[4/5] w-full max-h-[560px] relative">
+          <div class="bg-stone-50 aspect-[4/5] w-full max-h-[560px] relative overflow-hidden" id="zoomContainer">
             {% if product.image %}
-            <img src="{{ product.image.url }}" alt="{{ product.name }}" id="mainImg" class="w-full h-full object-contain">
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" id="mainImg"
+              class="w-full h-full object-contain transition-transform duration-300 ease-out cursor-zoom-in">
             {% else %}
             <div class="w-full h-full flex items-center justify-center text-ink/20">Sem imagem</div>
             {% endif %}
+
+            <button type="button" data-wishlist-toggle data-slug="{{ product.slug }}" data-name="{{ product.name }}"
+              data-image="{% if product.image %}{{ product.image.url }}{% endif %}"
+              data-price="{% if product.price %}{{ product.price|floatformat:2 }}{% endif %}"
+              data-url="{% url 'product_detail' product.slug %}"
+              aria-label="Adicionar aos favoritos"
+              class="wishlist-btn absolute top-4 right-4 w-10 h-10 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-sm text-ink/60 shadow-soft hover:text-gold-500 transition-colors [&.is-active]:text-gold-500 z-10">
+              <i class="bi bi-heart text-base" aria-hidden="true"></i>
+            </button>
           </div>
 
         </div>
@@ -59,6 +69,15 @@
           {{ product.category.name }}
         </p>
         {% endif %}
+
+        <div class="flex items-center gap-2 mb-3">
+          {% if product.is_new %}
+          <span class="bg-ink/90 text-white text-[9px] uppercase tracking-[0.15em] px-2.5 py-1 rounded-full">Novo</span>
+          {% endif %}
+          {% if product.featured %}
+          <span class="bg-gold-500 text-white text-[9px] uppercase tracking-[0.15em] px-2.5 py-1 rounded-full">Destaque</span>
+          {% endif %}
+        </div>
 
         <h1 class="font-serif text-3xl md:text-4xl text-ink font-light leading-snug mb-5">
           {{ product.name }}
@@ -176,5 +195,26 @@
       thumb.classList.add('border-ink');
     });
   });
+
+  // Zoom suave que segue o cursor na imagem principal
+  (function () {
+    const container = document.getElementById('zoomContainer');
+    const img = document.getElementById('mainImg');
+    if (!container || !img) return;
+    const ZOOM = 1.6;
+
+    container.addEventListener('mousemove', (e) => {
+      const rect = container.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      img.style.transformOrigin = `${x}% ${y}%`;
+      img.style.transform = `scale(${ZOOM})`;
+    });
+
+    container.addEventListener('mouseleave', () => {
+      img.style.transform = 'scale(1)';
+      img.style.transformOrigin = 'center';
+    });
+  })();
 </script>
 {% endblock %}
