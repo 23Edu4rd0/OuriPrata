@@ -1,4 +1,7 @@
+from datetime import timedelta
+
 from django.db import models
+from django.utils import timezone
 from django.utils.text import slugify
 from django.urls import reverse
 
@@ -95,6 +98,9 @@ class Product(models.Model):
     )
     featured = models.BooleanField(default=False)
     image = models.ImageField(upload_to='catalog', blank=True, null=True)
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+
 
     material = models.ForeignKey(
         Material, on_delete=models.CASCADE, related_name='products'
@@ -132,6 +138,10 @@ class Product(models.Model):
 
     def extra_images(self):
         return self.images.all()
+
+    @property
+    def is_new(self):
+        return self.created_at and self.created_at >= timezone.now() - timedelta(days=14)
 
 
 class ProductImage(models.Model):
