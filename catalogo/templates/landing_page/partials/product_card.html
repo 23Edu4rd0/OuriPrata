@@ -1,6 +1,6 @@
 {% comment %} Card de produto — usado em grids e listagens {% endcomment %}
 <div class="product-item group cursor-pointer border border-cream-200 bg-white rounded-2xl overflow-hidden shadow-soft"
-  data-price="{% if product.price %}{{ product.price|floatformat:2 }}{% else %}0{% endif %}"
+  data-price="{% if product.price %}{{ product.price|floatformat:2 }}{% else %}0{% endif %}">
 
   <div class="relative w-full aspect-square overflow-hidden bg-stone-50">
     <a href="{% url 'product_detail' product.slug %}" class="block w-full h-full">
