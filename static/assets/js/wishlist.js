@@ -39,6 +39,7 @@ function getWishlist() {
 
 function saveWishlist(items) {
     localStorage.setItem(WISHLIST_KEY, JSON.stringify(items));
+    window.dispatchEvent(new CustomEvent('wishlist:changed', { detail: { items } }));
     updateWishlistCount();
 }
 
