@@ -12,6 +12,13 @@ dependencies = [
 ]
 
 
+# Este projeto é uma aplicação Django, não uma biblioteca: não existe um
+# módulo "ouriprata" para empacotar (os apps são catalogo, accounts, config e
+# theme). Sem isto o uv tenta construir um wheel do projeto e o poetry-core
+# falha com "No file/folder found for package ouriprata".
+[tool.uv]
+package = false
+
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
