@@ -151,7 +151,12 @@ document.getElementById('consultaForm').addEventListener('submit', e => {
   if (orc)     msg += `*Orçamento:* ${orc}\n`;
   msg += `\n*Descrição:*\n${desc}`;
 
-  window.open(`https://wa.me/5537998623061?text=${encodeURIComponent(msg)}`, '_blank');
+  // noopener: ver comentário em contact_us.html (reverse tabnabbing).
+  window.open(
+    `https://wa.me/5537998623061?text=${encodeURIComponent(msg)}`,
+    '_blank',
+    'noopener,noreferrer'
+  );
 });
 </script>
 {% endblock %}

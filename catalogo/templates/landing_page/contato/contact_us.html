@@ -110,9 +110,12 @@ document.getElementById('contactForm').addEventListener('submit', e => {
   msg += `*E-mail:* ${email}\n`;
   msg += `\n*Mensagem:*\n${mensagem}`;
 
+  // noopener impede que a aba aberta acesse window.opener e consiga
+  // redirecionar esta página (reverse tabnabbing).
   window.open(
     `https://wa.me/5537998623061?text=${encodeURIComponent(msg)}`,
-    '_blank'
+    '_blank',
+    'noopener,noreferrer'
   );
 });
 </script>

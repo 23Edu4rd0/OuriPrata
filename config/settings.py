@@ -96,8 +96,15 @@ MIDDLEWARE = [
 
 # Ferramenta de desenvolvimento: injeta um script de auto-reload em cada
 # página. Não deve rodar em produção.
+#
+# Entra depois do SecurityMiddleware, que o Django recomenda manter no topo:
+# assim os cabeçalhos e redirecionamentos de segurança valem para todas as
+# respostas e o ambiente de desenvolvimento não mascara problemas de ordem.
 if DEBUG:
-    MIDDLEWARE.insert(0, 'django_browser_reload.middleware.BrowserReloadMiddleware')
+    MIDDLEWARE.insert(
+        MIDDLEWARE.index('django.middleware.security.SecurityMiddleware') + 1,
+        'django_browser_reload.middleware.BrowserReloadMiddleware',
+    )
 
 ROOT_URLCONF = 'config.urls'
 

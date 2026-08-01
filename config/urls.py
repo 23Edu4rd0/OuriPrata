@@ -1,3 +1,5 @@
+import re
+
 from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf import settings
@@ -27,9 +29,12 @@ else:
     # um catálogo pequeno. Se o tráfego crescer, o caminho é mover as imagens
     # para armazenamento de objetos (S3, Cloudflare R2) e apontar MEDIA_URL
     # para lá — só esta rota sai.
+    # O prefixo sai de MEDIA_URL em vez de ficar fixo, para a rota não sair do
+    # ar caso a configuração mude.
+    _prefixo_media = re.escape(settings.MEDIA_URL.lstrip('/'))
     urlpatterns += [
         re_path(
-            r'^media/(?P<path>.*)$',
+            rf'^{_prefixo_media}(?P<path>.*)$',
             serve,
             {'document_root': settings.MEDIA_ROOT},
         ),

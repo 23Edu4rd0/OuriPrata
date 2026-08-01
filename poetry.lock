@@ -408,6 +408,21 @@ files = [
 ]
 
 [[package]]
+name = "python-dotenv"
+version = "1.2.2"
+description = "Read key-value pairs from a .env file and set them as environment variables"
+optional = false
+python-versions = ">=3.10"
+groups = ["main"]
+files = [
+    {file = "python_dotenv-1.2.2-py3-none-any.whl", hash = "sha256:1d8214789a24de455a8b8bd8ae6fe3c6b69a5e3d64aa8a8e5d68e694bbcb285a"},
+    {file = "python_dotenv-1.2.2.tar.gz", hash = "sha256:2c371a91fbd7ba082c2c1dc1f8bf89ca22564a087c2c287cd9b662adde799cf3"},
+]
+
+[package.extras]
+cli = ["click (>=5.0)"]
+
+[[package]]
 name = "ruff"
 version = "0.15.20"
 description = "An extremely fast Python linter and code formatter, written in Rust."
@@ -557,4 +572,4 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.14,<4.0"
-content-hash = "5dde75d9e9c8ba6dcbd37a8700e01141509a0ca0dd8fabfcafd9a3b8d4377662"
+content-hash = "e7e08f8bf07024bea474a00f741b1b1d82edbc374e415478e7bfce85f9cb8da1"
