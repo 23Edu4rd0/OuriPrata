@@ -638,20 +638,25 @@
         // Inserir ou atualizar card da avaliação no topo da lista
         const list = document.getElementById('reviewsList');
         const existingCard = list.querySelector('[data-own-review]');
-        const initial = json.username ? json.username[0].toUpperCase() : '?';
+        const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({
+          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+        }[c]));
+        const username = esc(json.username);
+        const comment = esc(json.comment);
+        const initial = username ? username[0].toUpperCase() : '?';
         const starsHtml = [1,2,3,4,5].map(i =>
           `<i class="bi ${i <= json.rating ? 'bi-star-fill text-gold-500' : 'bi-star text-ink/15'} text-[11px]"></i>`
         ).join('');
-        const commentHtml = json.comment
-          ? `<p class="text-[13px] text-ink/70 leading-relaxed font-light">${json.comment.replace(/</g,'&lt;')}</p>`
+        const commentHtml = comment
+          ? `<p class="text-[13px] text-ink/70 leading-relaxed font-light">${comment}</p>`
           : '';
         const cardHtml = `
           <div data-own-review class="flex gap-5 mb-8 pb-8 border-b border-ink/5">
             <div class="shrink-0 w-9 h-9 rounded-full bg-gold-50 border border-gold-200 flex items-center justify-center text-gold-600 text-[13px] font-medium uppercase select-none">${initial}</div>
             <div class="flex-1 min-w-0">
               <div class="flex items-center justify-between mb-1.5 gap-4">
-                <span class="text-[13px] font-medium text-ink truncate">${json.username}</span>
-                <span class="text-[10px] text-ink/30 shrink-0">${json.date}</span>
+                <span class="text-[13px] font-medium text-ink truncate">${username}</span>
+                <span class="text-[10px] text-ink/30 shrink-0">${json.date}</span>`}
               </div>
               <div class="flex items-center gap-0.5 mb-2.5">${starsHtml}</div>
               ${commentHtml}
