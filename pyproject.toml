@@ -9,6 +9,11 @@ dependencies = [
     "django-jazzmin (>=3.0.5,<4.0.0)",
     "django-tailwind (>=4.5.0,<5.0.0)",
     "django-browser-reload (>=1.21.0,<2.0.0)",
+    # Está no INSTALLED_APPS (o admin usa para escolher a cor das peças), mas
+    # só existia no venv local e no requirements.txt. Sem a declaração aqui o
+    # build instala tudo menos ela e o django.setup() falha com
+    # "No module named 'colorfield'" já no collectstatic.
+    "django-colorfield (>=0.14.0,<1.0.0)",
     # Produção. Estavam instaladas no venv local mas não declaradas aqui, então
     # o deploy subia sem elas — o whitenoise, por exemplo, está no MIDDLEWARE e
     # derrubaria a aplicação no primeiro request.
