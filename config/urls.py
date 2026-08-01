@@ -12,10 +12,14 @@ urlpatterns = [
     path('conta/', include('accounts.urls')),
 ]
 
-if settings.DEBUG:
+# Só o settings de desenvolvimento instala o django_browser_reload; incluir a
+# rota sem o app derrubaria a produção no import.
+if 'django_browser_reload' in settings.INSTALLED_APPS:
     urlpatterns += [
         path('__reload__/', include('django_browser_reload.urls')),
     ]
+
+if settings.DEBUG:
     urlpatterns += static(
         settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
     )

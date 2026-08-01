@@ -50,8 +50,11 @@ else
   unset CHAVE
 fi
 
+# DJANGO_ENV escolhe config/settings/prod.py, que recusa subir com a chave de
+# desenvolvimento, sem banco ou sem ALLOWED_HOSTS. Dentro do Railway o padrão
+# já seria production; definir explicitamente deixa o ambiente visível no painel.
 railway variables \
-  --set "DEBUG=False" \
+  --set "DJANGO_ENV=production" \
   --set "MEDIA_ROOT=$MONTAGEM" \
   --skip-deploys
 
