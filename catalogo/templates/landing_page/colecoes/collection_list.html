@@ -20,7 +20,7 @@
     {% if collections %}
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 lg:gap-8">
       {% for col in collections %}
-      {% with count=col.products.count %}
+      {% with count=col.products.all|length %}
       <a href="{{ col.get_absolute_url }}" class="group relative overflow-hidden rounded-xl bg-stone-100 aspect-[16/9] md:aspect-[4/3] block shadow-sm">
         {% if col.image %}
         <img src="{{ col.image.url }}" alt="{{ col.name }}"
