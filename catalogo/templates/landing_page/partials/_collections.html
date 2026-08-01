@@ -20,7 +20,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
     {% endif %}
       {% for col in featured_collections %}
-      {% with count=col.products.count %}
+      {% with count=col.products.all|length %}
       <a href="{{ col.get_absolute_url }}"
         class="group relative overflow-hidden rounded-xl bg-stone-800 aspect-[16/9] md:aspect-[4/3] block">
         {% if col.image %}
