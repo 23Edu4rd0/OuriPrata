@@ -38,6 +38,22 @@ Em outro terminal, para recompilar o CSS enquanto edita os templates:
 python manage.py tailwind start
 ```
 
+## O CSS é compilado aqui, não no deploy
+
+O build do Railway só enxerga Python: ele detecta o projeto pelo
+`pyproject.toml`, e o `package.json` do Tailwind está em `theme/static_src/`,
+não na raiz. Não há Node no container de build.
+
+O que vai para produção é o `theme/static/css/dist/styles.css` versionado no
+repositório. Então, ao mexer em classes nos templates:
+
+```bash
+python manage.py tailwind build
+```
+
+e commite o `styles.css` junto — senão o estilo novo simplesmente não aparece no
+ar, sem erro nenhum para denunciar.
+
 ## Conferir o comportamento de produção antes do deploy
 
 ```bash
