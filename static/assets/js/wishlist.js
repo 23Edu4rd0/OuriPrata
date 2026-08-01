@@ -1,5 +1,33 @@
-// Wishlist client-side (localStorage) — sem backend, persiste no navegador
+// Wishlist — localStorage para visitantes anônimos, sincronizado com o servidor quando logado
 const WISHLIST_KEY = 'ouriprata_wishlist';
+
+function getCookie(name) {
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? decodeURIComponent(match[2]) : null;
+}
+
+function isAuthenticated() {
+    return document.body.dataset.userAuthenticated === '1';
+}
+
+function toggleWishlistOnServer(slug) {
+    const url = document.body.dataset.toggleWishlistUrl;
+    if (!url) return;
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': getCookie('csrftoken'),
+        },
+        body: `slug=${encodeURIComponent(slug)}`,
+    }).then(response => {
+        if (!response.ok) {
+            console.warn('[wishlist] server sync failed', response.status);
+        }
+    }).catch(err => {
+        console.warn('[wishlist] server sync error', err);
+    });
+}
 
 function getWishlist() {
     try {
@@ -69,6 +97,10 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         const added = toggleWishlist(data);
         syncWishlistButtons();
+
+        if (isAuthenticated()) {
+            toggleWishlistOnServer(data.slug);
+        }
 
         if (typeof renderWishlistPage === 'function') {
             renderWishlistPage();

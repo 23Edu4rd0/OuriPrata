@@ -4,24 +4,24 @@
 <nav
   class="fixed top-0 inset-x-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200/70 transition-all duration-300"
   id="opNav" role="navigation" aria-label="Navegação principal">
-  <div class="max-w-[1200px] mx-auto px-6 lg:px-10 h-[80px] flex items-center justify-between">
+  <div class="max-w-[1360px] mx-auto px-6 lg:px-10 h-[80px] flex items-center gap-6">
 
-    <!-- Logo -->
-    <a href="{% url 'home' %}" class="flex-shrink-0 group flex items-center gap-3"
+    <!-- Zona 1: Logo -->
+    <a href="{% url 'home' %}" class="flex-shrink-0 group flex items-center gap-2.5 mr-2"
       aria-label="OuriPrata - Página inicial">
       <span class="text-[22px] lg:text-2xl font-serif tracking-[0.02em] leading-none">
         <span
           class="text-gray-800 font-medium transition-colors duration-500 group-hover:text-gray-500">Ouri</span><span
           class="text-gold-500 italic font-light transition-colors duration-500 group-hover:text-gold-600">Prata</span>
       </span>
-      <span class="h-3.5 w-px bg-gold-300"></span>
-      <span class="text-[9px] font-sans uppercase tracking-[0.35em] text-gray-400 mt-px">
+      <span class="h-3.5 w-px bg-gold-300 hidden lg:block"></span>
+      <span class="hidden lg:block text-[9px] font-sans uppercase tracking-[0.3em] text-gray-400 mt-px">
         Joalheria
       </span>
     </a>
 
-    <!-- Links desktop -->
-    <ul class="hidden md:flex items-center gap-10 lg:gap-14" role="list">
+    <!-- Zona 2: Links desktop (ocupa o espaço livre) -->
+    <ul class="hidden md:flex flex-1 items-center justify-center gap-7 lg:gap-9" role="list">
       <li>
         <a href="{% url 'home' %}"
           class="relative pb-1 text-[11px] font-medium uppercase tracking-[0.2em] transition-colors duration-300
@@ -48,6 +48,14 @@
         </a>
       </li>
       <li>
+        <a href="{% url 'collection_list' %}" class="relative pb-1 text-[11px] font-medium uppercase tracking-[0.2em] transition-colors duration-300
+          {% if 'colecoes' in request.path %} text-gold-600 {% else %} text-gray-500 hover:text-gray-800 {% endif %}
+          after:content-[''] after:absolute after:left-0 after:-bottom-0 after:h-px after:bg-gold-500 after:transition-all after:duration-300
+          {% if 'colecoes' in request.path %} after:w-full {% else %} after:w-0 hover:after:w-full {% endif %}">
+          Coleções
+        </a>
+      </li>
+      <li>
         <a href="{% url 'contact_us' %}" class="relative pb-1 text-[11px] font-medium uppercase tracking-[0.2em] transition-colors duration-300
           {% if 'contato' in request.path %} text-gold-600 {% else %} text-gray-500 hover:text-gray-800 {% endif %}
           after:content-[''] after:absolute after:left-0 after:-bottom-0 after:h-px after:bg-gold-500 after:transition-all after:duration-300
@@ -57,43 +65,65 @@
       </li>
     </ul>
 
-    <!-- Ações Desktop -->
-    <!-- Busca: pill claro integrado à navbar, botão circular neutro (sem dourado) -->
-    <form method="get" action="{% url 'search_products' %}"
-      class="relative group flex items-center h-10 pl-4 pr-1 bg-gray-50 rounded-full border border-gray-200 overflow-hidden hover:border-gray-300 focus-within:border-gray-400 focus-within:bg-white transition-colors duration-300"
-      role="search">
-      <input type="text" name="q" id="navSearch"
-        class="w-[150px] lg:w-[180px] bg-transparent border-0 shadow-none appearance-none p-0 text-xs text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-0"
-        placeholder="Buscar joias..." autocomplete="off" aria-label="Buscar joias">
-      <button type="submit"
-        class="flex items-center justify-center w-8 h-8 rounded-full bg-gray-800 group-hover:bg-gray-700 transition-colors duration-300 shrink-0"
-        aria-label="Buscar">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 text-white">
-          <circle cx="11" cy="11" r="7"></circle>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
+    <!-- Zona 3: Ações (busca + ícones), agrupadas à direita -->
+    <div class="flex items-center gap-1.5 lg:gap-2 flex-shrink-0 ml-auto md:ml-0">
+
+      <!-- Busca: oculta em mobile (mobile usa o drawer), visível em md+ -->
+      <form method="get" action="{% url 'search_products' %}"
+        class="relative group hidden md:flex items-center h-10 pl-4 pr-1 mr-2 bg-gray-50/80 rounded-full border border-gray-200 hover:border-gray-300 focus-within:border-gold-400 focus-within:bg-white focus-within:shadow-[0_0_0_3px_rgba(201,151,62,.10)] transition-all duration-300"
+        role="search">
+        <input type="text" name="q" id="navSearch"
+          class="w-[130px] lg:w-[170px] bg-transparent border-0 shadow-none appearance-none p-0 text-xs text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-0"
+          placeholder="Buscar joias..." autocomplete="off" aria-label="Buscar joias">
+        <button type="submit"
+          class="flex items-center justify-center w-8 h-8 rounded-full bg-gray-800 group-hover:bg-gold-500 transition-colors duration-300 shrink-0"
+          aria-label="Buscar">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 text-white">
+            <circle cx="11" cy="11" r="7"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+        <!-- Sugestões da busca -->
+        <div
+          class="absolute top-full left-0 right-0 mt-2 bg-white shadow-lg shadow-gray-200/60 border border-gray-200 rounded-2xl overflow-hidden hidden empty:hidden"
+          id="searchSuggestions" role="listbox"></div>
+      </form>
+
+      <!-- Favoritos -->
+      <a href="{% url 'wishlist' %}" aria-label="Favoritos" class="relative hidden md:flex items-center justify-center w-9 h-9 rounded-full text-gray-600 hover:text-gold-500 hover:bg-gold-50 transition-all duration-300">
+        <i class="bi bi-heart text-lg"></i>
+        <span data-wishlist-count class="hidden absolute top-0 right-0 min-w-[16px] h-4 px-1 rounded-full bg-gold-500 text-white text-[9px] leading-4 text-center font-medium">0</span>
+      </a>
+
+      <!-- Carrinho -->
+      <a href="{% url 'cart' %}" aria-label="Carrinho" class="relative hidden md:flex items-center justify-center w-9 h-9 rounded-full text-gray-600 hover:text-gold-500 hover:bg-gold-50 transition-all duration-300">
+        <i class="bi bi-bag text-lg"></i>
+        <span data-cart-count class="hidden absolute top-0 right-0 min-w-[16px] h-4 px-1 rounded-full bg-ink text-white text-[9px] leading-4 text-center font-medium">0</span>
+      </a>
+
+      <!-- Conta -->
+      {% if user.is_authenticated %}
+      <a href="{% url 'profile' %}" aria-label="Minha conta" class="hidden md:flex items-center justify-center w-9 h-9 rounded-full text-gray-600 hover:text-gold-500 hover:bg-gold-50 transition-all duration-300">
+        <i class="bi bi-person-circle text-lg"></i>
+      </a>
+      {% else %}
+      <a href="{% url 'login' %}"
+        class="hidden md:flex items-center ml-1.5 px-5 h-9 rounded-full border border-ink/15 text-[10px] font-medium uppercase tracking-[0.18em] text-gray-600 hover:border-gold-400 hover:text-gold-600 hover:bg-gold-50 transition-all duration-300 whitespace-nowrap">
+        Entrar
+      </a>
+      {% endif %}
+
+      <!-- Toggle Mobile (Hamburger) -->
+      <button
+        class="md:hidden flex flex-col justify-center items-center gap-[6px] w-10 h-10 text-gray-700 focus:outline-none"
+        id="navToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="navDrawer">
+        <span class="w-6 h-px bg-current"></span>
+        <span class="w-6 h-px bg-current"></span>
+        <span class="w-3.5 h-px bg-gold-500"></span>
       </button>
-      <!-- Sugestões da busca -->
-      <div
-        class="absolute top-full left-0 right-0 mt-2 bg-white shadow-lg shadow-gray-200/60 border border-gray-200 rounded-2xl overflow-hidden hidden empty:hidden"
-        id="searchSuggestions" role="listbox"></div>
-    </form>
 
-    <!-- Favoritos -->
-    <a href="{% url 'wishlist' %}" aria-label="Favoritos" class="relative hidden md:flex items-center justify-center w-9 h-9 text-gray-600 hover:text-gold-500 transition-colors">
-      <i class="bi bi-heart text-lg"></i>
-      <span data-wishlist-count class="hidden absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 rounded-full bg-gold-500 text-white text-[9px] leading-4 text-center font-medium">0</span>
-    </a>
-
-    <!-- Toggle Mobile (Hamburger) -->
-    <button
-      class="md:hidden flex flex-col justify-center items-center gap-[6px] w-10 h-10 text-gray-700 focus:outline-none"
-      id="navToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="navDrawer">
-      <span class="w-6 h-px bg-current"></span>
-      <span class="w-6 h-px bg-current"></span>
-      <span class="w-3.5 h-px bg-gold-500"></span>
-    </button>
+    </div>
 
   </div>
 </nav>
@@ -110,75 +140,101 @@
   id="navDrawer" role="dialog" aria-label="Menu de navegação" aria-modal="true">
 
   <!-- Header do Drawer -->
-  <div class="flex items-center justify-between px-6 h-[80px] border-b border-gray-100 shrink-0">
-    <span class="text-xl font-serif tracking-[0.02em]">
+  <div class="flex items-center justify-between px-5 h-[60px] border-b border-gray-100 shrink-0">
+    <span class="text-lg font-serif tracking-[0.02em]">
       <span class="text-gray-800 font-medium">Ouri</span><span class="text-gold-500 italic font-light">Prata</span>
     </span>
-    <button onclick="closeDrawer()"
-      class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-800 transition-colors duration-300"
+    <button type="button" id="drawerClose"
+      class="w-9 h-9 -mr-1.5 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-800 hover:bg-gray-100 transition-colors duration-300"
       aria-label="Fechar menu">
       <i class="bi bi-x-lg text-sm"></i>
     </button>
   </div>
 
-  <!-- Links Mobile -->
-  <div class="flex-grow overflow-y-auto px-6 py-10 flex flex-col gap-7">
-    <a href="{% url 'home' %}"
-      class="text-lg font-serif text-gray-800 hover:text-gold-600 transition-colors duration-300 flex items-center justify-between group">
-      Início
-      <span class="w-5 h-px bg-gray-300 group-hover:w-8 group-hover:bg-gold-500 transition-all duration-300"></span>
-    </a>
-    <a href="{% url 'all_products' %}"
-      class="text-lg font-serif text-gray-800 hover:text-gold-600 transition-colors duration-300 flex items-center justify-between group">
-      Coleção
-      <span class="w-5 h-px bg-gray-300 group-hover:w-8 group-hover:bg-gold-500 transition-all duration-300"></span>
-    </a>
-    <a href="{% url 'about_us' %}"
-      class="text-lg font-serif text-gray-800 hover:text-gold-600 transition-colors duration-300 flex items-center justify-between group">
-      Sobre
-      <span class="w-5 h-px bg-gray-300 group-hover:w-8 group-hover:bg-gold-500 transition-all duration-300"></span>
-    </a>
-    <a href="{% url 'contact_us' %}"
-      class="text-lg font-serif text-gray-800 hover:text-gold-600 transition-colors duration-300 flex items-center justify-between group">
-      Contato
-      <span class="w-5 h-px bg-gray-300 group-hover:w-8 group-hover:bg-gold-500 transition-all duration-300"></span>
-    </a>
-    <a href="{% url 'wishlist' %}"
-      class="text-lg font-serif text-gray-800 hover:text-gold-600 transition-colors duration-300 flex items-center justify-between group">
-      Favoritos
-      <span class="flex items-center gap-2">
-        <span data-wishlist-count class="hidden text-xs font-sans text-gold-500">0</span>
-        <span class="w-5 h-px bg-gray-300 group-hover:w-8 group-hover:bg-gold-500 transition-all duration-300"></span>
-      </span>
-    </a>
+  <div class="flex-grow overflow-y-auto">
 
     <!-- Busca Mobile -->
-    <div class="mt-6 pt-8 border-t border-gray-100">
-      <p class="text-[10px] font-medium uppercase tracking-[0.3em] text-gray-400 mb-4">Procurando algo?</p>
+    <div class="px-5 pt-4 pb-3">
       <form method="get" action="{% url 'search_products' %}"
-        class="flex items-center h-11 pl-4 pr-1 bg-gray-50 rounded-full border border-gray-200 overflow-hidden focus-within:border-gray-400 focus-within:bg-white transition-colors duration-300">
+        class="flex items-center h-10 pl-4 pr-1 bg-gray-50 rounded-full border border-gray-200 focus-within:border-gold-400 focus-within:bg-white transition-colors duration-300">
         <input type="text" name="q"
-          class="flex-1 bg-transparent border-0 shadow-none appearance-none p-0 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-0"
+          class="flex-1 min-w-0 bg-transparent border-0 shadow-none appearance-none p-0 text-[13px] text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-0"
           placeholder="Buscar joias..." aria-label="Buscar no mobile">
-        <button type="submit" class="flex items-center justify-center w-9 h-9 rounded-full bg-gray-800 shrink-0"
+        <button type="submit" class="flex items-center justify-center w-8 h-8 rounded-full bg-gray-800 shrink-0"
           aria-label="Buscar">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-white">
+            stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 text-white">
             <circle cx="11" cy="11" r="7"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
         </button>
       </form>
     </div>
+
+    <!-- Navegação -->
+    <nav class="px-5 py-1">
+      <a href="{% url 'home' %}"
+        class="flex items-center justify-between py-3 border-b border-gray-100 text-[15px] font-serif text-gray-800 hover:text-gold-600 transition-colors duration-200 group">
+        Início
+        <i class="bi bi-chevron-right text-[10px] text-gray-300 group-hover:text-gold-500 transition-colors"></i>
+      </a>
+      <a href="{% url 'all_products' %}"
+        class="flex items-center justify-between py-3 border-b border-gray-100 text-[15px] font-serif text-gray-800 hover:text-gold-600 transition-colors duration-200 group">
+        Coleção
+        <i class="bi bi-chevron-right text-[10px] text-gray-300 group-hover:text-gold-500 transition-colors"></i>
+      </a>
+      <a href="{% url 'collection_list' %}"
+        class="flex items-center justify-between py-3 border-b border-gray-100 text-[15px] font-serif text-gray-800 hover:text-gold-600 transition-colors duration-200 group">
+        Coleções
+        <i class="bi bi-chevron-right text-[10px] text-gray-300 group-hover:text-gold-500 transition-colors"></i>
+      </a>
+      <a href="{% url 'about_us' %}"
+        class="flex items-center justify-between py-3 border-b border-gray-100 text-[15px] font-serif text-gray-800 hover:text-gold-600 transition-colors duration-200 group">
+        Sobre
+        <i class="bi bi-chevron-right text-[10px] text-gray-300 group-hover:text-gold-500 transition-colors"></i>
+      </a>
+      <a href="{% url 'contact_us' %}"
+        class="flex items-center justify-between py-3 text-[15px] font-serif text-gray-800 hover:text-gold-600 transition-colors duration-200 group">
+        Contato
+        <i class="bi bi-chevron-right text-[10px] text-gray-300 group-hover:text-gold-500 transition-colors"></i>
+      </a>
+    </nav>
+
+    <!-- Atalhos da conta -->
+    <div class="mx-5 my-3 p-1 bg-gray-50/70 rounded-xl">
+      <a href="{% url 'wishlist' %}"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] text-gray-700 hover:bg-white hover:text-gold-600 transition-colors duration-200">
+        <i class="bi bi-heart text-gold-500/70 text-sm w-4"></i>
+        Favoritos
+        <span data-wishlist-count class="hidden ml-auto min-w-[18px] h-[18px] px-1 rounded-full bg-gold-500 text-white text-[10px] leading-[18px] text-center">0</span>
+      </a>
+      <a href="{% url 'cart' %}"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] text-gray-700 hover:bg-white hover:text-gold-600 transition-colors duration-200">
+        <i class="bi bi-bag text-gold-500/70 text-sm w-4"></i>
+        Carrinho
+        <span data-cart-count class="hidden ml-auto min-w-[18px] h-[18px] px-1 rounded-full bg-ink text-white text-[10px] leading-[18px] text-center">0</span>
+      </a>
+      {% if user.is_authenticated %}
+      <a href="{% url 'profile' %}"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] text-gray-700 hover:bg-white hover:text-gold-600 transition-colors duration-200">
+        <i class="bi bi-person text-gold-500/70 text-sm w-4"></i>
+        Minha conta
+      </a>
+      {% else %}
+      <a href="{% url 'login' %}"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] text-gray-700 hover:bg-white hover:text-gold-600 transition-colors duration-200">
+        <i class="bi bi-person text-gold-500/70 text-sm w-4"></i>
+        Entrar
+      </a>
+      {% endif %}
+    </div>
+
   </div>
 
   <!-- Footer do Drawer -->
-  <div class="p-6 border-t border-gray-100 shrink-0">
-    <p class="text-[13px] text-gray-500 leading-relaxed font-light mb-5">
-      Joias em ouro e prata, feitas com amor e cuidado para cada momento especial.
-    </p>
+  <div class="px-5 py-4 border-t border-gray-100 shrink-0">
     <a href="https://wa.me/5537998623061" target="_blank" rel="noopener"
-      class="flex items-center justify-center gap-2 w-full py-3.5 border border-gold-500 text-gold-600 hover:bg-gold-500 hover:text-white rounded-full text-xs font-medium uppercase tracking-[0.15em] transition-colors duration-300">
+      class="flex items-center justify-center gap-2 w-full py-3 border border-gold-500 text-gold-600 hover:bg-gold-500 hover:text-white rounded-full text-[11px] font-medium uppercase tracking-[0.15em] transition-colors duration-300">
       <i class="bi bi-whatsapp"></i> Falar via WhatsApp
     </a>
   </div>

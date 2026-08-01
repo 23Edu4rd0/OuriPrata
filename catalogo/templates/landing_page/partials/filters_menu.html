@@ -1,66 +1,79 @@
-{% comment %} Barra de filtro por preço — discreta, acima do grid de produtos {% endcomment %}
-<div class="flex flex-wrap items-center justify-between gap-4 mb-10 pb-6 border-b border-ink/5">
+{% comment %} Barra de filtros server-side — preço, material, ocasião, gênero e ordenação {% endcomment %}
+<form method="get" class="mb-10">
+  {% if search_query %}<input type="hidden" name="q" value="{{ search_query }}">{% endif %}
+  {% if category_filter %}<input type="hidden" name="categoria" value="{{ category_filter }}">{% endif %}
 
-  <p class="text-[11px] tracking-[0.15em] uppercase text-ink/40">
-    <span id="resultsCount">{{ total_products }}</span> peça{{ total_products|pluralize:"s" }}
-  </p>
+  <div class="bg-white rounded-2xl border border-ink/8 shadow-[0_1px_16px_rgba(0,0,0,.035)] px-5 py-4 md:px-6 md:py-5">
+    <div class="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-6">
 
-  <div class="flex items-center gap-3">
-    <span class="text-[10px] tracking-[0.2em] uppercase text-ink/40 hidden sm:inline">Preço</span>
-    <div class="flex items-center gap-2">
-      <input type="number" id="preco-min" placeholder="Mín."
-        class="w-20 bg-transparent border-b border-ink/15 px-1 py-1.5 text-sm text-ink placeholder-ink/30 focus:outline-none focus:border-gold-400 transition-colors">
-      <span class="text-ink/20">—</span>
-      <input type="number" id="preco-max" placeholder="Máx."
-        class="w-20 bg-transparent border-b border-ink/15 px-1 py-1.5 text-sm text-ink placeholder-ink/30 focus:outline-none focus:border-gold-400 transition-colors">
+      <!-- Contador -->
+      <div class="flex items-center gap-2.5 shrink-0">
+        <span class="text-gold-400/70 text-[7px]">◆</span>
+        <p class="text-[11px] tracking-[0.15em] uppercase text-ink/45 whitespace-nowrap">
+          {{ total_products }} peça{{ total_products|pluralize:"s" }}
+        </p>
+      </div>
+
+      <div class="hidden lg:block h-7 w-px bg-ink/8 shrink-0"></div>
+
+      <!-- Controles -->
+      <div class="flex flex-wrap items-center gap-2.5 lg:flex-1">
+
+        <!-- Faixa de preço -->
+        <div class="inline-flex items-center gap-1.5 bg-cream-50 border border-ink/10 rounded-full pl-4 pr-2 py-1 hover:border-ink/20 focus-within:border-gold-400 focus-within:shadow-[0_0_0_3px_rgba(201,151,62,.10)] transition-all duration-250">
+          <span class="text-[9px] tracking-[0.18em] uppercase text-ink/35 mr-0.5">R$</span>
+          <input type="number" name="preco_min" value="{{ selected_preco_min }}" placeholder="mín"
+            aria-label="Preço mínimo"
+            class="w-14 bg-transparent border-0 p-0 text-[12px] text-ink placeholder-ink/30 focus:outline-none focus:ring-0">
+          <span class="text-ink/20 text-xs">—</span>
+          <input type="number" name="preco_max" value="{{ selected_preco_max }}" placeholder="máx"
+            aria-label="Preço máximo"
+            class="w-14 bg-transparent border-0 p-0 text-[12px] text-ink placeholder-ink/30 focus:outline-none focus:ring-0">
+        </div>
+
+        <select name="material" aria-label="Material" class="op-field">
+          <option value="">Material</option>
+          {% for material in materials %}
+            <option value="{{ material.id }}" {% if selected_material == material.id|stringformat:"s" %}selected{% endif %}>{{ material.name }}</option>
+          {% endfor %}
+        </select>
+
+        <select name="ocasiao" aria-label="Ocasião" class="op-field">
+          <option value="">Ocasião</option>
+          {% for occasion in occasions %}
+            <option value="{{ occasion.id }}" {% if selected_occasion == occasion.id|stringformat:"s" %}selected{% endif %}>{{ occasion.name }}</option>
+          {% endfor %}
+        </select>
+
+        <select name="genero" aria-label="Gênero" class="op-field">
+          <option value="">Gênero</option>
+          {% for value, label in gender_choices %}
+            <option value="{{ value }}" {% if selected_gender == value %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+
+        <select name="ordenar" aria-label="Ordenar por" class="op-field">
+          <option value="">Ordenar</option>
+          <option value="recentes" {% if selected_sort == "recentes" %}selected{% endif %}>Mais recentes</option>
+          <option value="preco_asc" {% if selected_sort == "preco_asc" %}selected{% endif %}>Menor preço</option>
+          <option value="preco_desc" {% if selected_sort == "preco_desc" %}selected{% endif %}>Maior preço</option>
+        </select>
+
+      </div>
+
+      <!-- Ações -->
+      <div class="flex items-center gap-4 shrink-0">
+        <button type="submit"
+          class="inline-flex items-center gap-2 text-[10px] tracking-[0.2em] uppercase text-white bg-ink px-6 py-2.5 rounded-full hover:bg-gold-500 transition-colors duration-300 whitespace-nowrap">
+          <i class="bi bi-sliders2 text-[11px]"></i>
+          Aplicar
+        </button>
+        <a href="?{% if search_query %}q={{ search_query|urlencode }}{% endif %}{% if category_filter %}&categoria={{ category_filter|urlencode }}{% endif %}"
+          class="text-[10px] tracking-[0.2em] uppercase text-ink/35 hover:text-ink transition-colors whitespace-nowrap">
+          Limpar
+        </a>
+      </div>
+
     </div>
-    <button type="button" onclick="applyLocalFilters()"
-      class="text-[10px] tracking-[0.2em] uppercase text-white bg-ink px-5 py-2.5 rounded-full hover:bg-gold-500 transition-colors">
-      Aplicar
-    </button>
-    <button type="button" onclick="clearLocalFilters()"
-      class="text-[10px] tracking-[0.2em] uppercase text-ink/40 hover:text-ink transition-colors">
-      Limpar
-    </button>
   </div>
-</div>
-
-<script>
-  function parsePrice(val) {
-    if (!val) return 0;
-    return parseFloat(val.replace(',', '.')) || 0;
-  }
-
-  function applyLocalFilters() {
-    const minPrice = parsePrice(document.getElementById('preco-min').value);
-    const maxPrice = parsePrice(document.getElementById('preco-max').value) || Infinity;
-    const products = document.querySelectorAll('.product-item');
-    let visibleCount = 0;
-
-    products.forEach(product => {
-      const price = parsePrice(product.dataset.price);
-      const show = price >= minPrice && price <= maxPrice;
-      product.style.display = show ? '' : 'none';
-      if (show) visibleCount++;
-    });
-
-    const countEl = document.getElementById('resultsCount');
-    if (countEl) countEl.textContent = visibleCount;
-
-    const emptyMsg = document.getElementById('filtersEmptyState');
-    if (emptyMsg) emptyMsg.classList.toggle('hidden', visibleCount !== 0);
-  }
-
-  function clearLocalFilters() {
-    document.getElementById('preco-min').value = '';
-    document.getElementById('preco-max').value = '';
-    applyLocalFilters();
-  }
-
-  document.addEventListener('DOMContentLoaded', function() {
-    const precoMin = document.getElementById('preco-min');
-    const precoMax = document.getElementById('preco-max');
-    if (precoMin) precoMin.addEventListener('input', applyLocalFilters);
-    if (precoMax) precoMax.addEventListener('input', applyLocalFilters);
-  });
-</script>
+</form>

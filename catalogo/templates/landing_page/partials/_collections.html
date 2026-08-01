@@ -1,0 +1,54 @@
+{% if featured_collections %}
+<section class="py-10 md:py-16 bg-ink">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+
+    <div class="text-center mb-8 md:mb-12">
+      <p class="font-serif italic text-[11px] tracking-[0.35em] text-gold-400/80 uppercase mb-3">Universos de estilo</p>
+      <h2 class="font-serif text-3xl md:text-4xl text-white font-light tracking-wide mb-5">Coleções</h2>
+      <div class="flex items-center justify-center gap-4">
+        <span class="h-px w-10 bg-gold-400/30"></span>
+        <span class="text-gold-400/50 text-[7px]">◆</span>
+        <span class="h-px w-10 bg-gold-400/30"></span>
+      </div>
+    </div>
+
+    {% if featured_collections|length == 1 %}
+    <div class="grid grid-cols-1 gap-5 lg:gap-6">
+    {% elif featured_collections|length == 2 %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 lg:gap-6">
+    {% else %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
+    {% endif %}
+      {% for col in featured_collections %}
+      {% with count=col.products.count %}
+      <a href="{{ col.get_absolute_url }}"
+        class="group relative overflow-hidden rounded-xl bg-stone-800 aspect-[16/9] md:aspect-[4/3] block">
+        {% if col.image %}
+        <img src="{{ col.image.url }}" alt="{{ col.name }}"
+          class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-75 transition-opacity duration-700 group-hover:scale-105 transform transition-transform ease-out">
+        {% endif %}
+        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
+        <div class="absolute bottom-0 left-0 right-0 p-6">
+          <h3 class="font-serif text-xl text-white font-light leading-snug group-hover:text-gold-200 transition-colors duration-300">
+            {{ col.name }}
+          </h3>
+          <p class="text-[10px] tracking-[0.2em] uppercase text-white/40 mt-1 group-hover:text-gold-400/70 transition-colors duration-300">
+            {{ count }} peça{{ count|pluralize:"s" }}
+          </p>
+        </div>
+      </a>
+      {% endwith %}
+      {% endfor %}
+    </div>
+
+    <div class="text-center mt-10">
+      <a href="{% url 'collection_list' %}"
+        class="inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.25em] text-white/40 hover:text-gold-400 transition-colors duration-300 border-b border-white/10 hover:border-gold-400/40 pb-1.5">
+        Ver todas as coleções
+        <i class="bi bi-arrow-right text-xs" aria-hidden="true"></i>
+      </a>
+    </div>
+
+  </div>
+</section>
+{% endif %}

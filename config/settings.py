@@ -39,6 +39,7 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'catalogo.apps.CatalogoConfig',
+    'accounts.apps.AccountsConfig',
     'theme',
     'jazzmin',
     'tailwind',
@@ -157,8 +158,13 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'profile'
+LOGOUT_REDIRECT_URL = 'home'
+
 CSRF_TRUSTED_ORIGINS = [
     'https://0bcfd8c06314.ngrok-free.app',
+    'https://*.loca.lt',
     'http://localhost',
     'http://127.0.0.1',
 ]

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}Entrar — OuriPrata{% endblock %}
+
+{% block content %}
+<main class="bg-cream-50 min-h-[calc(100vh-80px)] flex items-center justify-center py-12 md:py-16 px-6">
+  <div class="w-full max-w-[400px]">
+
+    <!-- Ornament header -->
+    <div class="text-center mb-7">
+      <p class="font-serif italic text-[11px] tracking-[0.35em] text-gold-400 uppercase mb-2">Minha conta</p>
+      <h1 class="font-serif text-3xl text-ink font-light tracking-wide mb-4">Entrar</h1>
+      <div class="flex items-center justify-center gap-4">
+        <span class="h-px w-10 bg-gold-300/60"></span>
+        <span class="text-gold-400/70 text-[7px]">◆</span>
+        <span class="h-px w-10 bg-gold-300/60"></span>
+      </div>
+    </div>
+
+    <!-- Card -->
+    <div class="bg-white border border-ink/8 rounded-2xl px-7 py-8 shadow-[0_2px_24px_rgba(0,0,0,.04)]">
+      <form method="post" class="space-y-5">
+        {% csrf_token %}
+        {% if form.errors %}
+        <p class="text-[12px] text-red-500 bg-red-50 border border-red-100 rounded-lg px-4 py-3">
+          Usuário ou senha inválidos. Tente novamente.
+        </p>
+        {% endif %}
+
+        <div>
+          <label for="{{ form.username.id_for_label }}" class="block text-[9px] tracking-[0.22em] uppercase text-ink/40 mb-2">Usuário</label>
+          {{ form.username }}
+        </div>
+        <div>
+          <label for="{{ form.password.id_for_label }}" class="block text-[9px] tracking-[0.22em] uppercase text-ink/40 mb-2">Senha</label>
+          {{ form.password }}
+        </div>
+
+        <div class="pt-1">
+          <button type="submit"
+            class="w-full text-[10px] tracking-[0.25em] uppercase text-white bg-ink px-5 py-3.5 rounded-full hover:bg-gold-500 transition-colors duration-300">
+            Entrar
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <p class="text-center text-[13px] text-ink/40 font-light mt-6">
+      Ainda não tem conta?
+      <a href="{% url 'signup' %}" class="text-gold-500 hover:text-gold-600 transition-colors ml-1">Cadastre-se</a>
+    </p>
+
+  </div>
+</main>
+
+<script>
+  // Os widgets do Django vêm sem classe — aplica o estilo global de campo
+  document.querySelectorAll('form input[type="text"], form input[type="password"]').forEach(el => {
+    el.classList.add('op-field', 'op-field--block');
+  });
+</script>
+{% endblock %}

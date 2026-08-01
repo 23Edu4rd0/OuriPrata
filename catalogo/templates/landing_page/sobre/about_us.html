@@ -1,35 +1,48 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Nossos Pensamentos — OuriPrata{% endblock %}
+{% block title %}Nossa Filosofia — OuriPrata{% endblock %}
 {% block meta_description %}
-<meta name="description" content="Conheça as ideias, rituais e a filosofia por trás da OuriPrata.">{% endblock %}
+<meta name="description" content="Conheça as ideias, rituais e a filosofia por trás da OuriPrata.">
+{% endblock %}
 
 {% block content %}
-<main class="bg-cream-50 min-h-screen py-16 md:py-24">
-  <div class="max-w-6xl mx-auto px-6 lg:px-12">
+<main class="bg-cream-50 min-h-screen">
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-24 items-center">
+  <!-- Hero split -->
+  <div class="max-w-6xl mx-auto px-6 lg:px-12 py-12 md:py-28">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 lg:gap-28 items-center">
 
-
+      <!-- Image -->
       <div class="order-2 md:order-1">
-        <div class="aspect-[3/4] md:aspect-[4/5] overflow-hidden shadow-sm bg-stone-100">
-          <img src="{% static 'assets/landing_page/cat-aneis.png' %}" alt="A atmosfera de criação da OuriPrata"
-            loading="lazy" class="w-full h-full object-cover opacity-95">
+        <div class="relative">
+          <div class="aspect-[3/4] overflow-hidden rounded-2xl bg-stone-100 shadow-[0_8px_40px_rgba(0,0,0,.08)]">
+            <img src="{% static 'assets/landing_page/cat-aneis.png' %}"
+              alt="A atmosfera de criação da OuriPrata"
+              loading="lazy"
+              class="w-full h-full object-cover opacity-92 hover:opacity-100 transition-opacity duration-700">
+          </div>
+          <!-- Accent line -->
+          <div class="absolute -bottom-6 -right-6 w-2/3 h-px bg-gold-300/50 hidden md:block"></div>
+          <div class="absolute -bottom-6 -right-6 w-px h-2/3 bg-gold-300/50 hidden md:block"></div>
         </div>
       </div>
 
-
+      <!-- Text -->
       <div class="order-1 md:order-2 flex flex-col justify-center">
-
-        <header class="mb-8 md:mb-10">
-          <p class="font-serif italic text-[11px] tracking-[0.3em] text-gold-500 uppercase mb-4">A Filosofia</p>
-          <h1 class="font-serif text-4xl md:text-5xl text-ink font-light tracking-wide leading-tight">
-            A beleza mora <br class="hidden md:block">na calmaria
+        <div class="mb-10">
+          <p class="font-serif italic text-[11px] tracking-[0.35em] text-gold-400 uppercase mb-3">A Filosofia</p>
+          <h1 class="font-serif text-4xl md:text-5xl text-ink font-light tracking-wide leading-tight mb-5">
+            A beleza mora<br class="hidden md:block"> na calmaria
           </h1>
-        </header>
+          <div class="flex items-center gap-4">
+            <span class="h-px w-10 bg-gold-300/60"></span>
+            <span class="text-gold-400/70 text-[7px]">◆</span>
+            <span class="h-px w-10 bg-gold-300/60"></span>
+          </div>
+        </div>
 
-        <article class="font-serif text-[15px] md:text-lg leading-relaxed text-ink/70 space-y-6 font-light">
+        <article class="space-y-6 font-light text-[15px] md:text-[16px] leading-[1.85] text-ink/65">
           <p>
             Acreditamos que as coisas que escolhemos carregar junto ao corpo dizem muito sobre o ritmo que desejamos
             para os nossos dias. Em um mundo que se move rápido demais, a OuriPrata nasce como uma busca por espaço,
@@ -44,14 +57,45 @@
             Não nos interessam as tendências passageiras. Criamos pensando em rituais, na poesia do cotidiano e em
             objetos que ganham vida própria à medida que acompanham as suas próprias histórias e atravessam gerações.
           </p>
-          <p class="pt-4 text-ink italic opacity-80">
-            "Um convite para notar a sutileza nos pequenos detalhes."
-          </p>
         </article>
 
+        <!-- Pull-quote -->
+        <blockquote class="mt-10 pl-5 border-l-2 border-gold-300/70">
+          <p class="font-serif italic text-[15px] md:text-lg text-ink/55 leading-relaxed">
+            "Um convite para notar a sutileza nos pequenos detalhes."
+          </p>
+        </blockquote>
       </div>
 
     </div>
   </div>
+
+  <!-- Values strip -->
+  <div class="border-t border-ink/6 bg-white py-16 md:py-20">
+    <div class="max-w-5xl mx-auto px-6 lg:px-12">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-10 text-center">
+
+        <div>
+          <i class="bi bi-gem text-gold-400 text-xl mb-4 block"></i>
+          <h3 class="font-serif text-[15px] text-ink font-light mb-2">Materiais nobres</h3>
+          <p class="text-[13px] text-ink/50 font-light leading-relaxed">Prata 925 e ouro 18k trabalhados com precisão artesanal.</p>
+        </div>
+
+        <div>
+          <i class="bi bi-heart text-gold-400 text-xl mb-4 block"></i>
+          <h3 class="font-serif text-[15px] text-ink font-light mb-2">Feito com intenção</h3>
+          <p class="text-[13px] text-ink/50 font-light leading-relaxed">Cada peça nasce de um cuidado que vai muito além da forma.</p>
+        </div>
+
+        <div>
+          <i class="bi bi-infinity text-gold-400 text-xl mb-4 block"></i>
+          <h3 class="font-serif text-[15px] text-ink font-light mb-2">Para durar gerações</h3>
+          <p class="text-[13px] text-ink/50 font-light leading-relaxed">Design atemporal que acompanha histórias ao longo do tempo.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
 </main>
 {% endblock %}

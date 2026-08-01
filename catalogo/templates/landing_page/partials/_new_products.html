@@ -1,19 +1,31 @@
 {% load static %}
 
-<section class="pt-6 pb-8 md:pt-8 md:pb-10 bg-white">
-  <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+<section class="py-10 md:py-16 bg-white">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
 
-    <div class="text-center mb-10">
-      <h2 class="font-serif text-3xl text-ink">Lançamentos</h2>
-      <span class="block w-12 h-px bg-gold-400 mx-auto mt-4"></span>
+    <div class="text-center mb-8 md:mb-12">
+      <p class="font-serif italic text-[11px] tracking-[0.35em] text-gold-400 uppercase mb-3">Recém chegadas</p>
+      <h2 class="font-serif text-3xl md:text-4xl text-ink font-light tracking-wide mb-5">Lançamentos</h2>
+      <div class="flex items-center justify-center gap-4">
+        <span class="h-px w-10 bg-gold-300/60"></span>
+        <span class="text-gold-400/70 text-[7px]">◆</span>
+        <span class="h-px w-10 bg-gold-300/60"></span>
+      </div>
     </div>
 
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6 lg:gap-8">
-      {% for product in new_arrivals %}
-        {% include 'landing_page/partials/product_card.html' with product=product %}
-      {% empty %}
-      <p class="col-span-full text-center text-ink/50">Nenhum lançamento no momento.</p>
-      {% endfor %}
+    {% if new_arrivals %}
+      {% include 'landing_page/partials/_product_carousel.html' with products=new_arrivals %}
+    {% else %}
+      <p class="text-center text-ink/40 font-light text-sm py-12">Nenhum lançamento no momento.</p>
+    {% endif %}
+
+    <div class="text-center mt-10">
+      <a href="{% url 'all_products' %}"
+        class="inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.25em] text-ink/50 hover:text-gold-500 transition-colors duration-300 border-b border-ink/15 hover:border-gold-400 pb-1.5">
+        Ver toda a coleção
+        <i class="bi bi-arrow-right text-xs" aria-hidden="true"></i>
+      </a>
     </div>
+
   </div>
 </section>

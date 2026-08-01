@@ -1,0 +1,28 @@
+{% load static %}
+{% if promo_products %}
+<section class="py-10 md:py-16 bg-cream-50">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+
+    <div class="text-center mb-8 md:mb-12">
+      <p class="font-serif italic text-[11px] tracking-[0.35em] text-red-400 uppercase mb-3">Por tempo limitado</p>
+      <h2 class="font-serif text-3xl md:text-4xl text-ink font-light tracking-wide mb-5">Promoções</h2>
+      <div class="flex items-center justify-center gap-4">
+        <span class="h-px w-10 bg-red-300/50"></span>
+        <span class="text-red-400/60 text-[7px]">◆</span>
+        <span class="h-px w-10 bg-red-300/50"></span>
+      </div>
+    </div>
+
+    {% include 'landing_page/partials/_product_carousel.html' with products=promo_products %}
+
+    <div class="text-center mt-10">
+      <a href="{% url 'all_products' %}?ordenar=preco_asc"
+        class="inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.25em] text-ink/50 hover:text-red-500 transition-colors duration-300 border-b border-ink/15 hover:border-red-400 pb-1.5">
+        Ver todas as ofertas
+        <i class="bi bi-arrow-right text-xs" aria-hidden="true"></i>
+      </a>
+    </div>
+
+  </div>
+</section>
+{% endif %}

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ collection.name }} — OuriPrata{% endblock %}
+
+{% block content %}
+<main class="bg-cream-50 min-h-screen py-10 md:py-24">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
+
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-3 text-[10px] tracking-[0.2em] uppercase text-ink/40 mb-12">
+      <a href="{% url 'home' %}" class="hover:text-ink transition-colors">Início</a>
+      <span>/</span>
+      <a href="{% url 'collection_list' %}" class="hover:text-ink transition-colors">Coleções</a>
+      <span>/</span>
+      <span class="text-ink/70">{{ collection.name }}</span>
+    </nav>
+
+    <!-- Header -->
+    <div class="text-center mb-8 md:mb-14">
+      <p class="font-serif italic text-[11px] tracking-[0.35em] text-gold-400 uppercase mb-3">Coleção</p>
+      <h1 class="font-serif text-4xl md:text-5xl text-ink font-light tracking-wide mb-5">{{ collection.name }}</h1>
+      <div class="flex items-center justify-center gap-4 mb-5">
+        <span class="h-px w-10 bg-gold-300/60"></span>
+        <span class="text-gold-400/70 text-[7px]">◆</span>
+        <span class="h-px w-10 bg-gold-300/60"></span>
+      </div>
+      {% if collection.description %}
+      <p class="font-serif text-[15px] text-ink/60 font-light max-w-xl mx-auto leading-relaxed">
+        {{ collection.description }}
+      </p>
+      {% endif %}
+      <p class="text-[10px] tracking-[0.22em] uppercase text-ink/35 mt-4">
+        {{ total_products }} peça{{ total_products|pluralize:"s" }}
+      </p>
+    </div>
+
+    <!-- Collection hero image -->
+    {% if collection.image %}
+    <div class="w-full h-48 md:h-72 overflow-hidden rounded-2xl mb-8 md:mb-14 shadow-sm">
+      <img src="{{ collection.image.url }}" alt="{{ collection.name }}"
+        class="w-full h-full object-cover opacity-90">
+    </div>
+    {% endif %}
+
+    {% if products %}
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-6 gap-y-14">
+      {% for product in products %}
+        {% include 'landing_page/partials/product_card.html' %}
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-32">
+      <i class="bi bi-gem text-3xl text-ink/15 block mb-4"></i>
+      <p class="font-serif text-xl text-ink/40 font-light">Nenhuma peça nesta coleção.</p>
+    </div>
+    {% endif %}
+
+  </div>
+</main>
+{% endblock %}

@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Consulta Personalizada — OuriPrata{% endblock %}
+
+{% block content %}
+<main class="bg-cream-50 min-h-screen py-10 md:py-24">
+  <div class="max-w-6xl mx-auto px-6 lg:px-12">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+
+      <!-- Texto -->
+      <div class="lg:col-span-5">
+        <div class="mb-10">
+          <p class="font-serif italic text-[11px] tracking-[0.35em] text-gold-400 uppercase mb-3">Exclusivo para você</p>
+          <h1 class="font-serif text-4xl md:text-5xl text-ink font-light tracking-wide leading-tight mb-5">
+            Consulta<br>personalizada
+          </h1>
+          <div class="flex items-center gap-4 mb-8">
+            <span class="h-px w-10 bg-gold-300/60"></span>
+            <span class="text-gold-400/70 text-[7px]">◆</span>
+            <span class="h-px w-10 bg-gold-300/60"></span>
+          </div>
+          <p class="text-[15px] leading-relaxed text-ink/65 font-light">
+            Não encontrou o que procura? Fale conosco e criamos ou buscamos a peça ideal para o seu momento.
+            Preenchendo o formulário, nossa equipe entra em contato via WhatsApp com sugestões personalizadas.
+          </p>
+        </div>
+
+        <div class="space-y-8">
+          <div class="flex items-start gap-4">
+            <i class="bi bi-gem text-gold-400 text-xl mt-1"></i>
+            <div>
+              <h3 class="font-serif text-[15px] text-ink font-light mb-1">Peças sob encomenda</h3>
+              <p class="text-[13px] text-ink/50 font-light">Desenvolvemos projetos exclusivos em ouro e prata com acabamento artesanal.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <i class="bi bi-clock-history text-gold-400 text-xl mt-1"></i>
+            <div>
+              <h3 class="font-serif text-[15px] text-ink font-light mb-1">Retorno em até 24h</h3>
+              <p class="text-[13px] text-ink/50 font-light">Nossa equipe responde pelo WhatsApp de segunda a sexta, das 8h às 17h.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <i class="bi bi-heart text-gold-400 text-xl mt-1"></i>
+            <div>
+              <h3 class="font-serif text-[15px] text-ink font-light mb-1">Presente especial?</h3>
+              <p class="text-[13px] text-ink/50 font-light">Podemos ajudá-lo a escolher a peça certa para o momento certo.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formulário -->
+      <div class="lg:col-span-7">
+        <div class="bg-white border border-ink/8 rounded-2xl p-6 md:p-9 shadow-[0_2px_24px_rgba(0,0,0,.04)]">
+          <h2 class="font-serif text-2xl text-ink font-light mb-2">Conte-nos sobre sua ideia</h2>
+          <p class="text-[13px] text-ink/45 font-light mb-8">
+            Quanto mais detalhes, melhor conseguimos ajudar.
+          </p>
+
+          <form id="consultaForm" class="space-y-5">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div>
+                <label for="c-nome" class="block text-[9px] tracking-[0.22em] uppercase text-ink/40 mb-2">Seu nome</label>
+                <input type="text" id="c-nome" required class="op-field op-field--block">
+              </div>
+              <div>
+                <label for="c-orcamento" class="block text-[9px] tracking-[0.22em] uppercase text-ink/40 mb-2">Orçamento aproximado</label>
+                <input type="text" id="c-orcamento" placeholder="Ex: R$ 300" class="op-field op-field--block">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div>
+                <label for="c-tipo" class="block text-[9px] tracking-[0.22em] uppercase text-ink/40 mb-2">Tipo de joia</label>
+                <select id="c-tipo" class="op-field op-field--block">
+                  <option value="">Qualquer</option>
+                  <option>Anel</option>
+                  <option>Colar / Gargantilha</option>
+                  <option>Brinco</option>
+                  <option>Pulseira</option>
+                  <option>Aliança</option>
+                  <option>Outro</option>
+                </select>
+              </div>
+              <div>
+                <label for="c-metal" class="block text-[9px] tracking-[0.22em] uppercase text-ink/40 mb-2">Metal preferido</label>
+                <select id="c-metal" class="op-field op-field--block">
+                  <option value="">Sem preferência</option>
+                  {% for mat in materials %}
+                  <option>{{ mat.name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label for="c-ocasiao" class="block text-[9px] tracking-[0.22em] uppercase text-ink/40 mb-2">Ocasião</label>
+              <select id="c-ocasiao" class="op-field op-field--block">
+                <option value="">Qualquer</option>
+                {% for occ in occasions %}
+                <option>{{ occ.name }}</option>
+                {% endfor %}
+                <option>Presente</option>
+                <option>Uso diário</option>
+                <option>Evento especial</option>
+                <option>Casamento</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="c-descricao" class="block text-[9px] tracking-[0.22em] uppercase text-ink/40 mb-2">Descreva o que tem em mente</label>
+              <textarea id="c-descricao" rows="4" required
+                placeholder="Ex: Procuro um anel delicado em prata com pedra para usar no dia a dia..."
+                class="op-field op-field--block"></textarea>
+            </div>
+
+            <div class="pt-2">
+              <button type="submit"
+                class="flex items-center justify-center gap-3 w-full bg-[#25D366] hover:bg-[#20BD5A] text-white px-8 py-4 rounded-full text-[11px] uppercase tracking-[0.2em] transition-colors duration-300">
+                <i class="bi bi-whatsapp text-base"></i>
+                Enviar via WhatsApp
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('consultaForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const nome    = document.getElementById('c-nome').value.trim();
+  const tipo    = document.getElementById('c-tipo').value;
+  const metal   = document.getElementById('c-metal').value;
+  const ocasiao = document.getElementById('c-ocasiao').value;
+  const orc     = document.getElementById('c-orcamento').value.trim();
+  const desc    = document.getElementById('c-descricao').value.trim();
+
+  let msg = `Olá! Gostaria de uma consulta personalizada.\n\n`;
+  msg += `*Nome:* ${nome}\n`;
+  if (tipo)    msg += `*Tipo de joia:* ${tipo}\n`;
+  if (metal)   msg += `*Metal:* ${metal}\n`;
+  if (ocasiao) msg += `*Ocasião:* ${ocasiao}\n`;
+  if (orc)     msg += `*Orçamento:* ${orc}\n`;
+  msg += `\n*Descrição:*\n${desc}`;
+
+  window.open(`https://wa.me/5537998623061?text=${encodeURIComponent(msg)}`, '_blank');
+});
+</script>
+{% endblock %}
