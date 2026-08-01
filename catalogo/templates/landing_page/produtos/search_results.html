@@ -6,7 +6,7 @@
 <meta name="description" content="{{ page_subtitle }}">{% endblock %}
 
 {% block content %}
-<main class="bg-cream-50 min-h-screen py-16 md:py-24">
+<main class="bg-cream-50 min-h-screen py-10 md:py-24">
   <div class="max-w-7xl mx-auto px-6 lg:px-12">
 
     <header class="text-center mb-12 md:mb-16">
@@ -47,6 +47,8 @@
       {% endfor %}
     </nav>
     {% endif %}
+
+    {% include 'landing_page/partials/filters_menu.html' %}
 
     {% if products %}
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-6 gap-y-12">

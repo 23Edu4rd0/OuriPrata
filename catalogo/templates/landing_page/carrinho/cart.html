@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Carrinho — OuriPrata{% endblock %}
+
+{% block content %}
+<main class="bg-cream-50 min-h-screen py-10 md:py-24">
+  <div class="max-w-4xl mx-auto px-6 lg:px-12">
+
+    <!-- Header -->
+    <div class="text-center mb-8 md:mb-12">
+      <p class="font-serif italic text-[11px] tracking-[0.35em] text-gold-400 uppercase mb-3">Seu pedido</p>
+      <h1 class="font-serif text-4xl text-ink font-light tracking-wide mb-5">Carrinho</h1>
+      <div class="flex items-center justify-center gap-4">
+        <span class="h-px w-10 bg-gold-300/60"></span>
+        <span class="text-gold-400/70 text-[7px]">◆</span>
+        <span class="h-px w-10 bg-gold-300/60"></span>
+      </div>
+    </div>
+
+    <!-- Items -->
+    <div id="cartItems" class="space-y-4 mb-10"></div>
+
+    <!-- Empty state -->
+    <div id="cartEmpty" class="hidden text-center py-28">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-full border border-dashed border-gold-300/60 mb-8">
+        <i class="bi bi-bag text-xl text-gold-400/60"></i>
+      </div>
+      <p class="font-serif text-2xl text-ink font-light mb-2">Seu carrinho está vazio.</p>
+      <p class="text-[13px] text-ink/40 font-light mb-8">Explore a coleção e adicione as peças que chamarem atenção.</p>
+      <a href="{% url 'all_products' %}"
+        class="inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.25em] text-ink/50 hover:text-gold-500 transition-colors duration-300 border-b border-ink/15 hover:border-gold-400 pb-1.5">
+        Explorar a coleção <i class="bi bi-arrow-right text-xs"></i>
+      </a>
+    </div>
+
+    <!-- Summary + checkout -->
+    <div id="cartSummary" class="hidden border-t border-ink/10 pt-8">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+        <div>
+          <p class="text-[10px] tracking-[0.2em] uppercase text-ink/40 mb-1">Total estimado</p>
+          <p class="font-serif text-3xl text-ink font-light" id="cartTotal">R$ 0,00</p>
+          <p class="text-[11px] text-ink/35 mt-1">Frete e condições confirmados pelo atendimento</p>
+        </div>
+        <button id="whatsappCheckout"
+          class="flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#20BD5A] text-white px-8 py-4 rounded-full text-[11px] uppercase tracking-[0.2em] transition-colors duration-300 shadow-sm">
+          <i class="bi bi-whatsapp text-base"></i>
+          Finalizar via WhatsApp
+        </button>
+      </div>
+
+      <div class="flex justify-between items-center pt-6 border-t border-ink/8">
+        <a href="{% url 'all_products' %}"
+          class="text-[10px] uppercase tracking-[0.2em] text-ink/40 hover:text-ink transition-colors flex items-center gap-2">
+          <i class="bi bi-arrow-left text-xs"></i> Continuar comprando
+        </a>
+        <button id="clearCart" class="text-[10px] uppercase tracking-[0.2em] text-ink/30 hover:text-red-400 transition-colors">
+          Limpar carrinho
+        </button>
+      </div>
+    </div>
+
+  </div>
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const WA_NUMBER = '5537998623061';
+
+function formatPrice(price) {
+  const n = parseFloat(String(price).replace(',', '.'));
+  if (isNaN(n)) return 'Consulte';
+  return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
+
+function renderCart() {
+  const items = getCart();
+  const container = document.getElementById('cartItems');
+  const empty     = document.getElementById('cartEmpty');
+  const summary   = document.getElementById('cartSummary');
+
+  if (items.length === 0) {
+    container.innerHTML = '';
+    empty.classList.remove('hidden');
+    summary.classList.add('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+  summary.classList.remove('hidden');
+
+  // Tudo vem do localStorage — escapar antes de virar HTML. A chave também sai
+  // dos onclick inline: lá ela caía dentro de uma string JS dentro de um
+  // atributo, e uma aspa na chave bastaria para executar código. Agora vai em
+  // data-* e os cliques são tratados por delegação, abaixo.
+  container.innerHTML = items.map(item => {
+    const priceStr = escapeHtml(item.price ? formatPrice(item.price) : 'Consulte');
+    const chave = escapeHtml(item.key);
+    const nome = escapeHtml(item.name);
+    const url = escapeHtml(item.url);
+    const imagem = escapeHtml(item.image || '');
+    const variante = escapeHtml(item.variant || '');
+    return `
+    <div class="flex items-center gap-5 bg-white border border-ink/8 rounded-xl p-5 shadow-[0_1px_8px_rgba(0,0,0,.03)]"
+         data-cart-item-key="${chave}">
+      <a href="${url}" class="w-20 h-20 shrink-0 rounded-lg overflow-hidden bg-stone-50">
+        ${item.image
+          ? `<img src="${imagem}" alt="${nome}" class="w-full h-full object-cover">`
+          : `<div class="w-full h-full flex items-center justify-center"><i class="bi bi-gem text-xl text-ink/15"></i></div>`}
+      </a>
+      <div class="flex-1 min-w-0">
+        <a href="${url}" class="font-serif text-[15px] text-ink font-light leading-snug hover:text-gold-600 transition-colors">
+          ${nome}
+        </a>
+        ${item.variant ? `<p class="text-[11px] text-ink/40 mt-0.5">Tamanho: ${variante}</p>` : ''}
+        <p class="text-[13px] text-ink/50 mt-1 tracking-wide">${priceStr}</p>
+      </div>
+      <div class="flex items-center gap-3 shrink-0">
+        <button type="button" data-cart-action="decrementar" aria-label="Diminuir quantidade"
+          class="w-7 h-7 flex items-center justify-center rounded-full border border-ink/15 text-ink/50 hover:border-gold-400 hover:text-gold-500 transition-colors text-sm">
+          <i class="bi bi-dash"></i>
+        </button>
+        <span class="w-6 text-center text-sm text-ink">${item.quantity}</span>
+        <button type="button" data-cart-action="incrementar" aria-label="Aumentar quantidade"
+          class="w-7 h-7 flex items-center justify-center rounded-full border border-ink/15 text-ink/50 hover:border-gold-400 hover:text-gold-500 transition-colors text-sm">
+          <i class="bi bi-plus"></i>
+        </button>
+        <button type="button" data-cart-action="remover" aria-label="Remover do carrinho"
+          class="ml-2 w-7 h-7 flex items-center justify-center text-ink/25 hover:text-red-400 transition-colors text-sm">
+          <i class="bi bi-trash3"></i>
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Total
+  let total = 0;
+  let hasPrice = false;
+  items.forEach(item => {
+    const p = parseFloat(item.price);
+    if (!isNaN(p)) { total += p * item.quantity; hasPrice = true; }
+  });
+  document.getElementById('cartTotal').textContent = hasPrice
+    ? total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+    : 'Consulte';
+}
+
+// WhatsApp checkout
+document.getElementById('whatsappCheckout').addEventListener('click', () => {
+  const items = getCart();
+  if (!items.length) return;
+  let msg = 'Olá! Gostaria de finalizar meu pedido OuriPrata:\n\n';
+  let total = 0;
+  items.forEach((item, i) => {
+    const p = parseFloat(item.price);
+    const priceStr = !isNaN(p) ? ` — R$ ${(p * item.quantity).toLocaleString('pt-BR', {minimumFractionDigits:2})}` : '';
+    msg += `${i+1}. ${item.name}${item.variant ? ` (Tam. ${item.variant})` : ''} x${item.quantity}${priceStr}\n`;
+    if (!isNaN(p)) total += p * item.quantity;
+  });
+  if (total > 0) msg += `\nTotal: R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
+  msg += '\n\nAguardo orientações sobre pagamento e envio. Obrigado!';
+  window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+});
+
+document.getElementById('clearCart').addEventListener('click', () => {
+  if (confirm('Limpar todo o carrinho?')) clearCart();
+});
+
+// Delegação para os botões de quantidade e remoção. Substitui os onclick
+// inline, que embutiam a chave do item no atributo. A quantidade atual é lida
+// do carrinho, não do HTML, para não depender do que foi renderizado.
+document.getElementById('cartItems').addEventListener('click', e => {
+  const btn = e.target.closest('[data-cart-action]');
+  if (!btn) return;
+
+  const linha = btn.closest('[data-cart-item-key]');
+  if (!linha) return;
+
+  const chave = linha.dataset.cartItemKey;
+  const acao = btn.dataset.cartAction;
+
+  if (acao === 'remover') {
+    removeFromCart(chave);
+    return;
+  }
+
+  const item = getCart().find(i => i.key === chave);
+  if (!item) return;
+
+  updateQuantity(chave, item.quantity + (acao === 'incrementar' ? 1 : -1));
+});
+
+document.addEventListener('DOMContentLoaded', renderCart);
+window.addEventListener('cart:changed', renderCart);
+</script>
+{% endblock %}

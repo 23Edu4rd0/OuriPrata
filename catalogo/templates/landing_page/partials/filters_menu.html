@@ -1,128 +1,79 @@
-{% comment %} Partial para o menu de filtros do catálogo, reutilizável em várias páginas {% endcomment %}
-<div class="bg-white rounded-2xl shadow-sm border border-cream-200 p-5 lg:p-6 mb-6">
+{% comment %} Barra de filtros server-side — preço, material, ocasião, gênero e ordenação {% endcomment %}
+<form method="get" class="mb-10">
+  {% if search_query %}<input type="hidden" name="q" value="{{ search_query }}">{% endif %}
+  {% if category_filter %}<input type="hidden" name="categoria" value="{{ category_filter }}">{% endif %}
 
-  <div class="mb-6 text-center">
-    <span class="text-ink font-serif text-xl font-medium tracking-wide flex items-center justify-center gap-2">
-      <i class="bi bi-funnel"></i> Filtros
-    </span>
-  </div>
+  <div class="bg-white rounded-2xl border border-ink/8 shadow-[0_1px_16px_rgba(0,0,0,.035)] px-5 py-4 md:px-6 md:py-5">
+    <div class="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-6">
 
-  <div>
-    <!-- Filtro por Categoria -->
-    <div class="mb-6">
-      <div class="text-ink font-medium mb-3 flex items-center gap-2 text-sm uppercase tracking-wider">
-        <i class="bi bi-grid text-gold-500"></i> Categorias
+      <!-- Contador -->
+      <div class="flex items-center gap-2.5 shrink-0">
+        <span class="text-gold-400/70 text-[7px]">◆</span>
+        <p class="text-[11px] tracking-[0.15em] uppercase text-ink/45 whitespace-nowrap">
+          {{ total_products }} peça{{ total_products|pluralize:"s" }}
+        </p>
       </div>
-      <div class="flex flex-col gap-2">
-        <a href="{% url 'all_products' %}"
-           class="w-full flex items-center justify-between px-4 py-2.5 rounded-full border border-cream-200 text-ink-muted text-sm transition-all hover:border-gold-300 hover:text-ink">
-          <span class="flex items-center gap-2"><i class="bi bi-grid-3x3-gap"></i> Todas</span>
+
+      <div class="hidden lg:block h-7 w-px bg-ink/8 shrink-0"></div>
+
+      <!-- Controles -->
+      <div class="flex flex-wrap items-center gap-2.5 lg:flex-1">
+
+        <!-- Faixa de preço -->
+        <div class="inline-flex items-center gap-1.5 bg-cream-50 border border-ink/10 rounded-full pl-4 pr-2 py-1 hover:border-ink/20 focus-within:border-gold-400 focus-within:shadow-[0_0_0_3px_rgba(201,151,62,.10)] transition-all duration-250">
+          <span class="text-[9px] tracking-[0.18em] uppercase text-ink/35 mr-0.5">R$</span>
+          <input type="number" name="preco_min" value="{{ selected_preco_min }}" placeholder="mín"
+            aria-label="Preço mínimo"
+            class="w-14 bg-transparent border-0 p-0 text-[12px] text-ink placeholder-ink/30 focus:outline-none focus:ring-0">
+          <span class="text-ink/20 text-xs">—</span>
+          <input type="number" name="preco_max" value="{{ selected_preco_max }}" placeholder="máx"
+            aria-label="Preço máximo"
+            class="w-14 bg-transparent border-0 p-0 text-[12px] text-ink placeholder-ink/30 focus:outline-none focus:ring-0">
+        </div>
+
+        <select name="material" aria-label="Material" class="op-field">
+          <option value="">Material</option>
+          {% for material in materials %}
+            <option value="{{ material.id }}" {% if selected_material == material.id|stringformat:"s" %}selected{% endif %}>{{ material.name }}</option>
+          {% endfor %}
+        </select>
+
+        <select name="ocasiao" aria-label="Ocasião" class="op-field">
+          <option value="">Ocasião</option>
+          {% for occasion in occasions %}
+            <option value="{{ occasion.id }}" {% if selected_occasion == occasion.id|stringformat:"s" %}selected{% endif %}>{{ occasion.name }}</option>
+          {% endfor %}
+        </select>
+
+        <select name="genero" aria-label="Gênero" class="op-field">
+          <option value="">Gênero</option>
+          {% for value, label in gender_choices %}
+            <option value="{{ value }}" {% if selected_gender == value %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+
+        <select name="ordenar" aria-label="Ordenar por" class="op-field">
+          <option value="">Ordenar</option>
+          <option value="recentes" {% if selected_sort == "recentes" %}selected{% endif %}>Mais recentes</option>
+          <option value="preco_asc" {% if selected_sort == "preco_asc" %}selected{% endif %}>Menor preço</option>
+          <option value="preco_desc" {% if selected_sort == "preco_desc" %}selected{% endif %}>Maior preço</option>
+        </select>
+
+      </div>
+
+      <!-- Ações -->
+      <div class="flex items-center gap-4 shrink-0">
+        <button type="submit"
+          class="inline-flex items-center gap-2 text-[10px] tracking-[0.2em] uppercase text-white bg-ink px-6 py-2.5 rounded-full hover:bg-gold-500 transition-colors duration-300 whitespace-nowrap">
+          <i class="bi bi-sliders2 text-[11px]"></i>
+          Aplicar
+        </button>
+        <a href="?{% if search_query %}q={{ search_query|urlencode }}{% endif %}{% if category_filter %}&categoria={{ category_filter|urlencode }}{% endif %}"
+          class="text-[10px] tracking-[0.2em] uppercase text-ink/35 hover:text-ink transition-colors whitespace-nowrap">
+          Limpar
         </a>
-
-        {% for cat in all_categories %}
-        <a href="{% url 'products_by_category' cat.slug %}"
-           class="w-full flex items-center justify-between px-4 py-2.5 rounded-full border text-sm transition-all
-           {% if current_category and cat.slug == current_category.slug %} border-gold-400 bg-gold-50 text-ink font-medium shadow-sm {% else %} border-cream-200 text-ink-muted hover:border-gold-300 hover:text-ink {% endif %}">
-          <span>{{ cat.name }}</span>
-          {% if current_category and cat.slug == current_category.slug %}
-            <i class="bi bi-check-circle-fill text-gold-500"></i>
-          {% endif %}
-        </a>
-        {% endfor %}
       </div>
-    </div>
 
-    <hr class="border-cream-200 my-6">
-
-    <!-- Filtro por Promoção -->
-    <div class="mb-6">
-      <div class="text-ink font-medium mb-4 flex items-center gap-2 text-sm uppercase tracking-wider">
-        <i class="bi bi-lightning text-gold-500"></i> Ofertas
-      </div>
-      <label class="relative flex items-center cursor-pointer px-2">
-        <input type="checkbox" id="promocao" class="sr-only peer">
-        <div class="w-11 h-6 bg-cream-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[10px] after:bg-white after:border-cream-200 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gold-400"></div>
-        <span class="ml-3 text-sm font-medium text-ink-muted peer-checked:text-ink transition-colors">Apenas em promoção</span>
-      </label>
-    </div>
-
-    <hr class="border-cream-200 my-6">
-
-    <!-- Filtro por Avaliação -->
-    <div class="mb-6">
-      <div class="text-ink font-medium mb-3 flex items-center gap-2 text-sm uppercase tracking-wider">
-        <i class="bi bi-star text-gold-500"></i> Avaliação
-      </div>
-      <div class="flex flex-col gap-2">
-        <button type="button" class="rating-filter-btn active w-full flex items-center justify-between px-4 py-2.5 rounded-full border border-cream-200 text-ink-muted text-sm transition-all hover:border-gold-300 hover:text-ink [&.active]:border-gold-400 [&.active]:bg-gold-50 [&.active]:text-ink [&.active]:font-medium [&.active]:shadow-sm" data-rating="all">
-          <span class="flex items-center gap-2"><i class="bi bi-star"></i> Todas</span>
-        </button>
-        <button type="button" class="rating-filter-btn w-full flex items-center justify-between px-4 py-2.5 rounded-full border border-cream-200 text-ink-muted text-sm transition-all hover:border-gold-300 hover:text-ink [&.active]:border-gold-400 [&.active]:bg-gold-50 [&.active]:text-ink [&.active]:font-medium [&.active]:shadow-sm" data-rating="4">
-          <span class="flex items-center gap-2"><i class="bi bi-star-fill text-gold-400"></i> 4+ Estrelas</span>
-        </button>
-        <button type="button" class="rating-filter-btn w-full flex items-center justify-between px-4 py-2.5 rounded-full border border-cream-200 text-ink-muted text-sm transition-all hover:border-gold-300 hover:text-ink [&.active]:border-gold-400 [&.active]:bg-gold-50 [&.active]:text-ink [&.active]:font-medium [&.active]:shadow-sm" data-rating="3">
-          <span class="flex items-center gap-2"><i class="bi bi-star-fill text-gold-400"></i> 3+ Estrelas</span>
-        </button>
-      </div>
-    </div>
-
-    <hr class="border-cream-200 my-6">
-
-    <!-- Filtro por Preço -->
-    <div class="mb-4">
-      <div class="text-ink font-medium mb-3 flex items-center gap-2 text-sm uppercase tracking-wider">
-        <i class="bi bi-currency-dollar text-gold-500"></i> Faixa de Preço
-      </div>
-      <div class="flex gap-2 mb-4">
-        <input type="number" id="preco-min" class="w-1/2 bg-cream-50 border border-cream-200 rounded-lg px-3 py-2 text-sm text-ink placeholder-ink-light focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400 transition-all" placeholder="Mínimo">
-        <input type="number" id="preco-max" class="w-1/2 bg-cream-50 border border-cream-200 rounded-lg px-3 py-2 text-sm text-ink placeholder-ink-light focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400 transition-all" placeholder="Máximo">
-      </div>
-      <button onclick="applyLocalFilters()" class="w-full bg-ink hover:bg-gold-500 text-white rounded-full px-4 py-2.5 text-sm font-medium transition-colors">
-        Aplicar Filtros
-      </button>
     </div>
   </div>
-</div>
-
-<script>
-  function parsePrice(val) {
-    if (!val) return 0;
-    return parseFloat(val.replace(',', '.')) || 0;
-  }
-
-  function applyLocalFilters() {
-    const checkbox = document.getElementById('promocao');
-    const minPrice = parsePrice(document.getElementById('preco-min').value);
-    const maxPrice = parsePrice(document.getElementById('preco-max').value) || Infinity;
-    const ratingFilter = document.querySelector('.rating-filter-btn.active')?.dataset.rating || 'all';
-    const products = document.querySelectorAll('.product-item');
-
-    products.forEach(product => {
-      const isPromotion = product.dataset.promotion === 'true';
-      const price = parsePrice(product.dataset.price);
-      const rating = parseFloat(product.dataset.rating) || 0;
-
-      let show = true;
-      if (checkbox && checkbox.checked && !isPromotion) show = false;
-      if (price < minPrice || price > maxPrice) show = false;
-      if (ratingFilter !== 'all' && rating < parseInt(ratingFilter)) show = false;
-
-      product.style.display = show ? 'block' : 'none';
-    });
-  }
-
-  document.querySelectorAll('.rating-filter-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      document.querySelectorAll('.rating-filter-btn').forEach(b => b.classList.remove('active'));
-      this.classList.add('active');
-      applyLocalFilters();
-    });
-  });
-
-  document.addEventListener('DOMContentLoaded', function() {
-    const precoMin = document.getElementById('preco-min');
-    const precoMax = document.getElementById('preco-max');
-    if (precoMin) precoMin.addEventListener('input', applyLocalFilters);
-    if (precoMax) precoMax.addEventListener('input', applyLocalFilters);
-  });
-</script>
+</form>

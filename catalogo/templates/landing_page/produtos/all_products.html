@@ -5,34 +5,37 @@
 {% block meta_description %}<meta name="description" content="Explore todas as joias da OuriPrata. Anéis, colares, brincos e pulseiras em ouro e prata.">{% endblock %}
 
 {% block content %}
-<main class="bg-cream-50 min-h-screen py-16 md:py-24">
+<main class="bg-cream-50 min-h-screen py-10 md:py-24">
   <div class="max-w-7xl mx-auto px-6 lg:px-12">
 
-    <header class="text-center mb-16 md:mb-20">
-      <p class="font-serif italic text-[11px] tracking-[0.3em] text-gold-500 uppercase mb-4">Portfólio</p>
-      <h1 class="font-serif text-4xl md:text-5xl text-ink font-light tracking-wide mb-4">Nossa Coleção</h1>
-      <p class="text-[13px] text-ink/50 tracking-widest uppercase">
-        {{ total_products }} peça{{ total_products|pluralize:"s" }}
-      </p>
-    </header>
+    <!-- Header -->
+    <div class="text-center mb-8 md:mb-14">
+      <p class="font-serif italic text-[11px] tracking-[0.35em] text-gold-400 uppercase mb-3">Portfólio</p>
+      <h1 class="font-serif text-4xl md:text-5xl text-ink font-light tracking-wide mb-5">Nossa Coleção</h1>
+      <div class="flex items-center justify-center gap-4">
+        <span class="h-px w-10 bg-gold-300/60"></span>
+        <span class="text-gold-400/70 text-[7px]">◆</span>
+        <span class="h-px w-10 bg-gold-300/60"></span>
+      </div>
+    </div>
 
-    <nav class="flex flex-wrap items-center justify-center gap-6 md:gap-10 mb-16 border-b border-ink/5 pb-6" aria-label="Filtrar por categoria">
-
+    <!-- Category nav -->
+    <nav class="flex flex-wrap items-center justify-center gap-1.5 mb-12" aria-label="Filtrar por categoria">
       <a href="{% url 'all_products' %}"
-         class="text-[11px] tracking-[0.2em] uppercase transition-colors pb-1
-                {% if not current_category %}text-ink border-b border-ink{% else %}text-ink/40 hover:text-ink{% endif %}">
+        class="px-4 py-1.5 rounded-full text-[10px] tracking-[0.2em] uppercase transition-all duration-200
+               {% if not current_category %}bg-ink text-white{% else %}text-ink/45 hover:text-ink hover:bg-ink/5{% endif %}">
         Todas
       </a>
-
       {% for cat in all_categories %}
         <a href="{% url 'products_by_category' cat.slug %}"
-           class="text-[11px] tracking-[0.2em] uppercase transition-colors pb-1
-                  {% if current_category.slug == cat.slug %}text-ink border-b border-ink{% else %}text-ink/40 hover:text-ink{% endif %}">
+          class="px-4 py-1.5 rounded-full text-[10px] tracking-[0.2em] uppercase transition-all duration-200
+                 {% if current_category.slug == cat.slug %}bg-ink text-white{% else %}text-ink/45 hover:text-ink hover:bg-ink/5{% endif %}">
           {{ cat.name }}
         </a>
       {% endfor %}
-
     </nav>
+
+    {% include 'landing_page/partials/filters_menu.html' %}
 
     {% if products %}
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-6 gap-y-14">
@@ -42,7 +45,16 @@
       </div>
     {% else %}
       <div class="text-center py-32">
-        <p class="font-serif text-2xl text-ink font-light mb-4">Nenhuma peça disponível no momento.</p>
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full border border-dashed border-gold-300/60 mb-8">
+          <i class="bi bi-gem text-xl text-gold-400/60"></i>
+        </div>
+        <p class="font-serif text-2xl text-ink font-light mb-3">Nenhuma peça encontrada.</p>
+        <p class="text-[13px] text-ink/40 font-light mb-8">Tente ajustar os filtros ou explorar outra categoria.</p>
+        <a href="{% url 'all_products' %}"
+          class="inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.25em] text-ink/50 hover:text-gold-500 transition-colors duration-300 border-b border-ink/15 hover:border-gold-400 pb-1.5">
+          Ver toda a coleção
+          <i class="bi bi-arrow-right text-xs" aria-hidden="true"></i>
+        </a>
       </div>
     {% endif %}
 

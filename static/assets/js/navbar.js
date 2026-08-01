@@ -1,5 +1,6 @@
 (function () {
   var toggleBtn = document.getElementById('navToggle');
+  var closeBtn = document.getElementById('drawerClose');
   var drawer = document.getElementById('navDrawer');
   var backdrop = document.getElementById('drawerBackdrop');
 
@@ -27,13 +28,22 @@
     }
   });
 
+  if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
   backdrop.addEventListener('click', closeDrawer);
 
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') closeDrawer();
+  // Navegar para outra página fecha o menu — evita que ele reapareça aberto
+  // ao voltar pelo histórico (bfcache restaura o DOM como estava).
+  drawer.querySelectorAll('a[href]').forEach(function (link) {
+    link.addEventListener('click', closeDrawer);
   });
 
-  // Global para o onclick="closeDrawer()" no botão X do header do drawer
-  window.closeDrawer = closeDrawer;
-  window.openDrawer = openDrawer;
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && drawer.classList.contains('open')) closeDrawer();
+  });
+
+  // Se a largura passar para desktop com o menu aberto, o drawer some mas o
+  // scroll do body continuaria travado.
+  window.addEventListener('resize', function () {
+    if (window.innerWidth >= 768 && drawer.classList.contains('open')) closeDrawer();
+  });
 })();

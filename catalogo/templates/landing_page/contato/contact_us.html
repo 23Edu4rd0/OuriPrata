@@ -5,11 +5,11 @@
 {% block meta_description %}<meta name="description" content="Entre em contato com a OuriPrata. Atendimento exclusivo via WhatsApp, formulário ou em nosso ateliê.">{% endblock %}
 
 {% block content %}
-<main class="bg-cream-50 min-h-screen py-16 md:py-24">
+<main class="bg-cream-50 min-h-screen py-10 md:py-24">
   <div class="max-w-6xl mx-auto px-6 lg:px-12">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-start">
-      
-      <div class="lg:col-span-5 flex flex-col justify-center space-y-12">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+
+      <div class="lg:col-span-5 flex flex-col justify-center space-y-8">
         <header>
           <p class="font-serif italic text-[11px] tracking-[0.3em] text-gold-500 uppercase mb-4">Atendimento</p>
           <h1 class="font-serif text-4xl md:text-5xl text-ink font-light tracking-wide leading-tight mb-6">
@@ -20,7 +20,7 @@
           </p>
         </header>
 
-        <div class="space-y-10">
+        <div class="space-y-7">
           <div class="flex items-start gap-4">
             <i class="bi bi-whatsapp text-gold-400 text-xl mt-1"></i>
             <div>
@@ -51,35 +51,32 @@
       </div>
 
       <div class="lg:col-span-7">
-        <div class="bg-white p-8 md:p-12 shadow-sm border border-ink/5">
+        <div class="bg-white p-6 md:p-9 rounded-2xl shadow-[0_2px_24px_rgba(0,0,0,.04)] border border-ink/8">
           <h2 class="font-serif text-2xl text-ink font-light mb-2">Envie um e-mail</h2>
-          <p class="text-[14px] text-ink/50 font-light mb-10">
+          <p class="text-[14px] text-ink/50 font-light mb-8">
             Prefere escrever? Preencha os dados abaixo e retornaremos em até 24 horas.
           </p>
 
-          <form method="post" id="contactForm" class="space-y-6">
+          <form method="post" id="contactForm" class="space-y-5">
             {% csrf_token %}
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
-                <label for="nome" class="block text-[10px] tracking-[0.2em] uppercase text-ink/40 mb-1">Nome Completo</label>
-                <input type="text" id="nome" name="nome" required
-                       class="w-full bg-transparent border-0 border-b border-ink/20 py-2 px-0 text-[15px] text-ink focus:ring-0 focus:border-gold-400 transition-colors">
+                <label for="nome" class="block text-[9px] tracking-[0.22em] uppercase text-ink/40 mb-2">Nome Completo</label>
+                <input type="text" id="nome" name="nome" required class="op-field op-field--block">
               </div>
               <div>
-                <label for="email" class="block text-[10px] tracking-[0.2em] uppercase text-ink/40 mb-1">E-mail</label>
-                <input type="email" id="email" name="email" required
-                       class="w-full bg-transparent border-0 border-b border-ink/20 py-2 px-0 text-[15px] text-ink focus:ring-0 focus:border-gold-400 transition-colors">
+                <label for="email" class="block text-[9px] tracking-[0.22em] uppercase text-ink/40 mb-2">E-mail</label>
+                <input type="email" id="email" name="email" required class="op-field op-field--block">
               </div>
+            </div>
+
+            <div>
+              <label for="mensagem" class="block text-[9px] tracking-[0.22em] uppercase text-ink/40 mb-2">Sua Mensagem</label>
+              <textarea id="mensagem" name="mensagem" rows="4" required class="op-field op-field--block"></textarea>
             </div>
 
             <div class="pt-2">
-              <label for="mensagem" class="block text-[10px] tracking-[0.2em] uppercase text-ink/40 mb-1">Sua Mensagem</label>
-              <textarea id="mensagem" name="mensagem" rows="3" required
-                        class="w-full bg-transparent border-0 border-b border-ink/20 py-2 px-0 text-[15px] text-ink focus:ring-0 focus:border-gold-400 transition-colors resize-none"></textarea>
-            </div>
-
-            <div class="pt-8">
               <button type="submit" id="contact-submit" class="w-full border border-ink bg-ink text-white px-10 py-4 uppercase tracking-[0.2em] text-[11px] hover:bg-transparent hover:text-ink transition-all duration-300">
                 Enviar Mensagem
               </button>

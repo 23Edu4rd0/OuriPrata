@@ -1,0 +1,64 @@
+{% comment %}
+  Carrossel de produtos — 4 por vez no desktop, 2 (+ espia da terceira) no mobile.
+
+  Navegação:
+    - Mobile: só arraste (scroll nativo com snap). As setas não são renderizadas.
+    - Desktop: arraste (trackpad) e setas, as duas coisas.
+
+  A borda espiada da próxima peça é o que sinaliza que dá para arrastar; sem
+  ela o trilho parece uma grade estática.
+
+  Uso:
+    {% include 'landing_page/partials/_product_carousel.html' with products=new_arrivals %}
+{% endcomment %}
+<div class="relative group" data-carousel>
+
+  {% comment %}
+    O arraste vale nas duas telas (no desktop, rolagem lateral do trackpad).
+    overscroll-x-contain impede que o gesto "vaze" para o navegador e dispare
+    o voltar-página quando o trilho chega ao fim.
+
+    Snap firme no mobile, onde o dedo solta em qualquer ponto; no desktop fica
+    em proximity para não brigar com a posição exata em que as setas param.
+  {% endcomment %}
+  <div data-carousel-track
+    class="flex overflow-x-auto overscroll-x-contain
+           snap-x snap-mandatory md:snap-proximity
+           scroll-smooth motion-reduce:scroll-auto
+           -mx-2 md:-mx-3
+           [-webkit-overflow-scrolling:touch]
+           [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    {% for product in products %}
+    <div class="snap-start shrink-0 w-[43%] md:w-1/4 px-2 md:px-3">
+      {% include 'landing_page/partials/product_card.html' with product=product %}
+    </div>
+    {% endfor %}
+  </div>
+
+  {% comment %}
+    Setas: escondidas por padrão, aparecem só em telas md+ e apenas quando o
+    trilho realmente transborda (o JS marca data-overflow no elemento raiz).
+  {% endcomment %}
+  <button type="button" data-carousel-prev aria-label="Ver peças anteriores"
+    class="hidden md:group-data-[overflow=true]:flex
+           absolute left-0 -translate-x-1/2 top-[38%] -translate-y-1/2 z-20
+           w-11 h-11 items-center justify-center rounded-full
+           bg-white ring-1 ring-ink/8 shadow-[0_4px_20px_rgba(0,0,0,.10)]
+           text-ink/70 hover:text-gold-600 hover:ring-gold-300
+           active:scale-95 transition-all duration-300
+           disabled:opacity-0 disabled:pointer-events-none">
+    <i class="bi bi-chevron-left text-base" aria-hidden="true"></i>
+  </button>
+
+  <button type="button" data-carousel-next aria-label="Ver mais peças"
+    class="hidden md:group-data-[overflow=true]:flex
+           absolute right-0 translate-x-1/2 top-[38%] -translate-y-1/2 z-20
+           w-11 h-11 items-center justify-center rounded-full
+           bg-white ring-1 ring-ink/8 shadow-[0_4px_20px_rgba(0,0,0,.10)]
+           text-ink/70 hover:text-gold-600 hover:ring-gold-300
+           active:scale-95 transition-all duration-300
+           disabled:opacity-0 disabled:pointer-events-none">
+    <i class="bi bi-chevron-right text-base" aria-hidden="true"></i>
+  </button>
+
+</div>

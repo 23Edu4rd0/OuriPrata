@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}Minha conta — OuriPrata{% endblock %}
+
+{% block content %}
+<main class="bg-cream-50 min-h-screen py-10 md:py-24">
+  <div class="max-w-5xl mx-auto px-6 lg:px-12">
+
+    <!-- Avatar + header -->
+    <header class="text-center mb-8 md:mb-14">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gold-100 border border-gold-300/60 mb-6">
+        <span class="font-serif text-2xl text-gold-600 font-light select-none">
+          {{ user.username|slice:":1"|upper }}
+        </span>
+      </div>
+      <p class="font-serif italic text-[11px] tracking-[0.35em] text-gold-400 uppercase mb-3">Minha conta</p>
+      <h1 class="font-serif text-3xl md:text-4xl text-ink font-light tracking-wide mb-5">
+        Olá, {{ user.first_name|default:user.username }}
+      </h1>
+      <div class="flex items-center justify-center gap-4 mb-6">
+        <span class="h-px w-10 bg-gold-300/60"></span>
+        <span class="text-gold-400/70 text-[7px]">◆</span>
+        <span class="h-px w-10 bg-gold-300/60"></span>
+      </div>
+      <form method="post" action="{% url 'logout' %}" class="inline">
+        {% csrf_token %}
+        <button type="submit"
+          class="text-[9px] tracking-[0.2em] uppercase text-ink/35 hover:text-ink/60 border-b border-transparent hover:border-ink/20 pb-0.5 transition-all duration-200">
+          Sair da conta
+        </button>
+      </form>
+    </header>
+
+    <!-- Stats row -->
+    <div class="grid grid-cols-2 divide-x divide-ink/8 border border-ink/8 rounded-xl bg-white mb-16 shadow-[0_1px_12px_rgba(0,0,0,.03)]">
+      <div class="text-center py-6">
+        <p class="font-serif text-3xl text-ink font-light mb-1">{{ wishlist|length }}</p>
+        <p class="text-[9px] tracking-[0.2em] uppercase text-ink/40">Favoritos</p>
+      </div>
+      <div class="text-center py-6">
+        <p class="font-serif text-3xl text-ink font-light mb-1">{{ history|length }}</p>
+        <p class="text-[9px] tracking-[0.2em] uppercase text-ink/40">Peças vistas</p>
+      </div>
+    </div>
+
+    <!-- Wishlist section -->
+    <section class="mb-16">
+      <div class="flex items-center gap-5 mb-10">
+        <h2 class="font-serif text-2xl text-ink font-light">Meus favoritos</h2>
+        <span class="h-px flex-1 bg-ink/8"></span>
+        {% if wishlist %}
+        <a href="{% url 'wishlist' %}"
+          class="text-[9px] tracking-[0.2em] uppercase text-gold-500 hover:text-gold-600 transition-colors">
+          Ver todos
+        </a>
+        {% endif %}
+      </div>
+
+      {% if wishlist %}
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-6 gap-y-12">
+        {% for item in wishlist %}
+          {% with product=item.product %}
+            {% include 'landing_page/partials/product_card.html' %}
+          {% endwith %}
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="text-center py-16 border border-dashed border-ink/10 rounded-2xl">
+        <i class="bi bi-heart text-2xl text-ink/15 block mb-3"></i>
+        <p class="font-serif text-[15px] text-ink/40 font-light mb-4">Nenhuma peça favoritada ainda.</p>
+        <a href="{% url 'all_products' %}"
+          class="text-[10px] uppercase tracking-[0.2em] text-gold-500 border-b border-gold-300 pb-1 hover:text-gold-600 transition-colors">
+          Explorar coleção
+        </a>
+      </div>
+      {% endif %}
+    </section>
+
+    <!-- History section -->
+    <section>
+      <div class="flex items-center gap-5 mb-10">
+        <h2 class="font-serif text-2xl text-ink font-light">Vistos recentemente</h2>
+        <span class="h-px flex-1 bg-ink/8"></span>
+      </div>
+
+      {% if history %}
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-6 gap-y-12">
+        {% for entry in history %}
+          {% with product=entry.product %}
+            {% include 'landing_page/partials/product_card.html' %}
+          {% endwith %}
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="text-center py-16 border border-dashed border-ink/10 rounded-2xl">
+        <i class="bi bi-eye text-2xl text-ink/15 block mb-3"></i>
+        <p class="font-serif text-[15px] text-ink/40 font-light">Nenhuma peça visualizada ainda.</p>
+      </div>
+      {% endif %}
+    </section>
+
+  </div>
+</main>
+{% endblock %}

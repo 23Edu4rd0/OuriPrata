@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Favoritos — OuriPrata{% endblock %}
+
+{% block content %}
+<main class="bg-cream-50 min-h-screen py-10 md:py-24">
+  <div class="max-w-6xl mx-auto px-6 lg:px-12">
+
+    <!-- Header -->
+    <div class="text-center mb-8 md:mb-14">
+      <p class="font-serif italic text-[11px] tracking-[0.35em] text-gold-400 uppercase mb-3">Sua seleção</p>
+      <h1 class="font-serif text-4xl md:text-5xl text-ink font-light tracking-wide mb-5">Favoritos</h1>
+      <div class="flex items-center justify-center gap-4 mb-5">
+        <span class="h-px w-10 bg-gold-300/60"></span>
+        <span class="text-gold-400/70 text-[7px]">◆</span>
+        <span class="h-px w-10 bg-gold-300/60"></span>
+      </div>
+      <p class="text-[10px] tracking-[0.22em] uppercase text-ink/35" id="wishlistCountLabel">Carregando…</p>
+    </div>
+
+    <!-- Grid -->
+    <div id="wishlistGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-6 gap-y-14"></div>
+
+    <!-- Empty state -->
+    <div id="wishlistEmpty" class="hidden text-center py-32">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-full border border-dashed border-gold-300/60 mb-8">
+        <i class="bi bi-heart text-xl text-gold-400/60"></i>
+      </div>
+      <p class="font-serif text-2xl text-ink font-light mb-2">Nenhuma peça guardada ainda.</p>
+      <p class="text-[13px] text-ink/40 font-light mb-8">
+        Explore a coleção e salve as peças que chamarem a sua atenção.
+      </p>
+      <a href="{% url 'all_products' %}"
+        class="inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.25em] text-ink/50 hover:text-gold-500 transition-colors duration-300 border-b border-ink/15 hover:border-gold-400 pb-1.5">
+        Explorar a coleção
+        <i class="bi bi-arrow-right text-xs" aria-hidden="true"></i>
+      </a>
+    </div>
+
+  </div>
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  function renderWishlistPage() {
+    const items = getWishlist();
+    const grid = document.getElementById('wishlistGrid');
+    const empty = document.getElementById('wishlistEmpty');
+    const countLabel = document.getElementById('wishlistCountLabel');
+    if (!grid) return;
+
+    const n = items.length;
+    countLabel.textContent = n === 0 ? '' : `${n} peça${n === 1 ? '' : 's'} salva${n === 1 ? '' : 's'}`;
+
+    if (n === 0) {
+      grid.innerHTML = '';
+      empty.classList.remove('hidden');
+      return;
+    }
+    empty.classList.add('hidden');
+
+    // Tudo vem do localStorage — escapar antes de virar HTML, inclusive o que
+    // entra em atributos (data-*, src, href).
+    grid.innerHTML = items.map(item => {
+      const nome = escapeHtml(item.name);
+      const url = escapeHtml(item.url);
+      const imagem = escapeHtml(item.image || '');
+      const slug = escapeHtml(item.slug);
+      const preco = escapeHtml(item.price || '');
+      return `
+      <div class="product-item group">
+        <div class="relative w-full aspect-square overflow-hidden bg-stone-50 rounded-lg mb-4">
+          <a href="${url}" class="block w-full h-full">
+            ${item.image
+              ? `<img src="${imagem}" alt="${nome}" loading="lazy"
+                   class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">`
+              : `<div class="w-full h-full flex items-center justify-center"><i class="bi bi-gem text-2xl text-ink/15"></i></div>`}
+          </a>
+          <button type="button" data-wishlist-toggle data-slug="${slug}" data-name="${nome}"
+            data-image="${imagem}" data-price="${preco}" data-url="${url}"
+            aria-label="Remover dos favoritos"
+            class="wishlist-btn is-active absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-white/85 backdrop-blur-sm text-gold-500 hover:text-red-400 transition-colors">
+            <i class="bi bi-heart-fill text-sm" aria-hidden="true"></i>
+          </button>
+        </div>
+        <a href="${url}" class="block px-0.5">
+          <h3 class="font-serif text-[15px] text-ink font-light leading-snug mb-1.5 group-hover:text-gold-600 transition-colors duration-300">
+            ${nome}
+          </h3>
+          ${item.price
+            ? `<span class="text-[12px] text-ink/50 tracking-wider">R$ ${preco}</span>`
+            : `<span class="text-[10px] uppercase tracking-widest text-ink/35">Consulte</span>`}
+        </a>
+      </div>`;
+    }).join('');
+
+    grid.querySelectorAll('[data-wishlist-toggle]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        setTimeout(renderWishlistPage, 50);
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', renderWishlistPage);
+  window.addEventListener('wishlist:changed', renderWishlistPage);
+</script>
+{% endblock %}

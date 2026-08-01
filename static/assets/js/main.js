@@ -7,16 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, { passive: true });
     }
 
-    // 2. Mobile drawer (Menu lateral)
-    const toggle   = document.getElementById('navToggle');
-    const drawer   = document.getElementById('navDrawer');
-    const backdrop = document.getElementById('drawerBackdrop');
-
-    function openDrawer()  { drawer?.classList.add('open'); document.body.style.overflow = 'hidden'; }
-    function closeDrawer() { drawer?.classList.remove('open'); document.body.style.overflow = ''; }
-
-    toggle?.addEventListener('click', openDrawer);
-    backdrop?.addEventListener('click', closeDrawer);
+    // 2. O menu lateral mobile é controlado por navbar.js
 
     // 3. Fade-out suave para as mensagens (Toasts)
     document.querySelectorAll('.op-toast').forEach(t => {
