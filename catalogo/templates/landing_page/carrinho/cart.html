@@ -159,7 +159,12 @@ document.getElementById('whatsappCheckout').addEventListener('click', () => {
   });
   if (total > 0) msg += `\nTotal: R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits:2})}`;
   msg += '\n\nAguardo orientações sobre pagamento e envio. Obrigado!';
-  window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+  // noopener: ver comentário em contact_us.html (reverse tabnabbing).
+  window.open(
+    `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`,
+    '_blank',
+    'noopener,noreferrer'
+  );
 });
 
 document.getElementById('clearCart').addEventListener('click', () => {

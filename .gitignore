@@ -312,3 +312,11 @@ dist
 .svelte-kit
 
 # End of https://www.toptal.com/developers/gitignore/api/node,django
+
+# O CSS compilado do Tailwind precisa ir para o repositório: o build do Railway
+# não tem Node e não conseguiria gerá-lo. A regra "dist" acima ignora a pasta
+# inteira, e o git não entra em pasta ignorada — por isso é preciso liberar o
+# diretório antes do arquivo.
+# Depois de alterar estilos: python manage.py tailwind build && git add -f o css
+!theme/static/css/dist/
+!theme/static/css/dist/styles.css
