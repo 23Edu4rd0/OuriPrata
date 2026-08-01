@@ -120,7 +120,7 @@ def product_detail(request, slug):
     recently_viewed = []
     if request.user.is_authenticated:
         BrowsingHistory.objects.create(user=request.user, product=product)
-        recent_ids = (
+        recent_ids = list(
             BrowsingHistory.objects
             .filter(user=request.user)
             .exclude(product=product)
@@ -129,7 +129,9 @@ def product_detail(request, slug):
             .order_by('-last_viewed')
             .values_list('product_id', flat=True)[:4]
         )
-        recently_viewed = list(Product.objects.filter(id__in=recent_ids))
+        recently = Product.objects.filter(id__in=recent_ids)
+        by_id = {p.id: p for p in recently}
+        recently_viewed = [by_id[i] for i in recent_ids if i in by_id]
         user_review = reviews.filter(user=request.user).first()
 
     variants = list(product.variants.all())
