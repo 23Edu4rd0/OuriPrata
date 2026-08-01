@@ -95,9 +95,16 @@ railway variables --set "ALLOWED_HOSTS=ouriprata.com.br" \
 O script não sobrescreve `ALLOWED_HOSTS` se ela já existir, então esse ajuste
 sobrevive às próximas execuções.
 
-O `Procfile` roda `migrate` na etapa de release e `collectstatic` na subida do
-processo web — o container de release tem disco próprio, descartado depois, então
-um `collectstatic` feito lá não chegaria a quem serve o site.
+O `Procfile` roda `migrate` e `collectstatic` os dois na subida do processo
+web, não numa etapa de release separada. Duas razões, uma para cada comando:
+
+- o Nixpacks do Railway não trata `release:` como uma etapa de deploy à parte
+  com rede (diferente do Heroku) — ele embute esse comando no próprio build da
+  imagem, que roda isolado e não alcança a rede privada onde fica o Postgres;
+  `migrate` ali falharia sempre por não conseguir resolver
+  `postgres.railway.internal`.
+- mesmo se alcançasse o banco, o container de build tem disco descartado
+  depois: um `collectstatic` rodado lá nunca chegaria a quem serve o site.
 
 Depois do primeiro deploy, crie o usuário do admin:
 
