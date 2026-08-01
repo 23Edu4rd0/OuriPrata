@@ -66,6 +66,19 @@ O script cria o projeto, provisiona o Postgres, gera a `SECRET_KEY`, define
 `DJANGO_ENV=production`, cria o volume das imagens em `/app/media` e publica.
 Rodar de novo é seguro: ele pula o que já existe.
 
+No primeiro deploy o domínio ainda não foi gerado, então `RAILWAY_PUBLIC_DOMAIN`
+chega vazia e o `prod.py` abortaria por `ALLOWED_HOSTS` vazia. Por isso o script
+define `ALLOWED_HOSTS=.up.railway.app` de largada — um curinga que cobre qualquer
+domínio gerado pelo Railway. Ao apontar um domínio próprio, troque:
+
+```bash
+railway variables --set "ALLOWED_HOSTS=ouriprata.com.br" \
+                  --set "CSRF_TRUSTED_ORIGINS=https://ouriprata.com.br"
+```
+
+O script não sobrescreve `ALLOWED_HOSTS` se ela já existir, então esse ajuste
+sobrevive às próximas execuções.
+
 O `Procfile` roda `migrate` na etapa de release e `collectstatic` na subida do
 processo web — o container de release tem disco próprio, descartado depois, então
 um `collectstatic` feito lá não chegaria a quem serve o site.
