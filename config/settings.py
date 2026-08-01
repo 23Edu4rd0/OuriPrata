@@ -31,9 +31,23 @@ SECRET_KEY = os.getenv(
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = True
+# Padrão é False: se a variável não for definida no servidor, o site sobe
+# seguro. Ligar o debug em produção expõe código-fonte, SQL e configurações
+# na tela de erro.
+DEBUG = os.getenv('DEBUG', 'False').lower() in ('true', '1', 'yes')
 
-ALLOWED_HOSTS = ['*']
+# Em produção vem de ALLOWED_HOSTS (domínios separados por vírgula). O Railway
+# expõe o domínio gerado em RAILWAY_PUBLIC_DOMAIN.
+ALLOWED_HOSTS = [
+    h.strip() for h in os.getenv('ALLOWED_HOSTS', '').split(',') if h.strip()
+]
+
+_railway_domain = os.getenv('RAILWAY_PUBLIC_DOMAIN', '').strip()
+if _railway_domain:
+    ALLOWED_HOSTS.append(_railway_domain)
+
+if DEBUG and not ALLOWED_HOSTS:
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
 
 # Application definition
 
@@ -70,7 +84,6 @@ JAZZMIN_SETTINGS = {
 }
 
 MIDDLEWARE = [
-    'django_browser_reload.middleware.BrowserReloadMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -80,6 +93,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# Ferramenta de desenvolvimento: injeta um script de auto-reload em cada
+# página. Não deve rodar em produção.
+if DEBUG:
+    MIDDLEWARE.insert(0, 'django_browser_reload.middleware.BrowserReloadMiddleware')
 
 ROOT_URLCONF = 'config.urls'
 
@@ -106,13 +124,24 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# Em produção o Railway injeta DATABASE_URL ao ligar o Postgres ao serviço.
+# Sem a variável, cai no SQLite local para desenvolvimento.
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
-    # 'default': dj_database_url.config(conn_max_age=600)
 }
+
+_database_url = os.getenv('DATABASE_URL', '').strip()
+if _database_url:
+    import dj_database_url
+
+    DATABASES['default'] = dj_database_url.parse(
+        _database_url,
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -141,9 +170,13 @@ USE_I18N = True
 USE_TZ = True
 
 # Media files
+#
+# MEDIA_ROOT precisa apontar para o volume persistente do Railway, senão as
+# fotos enviadas pelo admin somem no próximo deploy (o disco do container é
+# descartável).
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.getenv('MEDIA_ROOT', os.path.join(BASE_DIR, 'media'))
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
@@ -151,7 +184,22 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+
+# STATICFILES_STORAGE foi removido no Django 5.1 e estava sendo ignorado em
+# silêncio: o whitenoise nunca chegou a atuar. A forma atual é STORAGES.
+#
+# A variante Manifest põe um hash no nome de cada arquivo (styles.a1b2c3.css),
+# então uma versão nova nunca é servida do cache antigo do navegador. Isso
+# importa para segurança: sem hash, quem já visitou o site continuaria com o
+# JavaScript anterior mesmo depois de uma correção.
+STORAGES = {
+    'default': {
+        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+    },
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+    },
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -163,8 +211,42 @@ LOGIN_REDIRECT_URL = 'profile'
 LOGOUT_REDIRECT_URL = 'home'
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://0bcfd8c06314.ngrok-free.app',
-    'https://*.loca.lt',
     'http://localhost',
     'http://127.0.0.1',
 ]
+
+# Domínios extras via variável (separados por vírgula), mais o domínio que o
+# Railway gera para o serviço.
+CSRF_TRUSTED_ORIGINS += [
+    o.strip()
+    for o in os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',')
+    if o.strip()
+]
+
+if _railway_domain:
+    CSRF_TRUSTED_ORIGINS.append(f'https://{_railway_domain}')
+
+
+# --- Segurança em produção -------------------------------------------------
+# Só entram fora do DEBUG: com SSL redirect ativo, o servidor de
+# desenvolvimento em http entraria em laço de redirecionamento.
+
+if not DEBUG:
+    # O Railway termina o TLS no roteador dele e repassa a requisição em http.
+    # Sem este cabeçalho o Django acharia que a conexão é insegura e redirecionaria
+    # em laço infinito.
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+    # HSTS instrui o navegador a só acessar por https. Começa em 1 hora de
+    # propósito: se algo der errado com o certificado, o prejuízo expira rápido.
+    # Suba para 31536000 (1 ano) depois de confirmar que o domínio está estável.
+    SECURE_HSTS_SECONDS = int(os.getenv('SECURE_HSTS_SECONDS', '3600'))
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = False
+
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = 'DENY'
