@@ -179,6 +179,8 @@
     </div>
   </div>
 
+  {% comment %} escape.js primeiro: os demais dependem de escapeHtml. {% endcomment %}
+  <script src="{% static 'assets/js/escape.js' %}"></script>
   <script src="{% static 'assets/js/cart.js' %}"></script>
   <script src="{% static 'assets/js/search.js' %}"></script>
   <script src="{% static 'assets/js/navbar.js' %}"></script>

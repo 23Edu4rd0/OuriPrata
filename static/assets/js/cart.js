@@ -66,7 +66,18 @@ function _showCartToast(name) {
 
   const t = document.createElement('div');
   t.className = 'flex items-center gap-3 px-4 py-3.5 bg-white rounded-xl shadow-soft border-l-4 border-gold-400 text-sm text-ink animate-fade-up';
-  t.innerHTML = `<i class="bi bi-bag-check text-gold-500"></i><span><strong>${name}</strong> adicionado ao carrinho</span>`;
+
+  // Montado com nós do DOM em vez de innerHTML: o nome da peça vem do banco e
+  // com innerHTML um nome contendo HTML seria executado.
+  const icon = document.createElement('i');
+  icon.className = 'bi bi-bag-check text-gold-500';
+  const msg = document.createElement('span');
+  const strong = document.createElement('strong');
+  strong.textContent = name;
+  msg.appendChild(strong);
+  msg.appendChild(document.createTextNode(' adicionado ao carrinho'));
+  t.append(icon, msg);
+
   wrap.appendChild(t);
   setTimeout(() => t.remove(), 3500);
 }

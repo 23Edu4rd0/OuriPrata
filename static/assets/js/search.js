@@ -27,19 +27,24 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
           }
 
-          suggestionsBox.innerHTML = items.map(p => `
-            <a href="/product/${p.slug}/"
+          // Nome, slug e URL de imagem vêm do banco — escapar antes de virar HTML.
+          suggestionsBox.innerHTML = items.map(p => {
+            const nome = escapeHtml(p.name);
+            const slug = encodeURIComponent(p.slug);
+            const imagem = escapeHtml(p.image);
+            return `
+            <a href="/product/${slug}/"
               class="flex items-center gap-3 px-4 py-3 hover:bg-cream-50 transition-colors group">
               <div class="w-10 h-10 rounded-lg overflow-hidden bg-stone-100 shrink-0">
                 ${p.image
-                  ? `<img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover">`
+                  ? `<img src="${imagem}" alt="${nome}" class="w-full h-full object-cover">`
                   : `<div class="w-full h-full flex items-center justify-center"><i class="bi bi-gem text-xs text-ink/25"></i></div>`}
               </div>
               <span class="text-[13px] text-ink font-light group-hover:text-gold-600 transition-colors truncate">
-                ${p.name}
+                ${nome}
               </span>
-            </a>
-          `).join('');
+            </a>`;
+          }).join('');
 
           // Separator + "ver todos"
           suggestionsBox.innerHTML += `

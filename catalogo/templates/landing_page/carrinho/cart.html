@@ -89,34 +89,43 @@ function renderCart() {
   empty.classList.add('hidden');
   summary.classList.remove('hidden');
 
+  // Tudo vem do localStorage — escapar antes de virar HTML. A chave também sai
+  // dos onclick inline: lá ela caía dentro de uma string JS dentro de um
+  // atributo, e uma aspa na chave bastaria para executar código. Agora vai em
+  // data-* e os cliques são tratados por delegação, abaixo.
   container.innerHTML = items.map(item => {
-    const priceStr = item.price ? formatPrice(item.price) : 'Consulte';
+    const priceStr = escapeHtml(item.price ? formatPrice(item.price) : 'Consulte');
+    const chave = escapeHtml(item.key);
+    const nome = escapeHtml(item.name);
+    const url = escapeHtml(item.url);
+    const imagem = escapeHtml(item.image || '');
+    const variante = escapeHtml(item.variant || '');
     return `
     <div class="flex items-center gap-5 bg-white border border-ink/8 rounded-xl p-5 shadow-[0_1px_8px_rgba(0,0,0,.03)]"
-         data-cart-item-key="${item.key}">
-      <a href="${item.url}" class="w-20 h-20 shrink-0 rounded-lg overflow-hidden bg-stone-50">
+         data-cart-item-key="${chave}">
+      <a href="${url}" class="w-20 h-20 shrink-0 rounded-lg overflow-hidden bg-stone-50">
         ${item.image
-          ? `<img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover">`
+          ? `<img src="${imagem}" alt="${nome}" class="w-full h-full object-cover">`
           : `<div class="w-full h-full flex items-center justify-center"><i class="bi bi-gem text-xl text-ink/15"></i></div>`}
       </a>
       <div class="flex-1 min-w-0">
-        <a href="${item.url}" class="font-serif text-[15px] text-ink font-light leading-snug hover:text-gold-600 transition-colors">
-          ${item.name}
+        <a href="${url}" class="font-serif text-[15px] text-ink font-light leading-snug hover:text-gold-600 transition-colors">
+          ${nome}
         </a>
-        ${item.variant ? `<p class="text-[11px] text-ink/40 mt-0.5">Tamanho: ${item.variant}</p>` : ''}
+        ${item.variant ? `<p class="text-[11px] text-ink/40 mt-0.5">Tamanho: ${variante}</p>` : ''}
         <p class="text-[13px] text-ink/50 mt-1 tracking-wide">${priceStr}</p>
       </div>
       <div class="flex items-center gap-3 shrink-0">
-        <button onclick="updateQuantity('${item.key}', ${item.quantity - 1})"
+        <button type="button" data-cart-action="decrementar" aria-label="Diminuir quantidade"
           class="w-7 h-7 flex items-center justify-center rounded-full border border-ink/15 text-ink/50 hover:border-gold-400 hover:text-gold-500 transition-colors text-sm">
           <i class="bi bi-dash"></i>
         </button>
         <span class="w-6 text-center text-sm text-ink">${item.quantity}</span>
-        <button onclick="updateQuantity('${item.key}', ${item.quantity + 1})"
+        <button type="button" data-cart-action="incrementar" aria-label="Aumentar quantidade"
           class="w-7 h-7 flex items-center justify-center rounded-full border border-ink/15 text-ink/50 hover:border-gold-400 hover:text-gold-500 transition-colors text-sm">
           <i class="bi bi-plus"></i>
         </button>
-        <button onclick="removeFromCart('${item.key}')"
+        <button type="button" data-cart-action="remover" aria-label="Remover do carrinho"
           class="ml-2 w-7 h-7 flex items-center justify-center text-ink/25 hover:text-red-400 transition-colors text-sm">
           <i class="bi bi-trash3"></i>
         </button>
@@ -155,6 +164,30 @@ document.getElementById('whatsappCheckout').addEventListener('click', () => {
 
 document.getElementById('clearCart').addEventListener('click', () => {
   if (confirm('Limpar todo o carrinho?')) clearCart();
+});
+
+// Delegação para os botões de quantidade e remoção. Substitui os onclick
+// inline, que embutiam a chave do item no atributo. A quantidade atual é lida
+// do carrinho, não do HTML, para não depender do que foi renderizado.
+document.getElementById('cartItems').addEventListener('click', e => {
+  const btn = e.target.closest('[data-cart-action]');
+  if (!btn) return;
+
+  const linha = btn.closest('[data-cart-item-key]');
+  if (!linha) return;
+
+  const chave = linha.dataset.cartItemKey;
+  const acao = btn.dataset.cartAction;
+
+  if (acao === 'remover') {
+    removeFromCart(chave);
+    return;
+  }
+
+  const item = getCart().find(i => i.key === chave);
+  if (!item) return;
+
+  updateQuantity(chave, item.quantity + (acao === 'incrementar' ? 1 : -1));
 });
 
 document.addEventListener('DOMContentLoaded', renderCart);
