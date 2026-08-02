@@ -157,34 +157,12 @@
 
   {% include 'landing_page/partials/_footer.html' %}
 
-  <div id="quickViewModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
-    <div id="quickViewBackdrop" class="absolute inset-0 bg-ink/50 backdrop-blur-sm"></div>
-    <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl grid grid-cols-1 md:grid-cols-2 overflow-hidden max-h-[90vh]">
-      <button id="quickViewClose" aria-label="Fechar"
-        class="absolute top-4 right-4 z-10 w-9 h-9 flex items-center justify-center rounded-full bg-white/90 text-ink hover:bg-ink hover:text-white transition-colors">
-        <i class="bi bi-x-lg text-sm"></i>
-      </button>
-      <div class="bg-stone-50 aspect-square md:aspect-auto flex items-center justify-center overflow-hidden">
-        <img id="quickViewImage" src="" alt="" class="w-full h-full object-cover">
-      </div>
-      <div class="p-8 flex flex-col justify-center">
-        <p id="quickViewCategory" class="font-serif italic text-[11px] tracking-[0.3em] text-gold-500 uppercase mb-3"></p>
-        <h3 id="quickViewName" class="font-serif text-2xl text-ink font-light leading-snug mb-3"></h3>
-        <p id="quickViewPrice" class="text-lg text-ink/70 tracking-wide mb-8"></p>
-        <a id="quickViewLink" href="#" class="flex items-center justify-center gap-2 w-full border border-ink bg-ink text-white px-6 py-3.5 uppercase tracking-[0.2em] text-[11px] hover:bg-transparent hover:text-ink transition-all duration-300">
-          Ver detalhes completos <i class="bi bi-arrow-right text-xs"></i>
-        </a>
-      </div>
-    </div>
-  </div>
-
   <script src="{% static 'assets/js/escape.js' %}"></script>
   <script src="{% static 'assets/js/cart.js' %}"></script>
   <script src="{% static 'assets/js/search.js' %}"></script>
   <script src="{% static 'assets/js/navbar.js' %}"></script>
   <script src="{% static 'assets/js/main.js' %}"></script>
   <script src="{% static 'assets/js/wishlist.js' %}"></script>
-  <script src="{% static 'assets/js/quickview.js' %}"></script>
   <script src="{% static 'assets/js/product-carousel.js' %}"></script>
   {% block extra_js %}{% endblock %}
 
