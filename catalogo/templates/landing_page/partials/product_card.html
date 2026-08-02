@@ -1,8 +1,6 @@
-{% comment %} Card de produto — usado em grids e listagens {% endcomment %}
 <div class="product-item group"
   data-price="{% if product.current_price %}{{ product.current_price|floatformat:2 }}{% else %}0{% endif %}">
 
-  <!-- Imagem -->
   <div class="relative w-full aspect-square overflow-hidden bg-stone-50 rounded-lg mb-4">
     <a href="{% url 'product_detail' product.slug %}" class="block w-full h-full">
       {% if product.image %}
@@ -15,7 +13,6 @@
       {% endif %}
     </a>
 
-    <!-- Selos -->
     <div class="absolute top-3 left-3 flex flex-col gap-1.5 pointer-events-none">
       {% if product.is_on_sale %}
       <span class="bg-red-500/95 text-white text-[8px] uppercase tracking-[0.18em] px-2 py-0.5 rounded-full">-{{ product.discount_percent }}%</span>
@@ -28,7 +25,6 @@
       {% endif %}
     </div>
 
-    <!-- Wishlist -->
     <button type="button" data-wishlist-toggle data-slug="{{ product.slug }}" data-name="{{ product.name }}"
       data-image="{% if product.image %}{{ product.image.url }}{% endif %}"
       data-price="{% if product.current_price %}{{ product.current_price|floatformat:2 }}{% endif %}"
@@ -38,7 +34,6 @@
       <i class="bi bi-heart text-sm" aria-hidden="true"></i>
     </button>
 
-    <!-- Quick view -->
     <button type="button" data-quick-view
       data-slug="{{ product.slug }}" data-name="{{ product.name }}"
       data-image="{% if product.image %}{{ product.image.url }}{% endif %}"
@@ -50,7 +45,6 @@
     </button>
   </div>
 
-  <!-- Info -->
   <a href="{% url 'product_detail' product.slug %}" class="block px-0.5">
     {% if product.category %}
     <p class="text-[9px] tracking-[0.2em] uppercase text-gold-400/80 mb-1">{{ product.category.name }}</p>

@@ -1,26 +1,5 @@
-{% comment %}
-  Carrossel de produtos — 4 por vez no desktop, 2 (+ espia da terceira) no mobile.
-
-  Navegação:
-    - Mobile: só arraste (scroll nativo com snap). As setas não são renderizadas.
-    - Desktop: arraste (trackpad) e setas, as duas coisas.
-
-  A borda espiada da próxima peça é o que sinaliza que dá para arrastar; sem
-  ela o trilho parece uma grade estática.
-
-  Uso:
-    {% include 'landing_page/partials/_product_carousel.html' with products=new_arrivals %}
-{% endcomment %}
 <div class="relative group" data-carousel>
 
-  {% comment %}
-    O arraste vale nas duas telas (no desktop, rolagem lateral do trackpad).
-    overscroll-x-contain impede que o gesto "vaze" para o navegador e dispare
-    o voltar-página quando o trilho chega ao fim.
-
-    Snap firme no mobile, onde o dedo solta em qualquer ponto; no desktop fica
-    em proximity para não brigar com a posição exata em que as setas param.
-  {% endcomment %}
   <div data-carousel-track
     class="flex overflow-x-auto overscroll-x-contain
            snap-x snap-mandatory md:snap-proximity
@@ -35,10 +14,6 @@
     {% endfor %}
   </div>
 
-  {% comment %}
-    Setas: escondidas por padrão, aparecem só em telas md+ e apenas quando o
-    trilho realmente transborda (o JS marca data-overflow no elemento raiz).
-  {% endcomment %}
   <button type="button" data-carousel-prev aria-label="Ver peças anteriores"
     class="hidden md:group-data-[overflow=true]:flex
            absolute left-0 -translate-x-1/2 top-[38%] -translate-y-1/2 z-20

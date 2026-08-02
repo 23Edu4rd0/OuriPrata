@@ -57,12 +57,6 @@
             Preencha os dados abaixo e abriremos o WhatsApp com sua mensagem pronta para enviar.
           </p>
 
-          {% comment %}
-            Sem method="post": não há view tratando POST, e o formulário é
-            enviado pelo WhatsApp (mesmo caminho da consulta personalizada).
-            Antes o envio recarregava a página e a mensagem se perdia em
-            silêncio — o cliente achava que tinha falado com a loja.
-          {% endcomment %}
           <form id="contactForm" class="space-y-5">
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">

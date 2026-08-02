@@ -157,7 +157,6 @@
 
   {% include 'landing_page/partials/_footer.html' %}
 
-  <!-- Quick View Modal -->
   <div id="quickViewModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
     <div id="quickViewBackdrop" class="absolute inset-0 bg-ink/50 backdrop-blur-sm"></div>
     <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl grid grid-cols-1 md:grid-cols-2 overflow-hidden max-h-[90vh]">
@@ -179,7 +178,6 @@
     </div>
   </div>
 
-  {% comment %} escape.js primeiro: os demais dependem de escapeHtml. {% endcomment %}
   <script src="{% static 'assets/js/escape.js' %}"></script>
   <script src="{% static 'assets/js/cart.js' %}"></script>
   <script src="{% static 'assets/js/search.js' %}"></script>

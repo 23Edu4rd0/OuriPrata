@@ -21,7 +21,6 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
 
-      <!-- GALERIA -->
       <div class="lg:col-span-7">
         <div class="flex gap-4">
 
@@ -61,7 +60,6 @@
         </div>
       </div>
 
-      <!-- INFORMAÇÕES -->
       <div class="lg:col-span-5 flex flex-col pt-2">
 
         {% if product.category %}
@@ -88,7 +86,6 @@
           {{ product.name }}
         </h1>
 
-        <!-- Avaliação resumida -->
         <a href="#avaliacoes" class="flex items-center gap-2 mb-5 group w-fit">
           <div class="flex items-center gap-0.5">
             {% for i in rating_range %}
@@ -133,7 +130,6 @@
         <div class="mb-8 pb-8 border-b border-ink/10"></div>
         {% endif %}
 
-        <!-- Detalhes da peça -->
         <div class="mb-8">
           <h3 class="text-[10px] tracking-[0.2em] uppercase text-ink/40 mb-4">Detalhes da Peça</h3>
           <ul class="text-[13px] text-ink/80 font-light space-y-3">
@@ -165,7 +161,6 @@
           </ul>
         </div>
 
-        <!-- Seletor de tamanho / variante -->
         {% if variants %}
         <div class="mb-6" id="variantSelector">
           <p class="text-[9px] tracking-[0.22em] uppercase text-ink/40 mb-3">Tamanho</p>
@@ -188,7 +183,6 @@
         </div>
         {% endif %}
 
-        <!-- Botão Carrinho -->
         {% if not product.is_out_of_stock %}
         <button type="button" id="addToCartBtn"
           data-add-to-cart
@@ -213,7 +207,6 @@
           <span>Consultar Disponibilidade</span>
         </a>
 
-        <!-- Selos de confiança -->
         <div class="grid grid-cols-3 gap-4 py-6 border-y border-ink/10 mb-8">
           <div class="flex flex-col items-center text-center gap-2">
             <i class="bi bi-shield-check text-lg text-gold-500" aria-hidden="true"></i>
@@ -229,7 +222,6 @@
           </div>
         </div>
 
-        <!-- Compartilhar -->
         <div class="flex items-center gap-4">
           <span class="text-[10px] tracking-[0.2em] uppercase text-ink/40">Compartilhar</span>
           <div class="flex items-center gap-3">
@@ -255,7 +247,6 @@
       </div>
     </div>
 
-    <!-- AVALIAÇÕES -->
     <section id="avaliacoes" class="mt-20 pt-14 border-t border-ink/10">
       <div class="mb-10">
         <p class="font-serif italic text-[11px] tracking-[0.3em] text-gold-500 uppercase mb-2">O que dizem</p>
@@ -264,7 +255,6 @@
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
 
-        <!-- Resumo numérico -->
         <div class="lg:col-span-3 flex flex-col items-center justify-start text-center">
           <p class="font-serif text-6xl font-light text-ink leading-none mb-3" id="avgRatingDisplay">
             {% if review_count > 0 %}{{ avg_rating|floatformat:1 }}{% else %}—{% endif %}
@@ -279,10 +269,8 @@
           </p>
         </div>
 
-        <!-- Formulário + lista -->
         <div class="lg:col-span-9">
 
-          <!-- Formulário -->
           {% if user.is_authenticated %}
           <div class="mb-10 pb-10 border-b border-ink/5">
             <h3 class="text-[10px] tracking-[0.2em] uppercase text-ink/40 mb-6">
@@ -323,7 +311,6 @@
           </div>
           {% endif %}
 
-          <!-- Lista de avaliações -->
           <div id="reviewsList">
             {% for review in reviews %}
             <div class="flex gap-5 mb-8 pb-8 border-b border-ink/5 last:border-0 last:mb-0 last:pb-0">
@@ -354,7 +341,6 @@
       </div>
     </section>
 
-    <!-- PRODUTOS RELACIONADOS -->
     {% if related_products %}
     <section class="mt-24 pt-16 border-t border-ink/10">
       <div class="text-center mb-12">
@@ -386,7 +372,6 @@
   </div>
 </main>
 
-<!-- Lightbox -->
 <div id="lightbox" role="dialog" aria-modal="true" aria-label="Visualizar imagem"
   class="fixed inset-0 z-50 hidden items-center justify-center bg-black/90 cursor-zoom-out">
   <button id="lightboxClose" aria-label="Fechar"

@@ -3,10 +3,6 @@
 <section class="py-10 md:py-16 bg-white">
   <div class="max-w-7xl mx-auto px-6 lg:px-12">
 
-    {% comment %}
-      Com capa: cabeçalho em duas colunas ao lado da imagem.
-      Sem capa: cabeçalho centralizado, senão sobrariam 7 colunas vazias no desktop.
-    {% endcomment %}
     <div class="{% if season_collection.image %}grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center{% endif %} mb-8 md:mb-12">
 
       <div class="{% if season_collection.image %}lg:col-span-5{% else %}text-center max-w-2xl mx-auto{% endif %}">
@@ -44,7 +40,6 @@
 
     </div>
 
-    <!-- Peças da coleção -->
     {% include 'landing_page/partials/_product_carousel.html' with products=season_products %}
 
   </div>

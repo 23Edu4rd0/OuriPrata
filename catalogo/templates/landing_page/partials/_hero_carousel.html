@@ -1,7 +1,6 @@
 {% load static %}
 <section class="relative w-full h-[70vh] md:h-[80vh] overflow-hidden" id="heroCarousel">
 
-  <!-- Slide 1 -->
   <div class="carousel-slide absolute inset-0 transition-opacity duration-700 ease-in-out opacity-100" data-index="0">
     <img src="{% static 'assets/landing_page/carousel-braceletes.jpg' %}" alt="Braceletes"
          class="w-full h-full object-cover">
@@ -20,7 +19,6 @@
     </div>
   </div>
 
-  <!-- Slide 2 -->
   <div class="carousel-slide absolute inset-0 transition-opacity duration-700 ease-in-out opacity-0" data-index="1">
     <img src="{% static 'assets/landing_page/carousel-aneis.jpg' %}" alt="Anéis"
          class="w-full h-full object-cover">
@@ -39,7 +37,6 @@
     </div>
   </div>
 
-  <!-- Slide 3 -->
   <div class="carousel-slide absolute inset-0 transition-opacity duration-700 ease-in-out opacity-0" data-index="2">
     <img src="{% static 'assets/landing_page/carousel-colares.jpg' %}" alt="Colares"
          class="w-full h-full object-cover">
@@ -58,7 +55,6 @@
     </div>
   </div>
 
-  <!-- Setas -->
   <button id="carouselPrev" aria-label="Slide anterior"
     class="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 z-10 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-white/80 hover:text-white transition-colors duration-200">
     <i class="bi bi-chevron-left text-2xl md:text-3xl"></i>
@@ -68,7 +64,6 @@
     <i class="bi bi-chevron-right text-2xl md:text-3xl"></i>
   </button>
 
-  <!-- Dots -->
   <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex gap-2" id="carouselDots">
     <button class="carousel-dot w-2 h-2 rounded-full bg-white transition-all duration-300" data-index="0" aria-label="Ir para slide 1"></button>
     <button class="carousel-dot w-2 h-2 rounded-full bg-white/40 transition-all duration-300" data-index="1" aria-label="Ir para slide 2"></button>

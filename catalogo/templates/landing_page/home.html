@@ -5,20 +5,16 @@
 
 {% block content %}
 
-
 <section class="w-full">
   <a href="{% url 'all_products' %}" class="block w-full h-[50vh] md:h-[65vh] overflow-hidden group">
     <picture>
-      <!-- Desktop Photo -->
       <source media="(min-width: 768px)" srcset="{% static 'assets/images/desktop.jpg' %}">
-      <!-- Mobile Photo -->
       <img src="{% static 'assets/images/mobile.png' %}"
            alt="Coleção OuriPrata"
            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
     </picture>
   </a>
 </section>
-
 
 {% include 'landing_page/partials/_trust_bar.html' %}
 
@@ -37,6 +33,5 @@
 {% include 'landing_page/partials/_testimonials.html' %}
 
 {% include 'landing_page/partials/_consulta_cta.html' %}
-
 
 {% endblock %}

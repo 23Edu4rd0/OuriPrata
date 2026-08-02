@@ -7,7 +7,6 @@
 <main class="bg-cream-50 min-h-screen py-10 md:py-24">
   <div class="max-w-7xl mx-auto px-6 lg:px-12">
 
-    <!-- Breadcrumb -->
     <nav class="flex items-center gap-3 text-[10px] tracking-[0.2em] uppercase text-ink/40 mb-12">
       <a href="{% url 'home' %}" class="hover:text-ink transition-colors">Início</a>
       <span>/</span>
@@ -16,7 +15,6 @@
       <span class="text-ink/70">{{ collection.name }}</span>
     </nav>
 
-    <!-- Header -->
     <div class="text-center mb-8 md:mb-14">
       <p class="font-serif italic text-[11px] tracking-[0.35em] text-gold-400 uppercase mb-3">Coleção</p>
       <h1 class="font-serif text-4xl md:text-5xl text-ink font-light tracking-wide mb-5">{{ collection.name }}</h1>
@@ -34,7 +32,6 @@
       </p>
     </div>
 
-    <!-- Collection hero image -->
     {% if collection.image %}
     <div class="w-full h-48 md:h-72 overflow-hidden rounded-2xl mb-8 md:mb-14 shadow-sm">
       <img src="{{ collection.image.url }}" alt="{{ collection.name }}"
