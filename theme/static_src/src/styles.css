@@ -21,3 +21,134 @@
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
 }
+
+/* ---- Controles de formulário: aparência unificada em todo o site ---- */
+
+/* Remove o anel azul nativo apenas dos campos — eles indicam o foco pela
+   borda dourada abaixo. Links e botões mantêm indicador visível (teclado). */
+select:focus, input:focus, textarea:focus,
+select:focus-visible, input:focus-visible, textarea:focus-visible {
+  outline: none;
+}
+
+/* Indicador de foco por teclado para navegação (links, botões, etc.) */
+a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid #c9973e;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+select, input[type="text"], input[type="number"], input[type="search"],
+input[type="email"], input[type="password"], input[type="tel"], textarea {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  font-family: inherit;
+  color: #2a2724;
+  transition: border-color .25s, background-color .25s, box-shadow .25s;
+}
+
+/* Seta customizada — substitui o triângulo nativo do sistema */
+select.op-field {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6' fill='none'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23b08a3e' stroke-width='1.3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.9rem center;
+  padding-right: 2.25rem;
+  cursor: pointer;
+}
+
+select.op-field::-ms-expand { display: none; }
+
+/* Campo padrão: pílula clara, borda sutil, foco dourado */
+.op-field {
+  background-color: #fff;
+  border: 1px solid rgba(42, 39, 36, .12);
+  border-radius: 9999px;
+  padding: .5rem .95rem;
+  font-size: .78rem;
+  letter-spacing: .01em;
+  line-height: 1.4;
+}
+
+.op-field::placeholder { color: rgba(42, 39, 36, .32); }
+.op-field:hover { border-color: rgba(42, 39, 36, .22); }
+
+.op-field:focus,
+.op-field:focus-visible {
+  border-color: #c9973e;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(201, 151, 62, .12);
+}
+
+/* Variante retangular para formulários longos (consulta, cadastro) */
+.op-field--block {
+  border-radius: .75rem;
+  width: 100%;
+  padding: .7rem 1rem;
+  font-size: .875rem;
+}
+
+select.op-field--block { background-position: right 1rem center; padding-right: 2.5rem; }
+
+textarea.op-field--block { border-radius: .75rem; resize: vertical; min-height: 7rem; }
+
+/* Opções do dropdown aberto (respeitado por Firefox e Chromium no Linux) */
+select.op-field option { background: #fff; color: #2a2724; padding: .5rem; }
+
+/* Autofill do Chrome pinta o campo de amarelo — neutraliza */
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 40px #fff inset;
+  -webkit-text-fill-color: #2a2724;
+}
+
+/* Remove as setinhas de input[type=number] */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+input[type="number"] { -moz-appearance: textfield; }
+
+/* Ajustes de toque, só em telas pequenas — o desktop mantém a tipografia
+   miúda e discreta que a identidade da marca pede. */
+@media (max-width: 767px) {
+  /* O Safari do iPhone dá zoom na página sempre que o usuário toca num campo
+     com fonte menor que 16px, e depois não volta sozinho. Os campos do site
+     estavam entre 12px e 13px, então toda busca e todo filtro deixavam a
+     página torta. 16px é o limiar exato que desliga esse comportamento.
+
+     A classe entra no seletor porque .op-field também define font-size: vir
+     depois no arquivo não basta, um seletor de elemento perde para uma classe
+     na especificidade. */
+  input[type="text"],
+  input[type="search"],
+  input[type="number"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="password"],
+  select,
+  textarea,
+  .op-field,
+  .op-field--block {
+    font-size: 16px;
+  }
+
+  /* Alvos de toque: o mínimo recomendado é 44px (Apple HIG). Os campos
+     estavam com 24px a 35px de altura, o que faz errar o toque. */
+  input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]),
+  select,
+  textarea {
+    min-height: 44px;
+  }
+
+  /* Botões só de ícone (menu, busca, fechar) tinham 32px a 40px. */
+  button,
+  a[role="button"] {
+    min-height: 44px;
+  }
+
+  /* Links dentro de texto corrido não devem esticar por causa da regra
+     acima — só os que funcionam como botão. */
+  button.inline,
+  button[data-inline] {
+    min-height: 0;
+  }
+}
