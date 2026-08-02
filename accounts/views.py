@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
 from catalogo.models import Product
+
 from .models import BrowsingHistory, Wishlist
 
 

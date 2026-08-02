@@ -5,38 +5,21 @@ description = ""
 authors = [{ name = "23Edu4rd0", email = "eduardo.vchaves23@gmail.com" }]
 requires-python = ">=3.14,<4.0"
 
-# Esta lista é a única fonte das dependências. Existia também um
-# requirements.txt, escrito à mão e já defasado — fixava Django 5.2.7 contra os
-# 6.x daqui e arrastava pacotes que o código não usa. Foi por essa fresta que o
-# django-colorfield se perdeu: estava lá, não estava aqui, e o build instala
-# daqui. Adicione dependência com `poetry add`, nunca editando os dois lugares.
 dependencies = [
     "django (>=6.0.7,<7.0.0)",
     "django-jazzmin (>=3.0.5,<4.0.0)",
     "django-tailwind (>=4.5.0,<5.0.0)",
     "django-browser-reload (>=1.21.0,<2.0.0)",
-    # Está no INSTALLED_APPS (o admin usa para escolher a cor das peças). Sem a
-    # declaração aqui o build instala tudo menos ela e o django.setup() falha
-    # com "No module named 'colorfield'" já no collectstatic.
     "django-colorfield (>=0.14.0,<1.0.0)",
-    # Produção. Estavam instaladas no venv local mas não declaradas aqui, então
-    # o deploy subia sem elas — o whitenoise, por exemplo, está no MIDDLEWARE e
-    # derrubaria a aplicação no primeiro request.
     "gunicorn (>=23.0.0,<24.0.0)",
     "whitenoise (>=6.9.0,<7.0.0)",
     "dj-database-url (>=3.0.1,<4.0.0)",
     "psycopg2-binary (>=2.9.10,<3.0.0)",
     "pillow (>=11.3.0,<12.0.0)",
-    # settings.py faz "from dotenv import load_dotenv" logo no topo: sem isto o
-    # processo nem chega a subir.
     "python-dotenv (>=1.1.1,<2.0.0)",
 ]
 
 
-# Este projeto é uma aplicação Django, não uma biblioteca: não existe um
-# módulo "ouriprata" para empacotar (os apps são catalogo, accounts, config e
-# theme). Sem isto o uv tenta construir um wheel do projeto e o poetry-core
-# falha com "No file/folder found for package ouriprata".
 [tool.uv]
 package = false
 
@@ -53,10 +36,6 @@ migrate = 'python manage.py migrate'
 migrations = 'python manage.py makemigrations'
 test = 'python manage.py test'
 
-# Sobe local com o settings de produção. Serve para conferir antes do deploy o
-# que só aparece fora do DEBUG: whitenoise com manifesto, cookies seguros,
-# páginas de erro sem stack trace. Precisa de SECRET_KEY, DATABASE_URL e
-# ALLOWED_HOSTS definidos (use `railway run task prod` para pegar os do Railway).
 prod = 'DJANGO_ENV=production python manage.py collectstatic --noinput && DJANGO_ENV=production SECURE_SSL_REDIRECT=False gunicorn config.wsgi:application --bind 0.0.0.0:8000'
 check = 'DJANGO_ENV=production python manage.py check --deploy'
 

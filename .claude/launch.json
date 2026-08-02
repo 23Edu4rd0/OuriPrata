@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "django",
+      "runtimeExecutable": "/home/edu4rd0/Projetos/OuriPrata/.venv/bin/python",
+      "runtimeArgs": ["manage.py", "runserver", "8000"],
+      "port": 8000
+    }
+  ]
+}
