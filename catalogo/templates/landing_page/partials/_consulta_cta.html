@@ -1,16 +1,7 @@
 {% load static %}
-<section class="relative py-12 md:py-20 bg-ink overflow-hidden">
+<section class="py-12 md:py-20 bg-cream-50 overflow-hidden">
 
-  <!-- Subtle texture overlay -->
-  <div class="absolute inset-0 opacity-[0.03]"
-    style="background-image: url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4a843' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\");">
-  </div>
-
-  <!-- Decorative gold lines -->
-  <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold-400/30 to-transparent"></div>
-  <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold-400/30 to-transparent"></div>
-
-  <div class="relative max-w-7xl mx-auto px-6 lg:px-12">
+  <div class="max-w-7xl mx-auto px-6 lg:px-12">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
 
       <!-- Texto -->
@@ -18,37 +9,37 @@
 
         <i class="bi bi-gem text-gold-400 text-2xl mb-8 inline-block" aria-hidden="true"></i>
 
-        <p class="font-serif italic text-[11px] tracking-[0.35em] text-gold-400/80 uppercase mb-4">Exclusivo para você</p>
-        <h2 class="font-serif text-3xl md:text-5xl text-white font-light tracking-wide leading-tight mb-6">
+        <p class="font-serif italic text-[11px] tracking-[0.35em] text-gold-400 uppercase mb-4">Exclusivo para você</p>
+        <h2 class="font-serif text-3xl md:text-5xl text-ink font-light tracking-wide leading-tight mb-6">
           Uma joia criada<br class="hidden md:block"> exclusivamente para você
         </h2>
 
         <div class="flex items-center justify-center lg:justify-start gap-4 mb-8">
-          <span class="h-px w-10 bg-gold-400/30"></span>
-          <span class="text-gold-400/50 text-[7px]">◆</span>
-          <span class="h-px w-10 bg-gold-400/30"></span>
+          <span class="h-px w-10 bg-gold-300/60"></span>
+          <span class="text-gold-400/70 text-[7px]">◆</span>
+          <span class="h-px w-10 bg-gold-300/60"></span>
         </div>
 
-        <p class="font-light text-[15px] md:text-[16px] leading-[1.85] text-cream-200/90 max-w-xl mx-auto lg:mx-0 mb-10">
+        <p class="font-light text-[15px] md:text-[16px] leading-[1.85] text-ink/60 max-w-xl mx-auto lg:mx-0 mb-10">
           Conte-nos sua visão — o metal, a ocasião, a história que quer eternizar.
           Nossa equipe cria uma peça única, desenvolvida do zero para ser só sua.
         </p>
 
         <!-- Feature pills -->
         <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3 mb-10">
-          <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cream-200/20 text-[11px] text-cream-200/80 tracking-wide">
-            <i class="bi bi-chat-text text-gold-400 text-xs"></i> Atendimento via WhatsApp
+          <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-ink/10 bg-white text-[11px] text-ink/60 tracking-wide">
+            <i class="bi bi-chat-text text-gold-500 text-xs"></i> Atendimento via WhatsApp
           </span>
-          <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cream-200/20 text-[11px] text-cream-200/80 tracking-wide">
-            <i class="bi bi-pencil text-gold-400 text-xs"></i> Design exclusivo
+          <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-ink/10 bg-white text-[11px] text-ink/60 tracking-wide">
+            <i class="bi bi-pencil text-gold-500 text-xs"></i> Design exclusivo
           </span>
-          <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cream-200/20 text-[11px] text-cream-200/80 tracking-wide">
-            <i class="bi bi-shield-check text-gold-400 text-xs"></i> Prata 925 ou Ouro 18k
+          <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-ink/10 bg-white text-[11px] text-ink/60 tracking-wide">
+            <i class="bi bi-shield-check text-gold-500 text-xs"></i> Prata 925 ou Ouro 18k
           </span>
         </div>
 
         <a href="{% url 'consulta_personalizada' %}"
-           class="inline-flex items-center gap-3 bg-gold-400 hover:bg-gold-500 text-ink px-10 py-4 rounded-full text-[11px] font-medium uppercase tracking-[0.25em] transition-all duration-300 hover:shadow-[0_0_32px_rgba(212,168,67,0.35)]">
+           class="inline-flex items-center gap-3 bg-gold-400 hover:bg-gold-500 text-ink px-10 py-4 rounded-full text-[11px] font-medium uppercase tracking-[0.25em] transition-all duration-300 hover:shadow-[0_0_32px_rgba(212,168,67,0.25)]">
           Iniciar consulta
           <i class="bi bi-arrow-right text-xs"></i>
         </a>
@@ -57,14 +48,14 @@
 
       <!-- Foto -->
       <div class="relative lg:col-span-6">
-        <div class="aspect-[4/5] lg:aspect-auto lg:h-[520px] overflow-hidden rounded-2xl ring-1 ring-gold-400/15 shadow-[0_20px_60px_rgba(0,0,0,.45)]">
+        <div class="aspect-[4/5] lg:aspect-auto lg:h-[520px] overflow-hidden rounded-2xl bg-stone-100 shadow-[0_12px_48px_rgba(0,0,0,.08)]">
           <img src="{% static 'assets/landing_page/hero.png' %}"
                alt="Peças em ouro criadas sob medida pela OuriPrata"
                loading="lazy"
                class="w-full h-full object-cover">
         </div>
-        <div class="absolute -bottom-4 -right-4 w-20 h-px bg-gold-400/40 hidden lg:block"></div>
-        <div class="absolute -bottom-4 -right-4 w-px h-20 bg-gold-400/40 hidden lg:block"></div>
+        <div class="absolute -bottom-4 -right-4 w-20 h-px bg-gold-300/50 hidden lg:block"></div>
+        <div class="absolute -bottom-4 -right-4 w-px h-20 bg-gold-300/50 hidden lg:block"></div>
       </div>
 
     </div>
