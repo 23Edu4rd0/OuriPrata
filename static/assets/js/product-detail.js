@@ -221,8 +221,13 @@ thumbs.forEach(thumb => {
         return;
       }
 
-      // Atualizar resumo numérico
-      document.getElementById('avgRatingDisplay').textContent = json.avg_rating.toFixed(1).replace('.', ',');
+      // Atualizar resumo numérico. Sem nota, o template renderiza um aviso
+      // discreto; ao surgir a primeira avaliação o número precisa assumir o
+      // tamanho grande, senão fica pequeno e apagado como se ainda não houvesse.
+      const avgEl = document.getElementById('avgRatingDisplay');
+      avgEl.textContent = json.avg_rating.toFixed(1).replace('.', ',');
+      avgEl.classList.remove('text-2xl', 'text-ink/25');
+      avgEl.classList.add('text-6xl', 'text-ink');
       document.getElementById('reviewCountDisplay').textContent =
         json.review_count + (json.review_count === 1 ? ' avaliação' : ' avaliações');
 

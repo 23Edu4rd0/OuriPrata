@@ -7,8 +7,8 @@
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
 
         <div class="lg:col-span-3 flex flex-col items-center justify-start text-center">
-          <p class="font-serif text-6xl font-light text-ink leading-none mb-3" id="avgRatingDisplay">
-            {% if review_count > 0 %}{{ avg_rating|floatformat:1 }}{% else %}—{% endif %}
+          <p class="font-serif font-light leading-none mb-3 {% if review_count > 0 %}text-6xl text-ink{% else %}text-2xl text-ink/25{% endif %}" id="avgRatingDisplay">
+            {% if review_count > 0 %}{{ avg_rating|floatformat:1 }}{% else %}Ainda sem nota{% endif %}
           </p>
           <div class="flex items-center gap-1 mb-3">
             {% for i in rating_range %}

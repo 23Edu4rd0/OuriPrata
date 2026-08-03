@@ -130,7 +130,7 @@
           data-image="{% if product.image %}{{ product.image.url }}{% endif %}"
           data-url="{% url 'product_detail' product.slug %}"
           {% if variants %}disabled{% endif %}
-          class="flex items-center justify-center gap-3 w-full bg-gold-500 hover:bg-gold-600 text-white px-8 py-4 rounded-full uppercase tracking-[0.2em] text-[11px] transition-colors duration-300 mb-3 disabled:opacity-40 disabled:cursor-not-allowed">
+          class="flex items-center justify-center gap-3 w-full bg-gold-400 hover:bg-gold-500 text-ink px-8 py-4 rounded-full font-medium uppercase tracking-[0.2em] text-[11px] transition-colors duration-300 mb-3 disabled:opacity-40 disabled:cursor-not-allowed">
           <i class="bi bi-bag-plus text-base"></i>
           {% if variants %}Selecione o tamanho{% else %}Adicionar ao carrinho{% endif %}
         </button>
@@ -138,7 +138,7 @@
 
         <a href="https://wa.me/5537998623061?text=Olá!%20Tenho%20interesse%20na%20joia%20*{{ product.name|urlencode }}*%20da%20OuriPrata.{% if product.current_price %}%0AR$%20{{ product.current_price|floatformat:2 }}{% endif %}%0A{{ request.build_absolute_uri|urlencode }}"
           target="_blank" rel="noopener"
-          class="flex items-center justify-center gap-3 w-full border border-ink bg-ink text-white px-8 py-4 uppercase tracking-[0.2em] text-[11px] hover:bg-transparent hover:text-ink transition-all duration-300 mb-8">
+          class="flex items-center justify-center gap-3 w-full border border-ink/20 text-ink px-8 py-4 rounded-full uppercase tracking-[0.2em] text-[11px] hover:border-ink hover:bg-ink hover:text-white transition-all duration-300 mb-8">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.44.79 3.06 1.2 4.71 1.2h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm5.83 14.13c-.25.7-1.23 1.28-2.02 1.45-.54.11-1.24.2-3.6-.77-2.99-1.24-4.91-4.27-5.06-4.47-.15-.2-1.21-1.61-1.21-3.08 0-1.46.75-2.18 1.02-2.47.25-.28.55-.35.73-.35.18 0 .37 0 .53.01.17.01.4-.06.62.48.25.6.85 2.06.92 2.21.07.15.12.33.02.53-.1.2-.15.32-.29.5-.15.17-.31.39-.44.52-.15.15-.3.31-.13.6.17.3.75 1.24 1.62 2.01 1.11.99 2.05 1.3 2.35 1.44.3.15.47.13.65-.08.18-.2.75-.87.95-1.17.2-.3.4-.25.67-.15.28.1 1.75.83 2.05.98.3.15.5.22.57.35.08.13.08.72-.17 1.42z"/>
           </svg>
@@ -160,24 +160,24 @@
           </div>
         </div>
 
-        <div class="flex items-center gap-4">
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
           <span class="text-[10px] tracking-[0.2em] uppercase text-ink/40">Compartilhar</span>
-          <div class="flex items-center gap-3">
-            <a href="https://api.whatsapp.com/send?text={{ request.build_absolute_uri|urlencode }}" target="_blank" rel="noopener" aria-label="Compartilhar no WhatsApp" class="text-ink/50 hover:text-gold-500 transition-colors">
+          <div class="flex items-center -ml-2.5">
+            <a href="https://api.whatsapp.com/send?text={{ request.build_absolute_uri|urlencode }}" target="_blank" rel="noopener" aria-label="Compartilhar no WhatsApp" class="w-11 h-11 inline-flex items-center justify-center rounded-full text-ink/50 hover:text-gold-500 hover:bg-ink/5 transition-colors">
               <i class="bi bi-whatsapp text-base" aria-hidden="true"></i>
             </a>
-            <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri|urlencode }}" target="_blank" rel="noopener" aria-label="Compartilhar no Facebook" class="text-ink/50 hover:text-gold-500 transition-colors">
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri|urlencode }}" target="_blank" rel="noopener" aria-label="Compartilhar no Facebook" class="w-11 h-11 inline-flex items-center justify-center rounded-full text-ink/50 hover:text-gold-500 hover:bg-ink/5 transition-colors">
               <i class="bi bi-facebook text-base" aria-hidden="true"></i>
             </a>
-            <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri|urlencode }}&text={{ product.name|urlencode }}" target="_blank" rel="noopener" aria-label="Compartilhar no X" class="text-ink/50 hover:text-gold-500 transition-colors">
+            <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri|urlencode }}&text={{ product.name|urlencode }}" target="_blank" rel="noopener" aria-label="Compartilhar no X" class="w-11 h-11 inline-flex items-center justify-center rounded-full text-ink/50 hover:text-gold-500 hover:bg-ink/5 transition-colors">
               <i class="bi bi-twitter-x text-base" aria-hidden="true"></i>
             </a>
-            <a href="https://pinterest.com/pin/create/button/?url={{ request.build_absolute_uri|urlencode }}{% if product.image %}&media={{ product.image.url|urlencode }}{% endif %}&description={{ product.name|urlencode }}" target="_blank" rel="noopener" aria-label="Compartilhar no Pinterest" class="text-ink/50 hover:text-gold-500 transition-colors">
+            <a href="https://pinterest.com/pin/create/button/?url={{ request.build_absolute_uri|urlencode }}{% if product.image %}&media={{ product.image.url|urlencode }}{% endif %}&description={{ product.name|urlencode }}" target="_blank" rel="noopener" aria-label="Compartilhar no Pinterest" class="w-11 h-11 inline-flex items-center justify-center rounded-full text-ink/50 hover:text-gold-500 hover:bg-ink/5 transition-colors">
               <i class="bi bi-pinterest text-base" aria-hidden="true"></i>
             </a>
-            <button type="button" id="copyLinkBtn" aria-label="Copiar link" class="relative text-ink/50 hover:text-gold-500 transition-colors">
+            <button type="button" id="copyLinkBtn" aria-label="Copiar link" class="relative w-11 h-11 inline-flex items-center justify-center rounded-full text-ink/50 hover:text-gold-500 hover:bg-ink/5 transition-colors">
               <i class="bi bi-link-45deg text-base" aria-hidden="true"></i>
-              <span id="copiedMsg" class="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-ink px-2 py-1 text-[9px] text-white opacity-0 transition-opacity duration-200">Copiado!</span>
+              <span id="copiedMsg" class="pointer-events-none absolute -top-6 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-ink px-2 py-1 text-[9px] text-white opacity-0 transition-opacity duration-200">Copiado!</span>
             </button>
           </div>
         </div>
