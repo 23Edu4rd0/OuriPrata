@@ -8,15 +8,15 @@
 
         <div class="flex items-center flex-wrap gap-2 mb-3">
           {% if product.is_new %}
-          <span class="bg-ink/90 text-white text-[9px] uppercase tracking-[0.15em] px-2.5 py-1 rounded-full">Novo</span>
+          <span class="bg-ink/[.06] ring-1 ring-ink/10 text-ink/75 text-[9px] font-medium uppercase tracking-[0.15em] px-2.5 py-1 rounded-full">Novo</span>
           {% endif %}
           {% if product.featured %}
-          <span class="bg-gold-500 text-white text-[9px] uppercase tracking-[0.15em] px-2.5 py-1 rounded-full">Destaque</span>
+          <span class="bg-gold-50 ring-1 ring-gold-500/25 text-gold-700 text-[9px] font-medium uppercase tracking-[0.15em] px-2.5 py-1 rounded-full">Destaque</span>
           {% endif %}
           {% if product.is_out_of_stock %}
-          <span class="bg-red-100 text-red-500 text-[9px] uppercase tracking-[0.15em] px-2.5 py-1 rounded-full">Sem estoque</span>
+          <span class="bg-red-50 ring-1 ring-red-700/15 text-red-700 text-[9px] font-medium uppercase tracking-[0.15em] px-2.5 py-1 rounded-full">Sem estoque</span>
           {% elif product.is_low_stock %}
-          <span class="bg-amber-50 text-amber-600 text-[9px] uppercase tracking-[0.15em] px-2.5 py-1 rounded-full">Últimas {{ product.stock_quantity }} unidade{{ product.stock_quantity|pluralize:"s" }}</span>
+          <span class="bg-amber-50 ring-1 ring-amber-700/20 text-amber-700 text-[9px] font-medium uppercase tracking-[0.15em] px-2.5 py-1 rounded-full">Últimas {{ product.stock_quantity }} unidade{{ product.stock_quantity|pluralize:"s" }}</span>
           {% endif %}
         </div>
 
@@ -41,7 +41,7 @@
         <div class="flex items-baseline flex-wrap gap-3 mb-6">
           <p class="text-lg text-ink/35 font-light tracking-wide line-through">R$ {{ product.price }}</p>
           <p class="text-2xl text-red-500 font-light tracking-wide">R$ {{ product.promo_price }}</p>
-          <span class="bg-red-50 text-red-500 text-[10px] uppercase tracking-[0.15em] px-2.5 py-1 rounded-full">
+          <span class="bg-red-50 ring-1 ring-red-700/15 text-red-700 text-[10px] font-medium uppercase tracking-[0.15em] px-2.5 py-1 rounded-full">
             Economize {{ product.discount_percent }}%
           </span>
         </div>
