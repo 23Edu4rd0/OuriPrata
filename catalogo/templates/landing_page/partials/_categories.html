@@ -1,4 +1,3 @@
-{% load static %}
 <section class="py-10 md:py-16 bg-white">
   <div class="max-w-7xl mx-auto px-6 lg:px-12">
 
@@ -9,82 +8,13 @@
       </div>
     </div>
 
-    <div class="flex md:grid md:grid-cols-5 gap-5 md:gap-8
-                overflow-x-auto md:overflow-visible
-                snap-x snap-mandatory md:snap-none
-                [-ms-overflow-style:none] [scrollbar-width:none]
-                [&::-webkit-scrollbar]:hidden">
-
-      <a href="{% url 'products_by_category' 'aneis' %}"
-         class="group shrink-0 w-[72%] xs:w-[56%] sm:w-[40%] md:w-auto snap-center">
-        <div class="aspect-square overflow-hidden rounded-xl bg-stone-100 mb-4 ring-1 ring-ink/5 group-hover:ring-gold-300/60 transition-all duration-500">
-          <img src="{% static 'assets/landing_page/cat-aneis.png' %}" alt="Anéis"
-               class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
-        </div>
-        <p class="text-center text-[11px] tracking-[0.2em] uppercase text-ink/60 group-hover:text-gold-500 transition-colors duration-300">
-          Anéis
-        </p>
-        <div class="flex justify-center mt-2">
-          <span class="h-px w-0 bg-gold-400 group-hover:w-6 transition-all duration-400 ease-out"></span>
-        </div>
-      </a>
-
-      <a href="{% url 'products_by_category' 'aliancas' %}"
-         class="group shrink-0 w-[72%] xs:w-[56%] sm:w-[40%] md:w-auto snap-center">
-        <div class="aspect-square overflow-hidden rounded-xl bg-stone-100 mb-4 ring-1 ring-ink/5 group-hover:ring-gold-300/60 transition-all duration-500">
-          <img src="{% static 'assets/landing_page/cat-aliancas.png' %}" alt="Alianças"
-               class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
-        </div>
-        <p class="text-center text-[11px] tracking-[0.2em] uppercase text-ink/60 group-hover:text-gold-500 transition-colors duration-300">
-          Alianças
-        </p>
-        <div class="flex justify-center mt-2">
-          <span class="h-px w-0 bg-gold-400 group-hover:w-6 transition-all duration-400 ease-out"></span>
-        </div>
-      </a>
-
-      <a href="{% url 'products_by_category' 'colares' %}"
-         class="group shrink-0 w-[72%] xs:w-[56%] sm:w-[40%] md:w-auto snap-center">
-        <div class="aspect-square overflow-hidden rounded-xl bg-stone-100 mb-4 ring-1 ring-ink/5 group-hover:ring-gold-300/60 transition-all duration-500">
-          <img src="{% static 'assets/landing_page/cat-colares.png' %}" alt="Colares"
-               class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
-        </div>
-        <p class="text-center text-[11px] tracking-[0.2em] uppercase text-ink/60 group-hover:text-gold-500 transition-colors duration-300">
-          Colares
-        </p>
-        <div class="flex justify-center mt-2">
-          <span class="h-px w-0 bg-gold-400 group-hover:w-6 transition-all duration-400 ease-out"></span>
-        </div>
-      </a>
-
-      <a href="{% url 'products_by_category' 'brincos' %}"
-         class="group shrink-0 w-[72%] xs:w-[56%] sm:w-[40%] md:w-auto snap-center">
-        <div class="aspect-square overflow-hidden rounded-xl bg-stone-100 mb-4 ring-1 ring-ink/5 group-hover:ring-gold-300/60 transition-all duration-500">
-          <img src="{% static 'assets/landing_page/cat-brincos.png' %}" alt="Brincos"
-               class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
-        </div>
-        <p class="text-center text-[11px] tracking-[0.2em] uppercase text-ink/60 group-hover:text-gold-500 transition-colors duration-300">
-          Brincos
-        </p>
-        <div class="flex justify-center mt-2">
-          <span class="h-px w-0 bg-gold-400 group-hover:w-6 transition-all duration-400 ease-out"></span>
-        </div>
-      </a>
-
-      <a href="{% url 'products_by_category' 'pulseiras' %}"
-         class="group shrink-0 w-[72%] xs:w-[56%] sm:w-[40%] md:w-auto snap-center">
-        <div class="aspect-square overflow-hidden rounded-xl bg-stone-100 mb-4 ring-1 ring-ink/5 group-hover:ring-gold-300/60 transition-all duration-500">
-          <img src="{% static 'assets/landing_page/cat-pulseiras.png' %}" alt="Pulseiras"
-               class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105">
-        </div>
-        <p class="text-center text-[11px] tracking-[0.2em] uppercase text-ink/60 group-hover:text-gold-500 transition-colors duration-300">
-          Pulseiras
-        </p>
-        <div class="flex justify-center mt-2">
-          <span class="h-px w-0 bg-gold-400 group-hover:w-6 transition-all duration-400 ease-out"></span>
-        </div>
-      </a>
-
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-8">
+      {% include 'landing_page/partials/_category_tile.html' with slug='aneis' nome='Anéis' imagem='assets/landing_page/cat-aneis.png' %}
+      {% include 'landing_page/partials/_category_tile.html' with slug='aliancas' nome='Alianças' imagem='assets/landing_page/cat-aliancas.png' %}
+      {% include 'landing_page/partials/_category_tile.html' with slug='colares' nome='Colares' imagem='assets/landing_page/cat-colares.png' %}
+      {% include 'landing_page/partials/_category_tile.html' with slug='brincos' nome='Brincos' imagem='assets/landing_page/cat-brincos.png' %}
+      {% include 'landing_page/partials/_category_tile.html' with slug='pulseiras' nome='Pulseiras' imagem='assets/landing_page/cat-pulseiras.png' %}
     </div>
+
   </div>
 </section>

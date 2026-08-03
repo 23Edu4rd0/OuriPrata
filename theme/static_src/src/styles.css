@@ -48,11 +48,17 @@ input[type="email"], input[type="password"], input[type="tel"], textarea {
   transition: border-color .25s, background-color .25s, box-shadow .25s;
 }
 
-/* Seta customizada — substitui o triângulo nativo do sistema */
+/* Seta customizada — substitui o triângulo nativo do sistema.
+
+   O background-size é obrigatório: o plugin @tailwindcss/forms aplica
+   1.5em 1.5em nos selects, o que espremia este SVG de 10x6 dentro de um
+   quadrado que cresce junto com a fonte (24x24 quando o campo vai a 16px
+   no mobile). A seta saía deformada e encostando no texto. */
 select.op-field {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6' fill='none'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23b08a3e' stroke-width='1.3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.9rem center;
+  background-size: 10px 6px;
   padding-right: 2.25rem;
   cursor: pointer;
 }
