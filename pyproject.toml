@@ -3,7 +3,12 @@ name = "ouriprata"
 version = "0.1.0"
 description = ""
 authors = [{ name = "23Edu4rd0", email = "eduardo.vchaves23@gmail.com" }]
-requires-python = ">=3.14,<4.0"
+# O Nixpacks do Railway provisiona Python 3.12 por padrão nesse pinning de
+# nixpkgs; o Poetry recusa instalar quando o venv não satisfaz requires-python.
+# Nada no código usa recurso exclusivo do 3.14 (Django 6.0 já suporta 3.12+),
+# então a exigência afrouxa para o que o build tem disponível em vez de forçar
+# uma versão específica do interpretador.
+requires-python = ">=3.12,<4.0"
 
 dependencies = [
     "django (>=6.0.7,<7.0.0)",

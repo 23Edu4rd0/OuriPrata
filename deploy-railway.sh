@@ -58,6 +58,25 @@ railway variables \
   --set "MEDIA_ROOT=$MONTAGEM" \
   --skip-deploys
 
+# No primeiro deploy o domínio ainda não foi gerado, então RAILWAY_PUBLIC_DOMAIN
+# vem vazia e o prod.py abortaria já na migração por ALLOWED_HOSTS vazia. O
+# curinga cobre qualquer domínio que o Railway venha a gerar; assim que houver um
+# domínio próprio, troque por ele:
+#
+#   railway variables --set "ALLOWED_HOSTS=ouriprata.com.br" \
+#                     --set "CSRF_TRUSTED_ORIGINS=https://ouriprata.com.br"
+#
+# Por isso o `if`: quem já ajustou não perde o ajuste ao rodar o script de novo.
+if railway variables --kv 2>/dev/null | grep -q '^ALLOWED_HOSTS='; then
+  echo "ALLOWED_HOSTS já definida, mantendo a existente"
+else
+  echo "Definindo ALLOWED_HOSTS provisória (domínios do Railway)"
+  railway variables \
+    --set "ALLOWED_HOSTS=.up.railway.app" \
+    --set "CSRF_TRUSTED_ORIGINS=https://*.up.railway.app" \
+    --skip-deploys
+fi
+
 # --- 5. Volume persistente -------------------------------------------------
 # Sem isto as fotos das peças enviadas pelo admin somem no próximo deploy:
 # o disco do container é descartável.
