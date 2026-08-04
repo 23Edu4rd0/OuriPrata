@@ -8,9 +8,7 @@ module.exports = {
         extend: {
             colors: {
                 cream: { 50: '#fdfaf5', 100: '#f7f2ea', 200: '#f0e8db', 300: '#e8dcc8' },
-                // 700 existe para texto pequeno sobre fundo claro: o 600 fica em
-                // 4.13:1 contra branco, abaixo dos 4.5:1 que a WCAG AA pede.
-                gold: { 50: '#fdf9ee', 100: '#f8efce', 200: '#f0d98e', 300: '#e8c65a', 400: '#d4a843', 500: '#b8922e', 600: '#9a7821', 700: '#836419' },
+                gold:{ 50: '#fdf9ee', 100: '#f8efce', 200: '#f0d98e', 300: '#e8c65a', 400: '#d4a843', 500: '#b8922e', 600: '#9a7821', 700: '#836419' },
                 ink: { DEFAULT: '#241a13', muted: '#6f6259', light: '#8a7d74' },
             },
             fontFamily: {
