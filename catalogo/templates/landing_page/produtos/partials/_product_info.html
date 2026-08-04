@@ -1,4 +1,4 @@
-      <div class="lg:col-span-5 flex flex-col pt-2">
+      <div class="lg:col-span-5 flex flex-col">
 
         {% if product.category %}
         <p class="font-serif italic text-[11px] tracking-[0.3em] text-gold-500 uppercase mb-3">
@@ -20,11 +20,11 @@
           {% endif %}
         </div>
 
-        <h1 class="font-serif text-3xl md:text-4xl text-ink font-light leading-snug mb-4">
+        <h1 class="font-serif text-3xl md:text-4xl text-ink font-light leading-snug mb-3">
           {{ product.name }}
         </h1>
 
-        <a href="#avaliacoes" class="flex items-center gap-2 mb-5 group w-fit">
+        <a href="#avaliacoes" class="flex items-center gap-2 mb-4 group w-fit">
           <div class="flex items-center gap-0.5">
             {% for i in rating_range %}
             <i class="bi {% if i <= avg_rating_int %}bi-star-fill text-gold-500{% else %}bi-star text-ink/20{% endif %} text-xs" aria-hidden="true"></i>
@@ -38,7 +38,7 @@
         </a>
 
         {% if product.is_on_sale %}
-        <div class="flex items-baseline flex-wrap gap-3 mb-6">
+        <div class="flex items-baseline flex-wrap gap-3 mb-5">
           <p class="text-lg text-ink/35 font-light tracking-wide line-through">R$ {{ product.price }}</p>
           <p class="text-2xl text-red-500 font-light tracking-wide">R$ {{ product.promo_price }}</p>
           <span class="bg-red-50 ring-1 ring-red-700/15 text-red-700 text-[10px] font-medium uppercase tracking-[0.15em] px-2.5 py-1 rounded-full">
@@ -46,15 +46,15 @@
           </span>
         </div>
         {% elif product.price %}
-        <p class="text-2xl text-ink font-light tracking-wide mb-6">
+        <p class="text-2xl text-ink font-light tracking-wide mb-5">
           R$ {{ product.price }}
         </p>
         {% else %}
-        <p class="text-[11px] uppercase tracking-widest text-ink/40 mb-6">Consulte o valor</p>
+        <p class="text-[11px] uppercase tracking-widest text-ink/40 mb-5">Consulte o valor</p>
         {% endif %}
 
         {% if product.description %}
-        <div class="mb-8 pb-8 border-b border-ink/10">
+        <div class="mb-6 pb-6 border-b border-ink/10">
           <div id="descText" class="font-serif text-[15px] leading-relaxed text-ink/70 font-light overflow-hidden transition-[max-height] duration-500" style="max-height: 96px;">
             {{ product.description|linebreaksbr }}
           </div>
@@ -65,11 +65,11 @@
           </button>
         </div>
         {% else %}
-        <div class="mb-8 pb-8 border-b border-ink/10"></div>
+        <div class="mb-6 pb-6 border-b border-ink/10"></div>
         {% endif %}
 
-        <div class="mb-8">
-          <h3 class="text-[10px] tracking-[0.2em] uppercase text-ink/40 mb-4">Detalhes da Peça</h3>
+        <div class="mb-6">
+          <h3 class="text-[10px] tracking-[0.2em] uppercase text-ink/40 mb-3">Detalhes da Peça</h3>
           <ul class="text-[13px] text-ink/80 font-light space-y-3">
             {% if product.material %}
             <li class="flex justify-between border-b border-ink/5 pb-2">
@@ -138,24 +138,24 @@
 
         <a href="https://wa.me/5537998623061?text=Olá!%20Tenho%20interesse%20na%20joia%20*{{ product.name|urlencode }}*%20da%20OuriPrata.{% if product.current_price %}%0AR$%20{{ product.current_price|floatformat:2 }}{% endif %}%0A{{ request.build_absolute_uri|urlencode }}"
           target="_blank" rel="noopener"
-          class="flex items-center justify-center gap-3 w-full border border-ink/20 text-ink px-8 py-4 rounded-full uppercase tracking-[0.2em] text-[11px] hover:border-ink hover:bg-ink hover:text-white transition-all duration-300 mb-8">
+          class="flex items-center justify-center gap-3 w-full border border-ink/20 text-ink px-8 py-4 rounded-full uppercase tracking-[0.2em] text-[11px] hover:border-ink hover:bg-ink hover:text-white transition-all duration-300 mb-6">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.44.79 3.06 1.2 4.71 1.2h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm5.83 14.13c-.25.7-1.23 1.28-2.02 1.45-.54.11-1.24.2-3.6-.77-2.99-1.24-4.91-4.27-5.06-4.47-.15-.2-1.21-1.61-1.21-3.08 0-1.46.75-2.18 1.02-2.47.25-.28.55-.35.73-.35.18 0 .37 0 .53.01.17.01.4-.06.62.48.25.6.85 2.06.92 2.21.07.15.12.33.02.53-.1.2-.15.32-.29.5-.15.17-.31.39-.44.52-.15.15-.3.31-.13.6.17.3.75 1.24 1.62 2.01 1.11.99 2.05 1.3 2.35 1.44.3.15.47.13.65-.08.18-.2.75-.87.95-1.17.2-.3.4-.25.67-.15.28.1 1.75.83 2.05.98.3.15.5.22.57.35.08.13.08.72-.17 1.42z"/>
           </svg>
           <span>Consultar Disponibilidade</span>
         </a>
 
-        <div class="grid grid-cols-3 gap-4 py-6 border-y border-ink/10 mb-8">
-          <div class="flex flex-col items-center text-center gap-2">
-            <i class="bi bi-shield-check text-lg text-gold-500" aria-hidden="true"></i>
+        <div class="grid grid-cols-3 gap-3 py-4 border-y border-ink/10 mb-6">
+          <div class="flex items-center gap-2">
+            <i class="bi bi-shield-check text-base text-gold-500" aria-hidden="true"></i>
             <span class="text-[10px] uppercase tracking-wider text-ink/60 leading-tight">Garantia<br>de 90 dias</span>
           </div>
-          <div class="flex flex-col items-center text-center gap-2">
-            <i class="bi bi-truck text-lg text-gold-500" aria-hidden="true"></i>
+          <div class="flex items-center gap-2">
+            <i class="bi bi-truck text-base text-gold-500" aria-hidden="true"></i>
             <span class="text-[10px] uppercase tracking-wider text-ink/60 leading-tight">Envio para<br>todo o Brasil</span>
           </div>
-          <div class="flex flex-col items-center text-center gap-2">
-            <i class="bi bi-arrow-repeat text-lg text-gold-500" aria-hidden="true"></i>
+          <div class="flex items-center gap-2">
+            <i class="bi bi-arrow-repeat text-base text-gold-500" aria-hidden="true"></i>
             <span class="text-[10px] uppercase tracking-wider text-ink/60 leading-tight">Troca fácil<br>em até 7 dias</span>
           </div>
         </div>
