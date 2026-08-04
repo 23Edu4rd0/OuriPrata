@@ -5,10 +5,10 @@
 {% block meta_description %}<meta name="description" content="Explore todas as joias da OuriPrata. Anéis, colares, brincos e pulseiras em ouro e prata.">{% endblock %}
 
 {% block content %}
-<main class="bg-cream-50 min-h-screen py-10 md:py-24">
+<main class="bg-cream-50 min-h-screen py-8 md:py-12">
   <div class="max-w-7xl mx-auto px-6 lg:px-12">
 
-    <div class="text-center mb-8 md:mb-14">
+    <div class="text-center mb-6 md:mb-10">
       <p class="font-serif italic text-[11px] tracking-[0.35em] text-gold-400 uppercase mb-3">Portfólio</p>
       <h1 class="font-serif text-4xl md:text-5xl text-ink font-light tracking-wide mb-5">Nossa Coleção</h1>
       <div class="flex items-center justify-center gap-4">
@@ -16,7 +16,7 @@
       </div>
     </div>
 
-    <nav class="flex flex-wrap items-center justify-center gap-1.5 mb-12" aria-label="Filtrar por categoria">
+    <nav class="flex flex-wrap items-center justify-center gap-1.5 mb-8" aria-label="Filtrar por categoria">
       <a href="{% url 'all_products' %}"
         class="px-4 py-1.5 rounded-full text-[10px] tracking-[0.2em] uppercase transition-all duration-200
                {% if not current_category %}bg-ink text-white{% else %}text-ink/45 hover:text-ink hover:bg-ink/5{% endif %}">
