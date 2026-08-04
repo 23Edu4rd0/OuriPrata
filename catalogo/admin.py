@@ -1,7 +1,15 @@
 from django.contrib import admin
+
 from .models import (
-    Category, Subcategory, Material, Occasion,
-    Product, ProductImage, ProductVariant, Collection, Review
+    Category,
+    Collection,
+    Material,
+    Occasion,
+    Product,
+    ProductImage,
+    ProductVariant,
+    Review,
+    Subcategory,
 )
 
 admin.site.register(Category)

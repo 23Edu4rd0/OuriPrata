@@ -1,14 +1,11 @@
-{% comment %} Barra de filtros server-side — preço, material, ocasião, gênero e ordenação {% endcomment %}
-<form method="get" class="mb-10">
+<form method="get" class="mb-8">
   {% if search_query %}<input type="hidden" name="q" value="{{ search_query }}">{% endif %}
   {% if category_filter %}<input type="hidden" name="categoria" value="{{ category_filter }}">{% endif %}
 
   <div class="bg-white rounded-2xl border border-ink/8 shadow-[0_1px_16px_rgba(0,0,0,.035)] px-5 py-4 md:px-6 md:py-5">
     <div class="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-6">
 
-      <!-- Contador -->
       <div class="flex items-center gap-2.5 shrink-0">
-        <span class="text-gold-400/70 text-[7px]">◆</span>
         <p class="text-[11px] tracking-[0.15em] uppercase text-ink/45 whitespace-nowrap">
           {{ total_products }} peça{{ total_products|pluralize:"s" }}
         </p>
@@ -16,10 +13,8 @@
 
       <div class="hidden lg:block h-7 w-px bg-ink/8 shrink-0"></div>
 
-      <!-- Controles -->
       <div class="flex flex-wrap items-center gap-2.5 lg:flex-1">
 
-        <!-- Faixa de preço -->
         <div class="inline-flex items-center gap-1.5 bg-cream-50 border border-ink/10 rounded-full pl-4 pr-2 py-1 hover:border-ink/20 focus-within:border-gold-400 focus-within:shadow-[0_0_0_3px_rgba(201,151,62,.10)] transition-all duration-250">
           <span class="text-[9px] tracking-[0.18em] uppercase text-ink/35 mr-0.5">R$</span>
           <input type="number" name="preco_min" value="{{ selected_preco_min }}" placeholder="mín"
@@ -61,7 +56,6 @@
 
       </div>
 
-      <!-- Ações -->
       <div class="flex items-center gap-4 shrink-0">
         <button type="submit"
           class="inline-flex items-center gap-2 text-[10px] tracking-[0.2em] uppercase text-white bg-ink px-6 py-2.5 rounded-full hover:bg-gold-500 transition-colors duration-300 whitespace-nowrap">

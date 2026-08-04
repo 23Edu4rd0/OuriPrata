@@ -1,44 +1,20 @@
-{% comment %}
-  Carrossel de produtos — 4 por vez no desktop, 2 (+ espia da terceira) no mobile.
-
-  Navegação:
-    - Mobile: só arraste (scroll nativo com snap). As setas não são renderizadas.
-    - Desktop: arraste (trackpad) e setas, as duas coisas.
-
-  A borda espiada da próxima peça é o que sinaliza que dá para arrastar; sem
-  ela o trilho parece uma grade estática.
-
-  Uso:
-    {% include 'landing_page/partials/_product_carousel.html' with products=new_arrivals %}
-{% endcomment %}
 <div class="relative group" data-carousel>
 
-  {% comment %}
-    O arraste vale nas duas telas (no desktop, rolagem lateral do trackpad).
-    overscroll-x-contain impede que o gesto "vaze" para o navegador e dispare
-    o voltar-página quando o trilho chega ao fim.
-
-    Snap firme no mobile, onde o dedo solta em qualquer ponto; no desktop fica
-    em proximity para não brigar com a posição exata em que as setas param.
-  {% endcomment %}
   <div data-carousel-track
-    class="flex overflow-x-auto overscroll-x-contain
-           snap-x snap-mandatory md:snap-proximity
-           scroll-smooth motion-reduce:scroll-auto
-           -mx-2 md:-mx-3
+    class="grid grid-cols-2 gap-x-4 gap-y-8
+           md:flex md:gap-0 md:overflow-x-auto md:overscroll-x-contain
+           md:snap-x md:snap-proximity
+           md:scroll-smooth md:motion-reduce:scroll-auto
+           md:-mx-3
            [-webkit-overflow-scrolling:touch]
            [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
     {% for product in products %}
-    <div class="snap-start shrink-0 w-[43%] md:w-1/4 px-2 md:px-3">
+    <div class="md:snap-start md:shrink-0 md:w-1/4 md:px-3{% if forloop.counter > 4 %} hidden md:block{% endif %}">
       {% include 'landing_page/partials/product_card.html' with product=product %}
     </div>
     {% endfor %}
   </div>
 
-  {% comment %}
-    Setas: escondidas por padrão, aparecem só em telas md+ e apenas quando o
-    trilho realmente transborda (o JS marca data-overflow no elemento raiz).
-  {% endcomment %}
   <button type="button" data-carousel-prev aria-label="Ver peças anteriores"
     class="hidden md:group-data-[overflow=true]:flex
            absolute left-0 -translate-x-1/2 top-[38%] -translate-y-1/2 z-20

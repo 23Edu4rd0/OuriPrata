@@ -5,7 +5,7 @@
 {% block meta_description %}<meta name="description" content="Entre em contato com a OuriPrata. Atendimento exclusivo via WhatsApp, formulário ou em nosso ateliê.">{% endblock %}
 
 {% block content %}
-<main class="bg-cream-50 min-h-screen py-10 md:py-24">
+<main class="bg-cream-50 min-h-screen py-8 md:py-12">
   <div class="max-w-6xl mx-auto px-6 lg:px-12">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
 
@@ -57,12 +57,6 @@
             Preencha os dados abaixo e abriremos o WhatsApp com sua mensagem pronta para enviar.
           </p>
 
-          {% comment %}
-            Sem method="post": não há view tratando POST, e o formulário é
-            enviado pelo WhatsApp (mesmo caminho da consulta personalizada).
-            Antes o envio recarregava a página e a mensagem se perdia em
-            silêncio — o cliente achava que tinha falado com a loja.
-          {% endcomment %}
           <form id="contactForm" class="space-y-5">
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -97,26 +91,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script>
-document.getElementById('contactForm').addEventListener('submit', e => {
-  e.preventDefault();
-
-  const nome = document.getElementById('nome').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const mensagem = document.getElementById('mensagem').value.trim();
-
-  let msg = 'Olá! Entrei em contato pelo site da OuriPrata.\n\n';
-  msg += `*Nome:* ${nome}\n`;
-  msg += `*E-mail:* ${email}\n`;
-  msg += `\n*Mensagem:*\n${mensagem}`;
-
-  // noopener impede que a aba aberta acesse window.opener e consiga
-  // redirecionar esta página (reverse tabnabbing).
-  window.open(
-    `https://wa.me/5537998623061?text=${encodeURIComponent(msg)}`,
-    '_blank',
-    'noopener,noreferrer'
-  );
-});
-</script>
+  <script src="{% static 'assets/js/contact.js' %}"></script>
 {% endblock %}

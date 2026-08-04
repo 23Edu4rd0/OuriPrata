@@ -1,0 +1,93 @@
+    <section id="avaliacoes" class="mt-10 pt-8 border-t border-ink/10">
+      <div class="mb-10">
+        <p class="font-serif italic text-[11px] tracking-[0.3em] text-gold-500 uppercase mb-2">O que dizem</p>
+        <h2 class="font-serif text-2xl md:text-3xl text-ink font-light">Avaliações</h2>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+
+        <div class="lg:col-span-3 flex flex-col items-center justify-start text-center">
+          <p class="font-serif font-light leading-none mb-3 {% if review_count > 0 %}text-6xl text-ink{% else %}text-2xl text-ink/25{% endif %}" id="avgRatingDisplay">
+            {% if review_count > 0 %}{{ avg_rating|floatformat:1 }}{% else %}Ainda sem nota{% endif %}
+          </p>
+          <div class="flex items-center gap-1 mb-3">
+            {% for i in rating_range %}
+            <i class="bi {% if i <= avg_rating_int %}bi-star-fill text-gold-500{% else %}bi-star text-ink/15{% endif %} text-sm" aria-hidden="true"></i>
+            {% endfor %}
+          </div>
+          <p class="text-[11px] text-ink/40 uppercase tracking-widest" id="reviewCountDisplay">
+            {% if review_count > 0 %}{{ review_count }} avaliação{{ review_count|pluralize:"ões" }}{% else %}Sem avaliações{% endif %}
+          </p>
+        </div>
+
+        <div class="lg:col-span-9">
+
+          {% if user.is_authenticated %}
+          <div class="mb-10 pb-10 border-b border-ink/5">
+            <h3 class="text-[10px] tracking-[0.2em] uppercase text-ink/40 mb-6">
+              {% if user_review %}Sua avaliação{% else %}Avaliar esta peça{% endif %}
+            </h3>
+            <form id="reviewForm" data-url="{% url 'submit_review' product.slug %}">
+              {% csrf_token %}
+              <div class="flex items-center gap-3 mb-5">
+                {% for i in rating_range %}
+                <button type="button" data-value="{{ i }}"
+                  class="star-pick text-2xl transition-colors {% if user_review and i <= user_review.rating %}text-gold-500{% else %}text-ink/15 hover:text-gold-300{% endif %}"
+                  aria-label="{{ i }} estrela{{ i|pluralize:'s' }}">
+                  <i class="bi bi-star-fill pointer-events-none"></i>
+                </button>
+                {% endfor %}
+                <span id="ratingLabel" class="text-[11px] text-ink/40 ml-1">
+                  {% if user_review %}{{ user_review.rating }} estrela{{ user_review.rating|pluralize:"s" }}{% else %}Selecione uma nota{% endif %}
+                </span>
+              </div>
+              <input type="hidden" name="rating" id="ratingInput" value="{% if user_review %}{{ user_review.rating }}{% endif %}">
+              <textarea name="comment" id="commentInput" rows="3"
+                placeholder="Conte o que achou da peça (opcional)…"
+                class="op-field op-field--block mb-6">{% if user_review %}{{ user_review.comment }}{% endif %}</textarea>
+              <div class="flex items-center gap-4">
+                <button type="submit"
+                  class="text-[10px] uppercase tracking-[0.2em] bg-ink text-white px-6 py-2.5 rounded-full hover:bg-gold-500 transition-colors">
+                  {% if user_review %}Atualizar{% else %}Publicar{% endif %}
+                </button>
+                <span id="reviewFormMsg" class="text-[12px] text-ink/40"></span>
+              </div>
+            </form>
+          </div>
+          {% else %}
+          <div class="mb-10 pb-10 border-b border-ink/5">
+            <p class="text-[13px] text-ink/50 font-light">
+              <a href="{% url 'login' %}?next={{ request.path }}" class="text-gold-500 hover:underline">Entre na sua conta</a> para avaliar esta peça.
+            </p>
+          </div>
+          {% endif %}
+
+          <div id="reviewsList">
+            {% for review in reviews %}
+            <div class="flex gap-5 mb-8 pb-8 border-b border-ink/5 last:border-0 last:mb-0 last:pb-0">
+              <div class="shrink-0 w-9 h-9 rounded-full bg-gold-50 border border-gold-200 flex items-center justify-center text-gold-600 text-[13px] font-medium uppercase select-none">
+                {{ review.user.get_full_name|first|default:review.user.username|first }}
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between mb-1.5 gap-4">
+                  <span class="text-[13px] font-medium text-ink truncate">{{ review.user.get_full_name|default:review.user.username }}</span>
+                  <span class="text-[10px] text-ink/30 shrink-0">{{ review.created_at|date:"d/m/Y" }}</span>
+                </div>
+                <div class="flex items-center gap-0.5 mb-2.5">
+                  {% for i in rating_range %}
+                  <i class="bi {% if i <= review.rating %}bi-star-fill text-gold-500{% else %}bi-star text-ink/15{% endif %} text-[11px]" aria-hidden="true"></i>
+                  {% endfor %}
+                </div>
+                {% if review.comment %}
+                <p class="text-[13px] text-ink/70 leading-relaxed font-light">{{ review.comment }}</p>
+                {% endif %}
+              </div>
+            </div>
+            {% empty %}
+            <p id="noReviewsMsg" class="text-[13px] text-ink/40 font-light">Ainda não há avaliações. Seja a primeira pessoa a avaliar!</p>
+            {% endfor %}
+          </div>
+
+        </div>
+      </div>
+    </section>

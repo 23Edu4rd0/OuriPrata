@@ -3,9 +3,9 @@ from datetime import timedelta
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.text import slugify
-from django.urls import reverse
 
 
 def generate_unique_slug(model_class, name, instance_pk=None):
@@ -43,7 +43,7 @@ class Category(models.Model):
         if not self.slug:
             self.slug = generate_unique_slug(Category, self.name, self.pk)
         super().save(*args, **kwargs)
-        
+
     def get_absolute_url(self):
         return reverse('products_by_category', kwargs={'category_slug': self.slug})
 
@@ -119,7 +119,6 @@ class Product(models.Model):
         help_text='Deixe em branco para estoque ilimitado. Use variantes para controle por tamanho.'
     )
     created_at = models.DateTimeField(auto_now_add=True)
-
 
     material = models.ForeignKey(
         Material, on_delete=models.CASCADE, related_name='products'

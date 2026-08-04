@@ -1,12 +1,10 @@
 {% load static %}
 
-<!-- Navbar Desktop & Mobile -->
 <nav
   class="fixed top-0 inset-x-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200/70 transition-all duration-300"
   id="opNav" role="navigation" aria-label="Navegação principal">
   <div class="max-w-[1360px] mx-auto px-6 lg:px-10 h-[80px] flex items-center gap-6">
 
-    <!-- Zona 1: Logo -->
     <a href="{% url 'home' %}" class="flex-shrink-0 group flex items-center gap-2.5 mr-2"
       aria-label="OuriPrata - Página inicial">
       <span class="text-[22px] lg:text-2xl font-serif tracking-[0.02em] leading-none">
@@ -20,7 +18,6 @@
       </span>
     </a>
 
-    <!-- Zona 2: Links desktop (ocupa o espaço livre) -->
     <ul class="hidden md:flex flex-1 items-center justify-center gap-7 lg:gap-9" role="list">
       <li>
         <a href="{% url 'home' %}"
@@ -65,10 +62,8 @@
       </li>
     </ul>
 
-    <!-- Zona 3: Ações (busca + ícones), agrupadas à direita -->
     <div class="flex items-center gap-1.5 lg:gap-2 flex-shrink-0 ml-auto md:ml-0">
 
-      <!-- Busca: oculta em mobile (mobile usa o drawer), visível em md+ -->
       <form method="get" action="{% url 'search_products' %}"
         class="relative group hidden md:flex items-center h-10 pl-4 pr-1 mr-2 bg-gray-50/80 rounded-full border border-gray-200 hover:border-gray-300 focus-within:border-gold-400 focus-within:bg-white focus-within:shadow-[0_0_0_3px_rgba(201,151,62,.10)] transition-all duration-300"
         role="search">
@@ -84,25 +79,21 @@
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
         </button>
-        <!-- Sugestões da busca -->
         <div
           class="absolute top-full left-0 right-0 mt-2 bg-white shadow-lg shadow-gray-200/60 border border-gray-200 rounded-2xl overflow-hidden hidden empty:hidden"
           id="searchSuggestions" role="listbox"></div>
       </form>
 
-      <!-- Favoritos -->
       <a href="{% url 'wishlist' %}" aria-label="Favoritos" class="relative hidden md:flex items-center justify-center w-9 h-9 rounded-full text-gray-600 hover:text-gold-500 hover:bg-gold-50 transition-all duration-300">
         <i class="bi bi-heart text-lg"></i>
         <span data-wishlist-count class="hidden absolute top-0 right-0 min-w-[16px] h-4 px-1 rounded-full bg-gold-500 text-white text-[9px] leading-4 text-center font-medium">0</span>
       </a>
 
-      <!-- Carrinho -->
       <a href="{% url 'cart' %}" aria-label="Carrinho" class="relative hidden md:flex items-center justify-center w-9 h-9 rounded-full text-gray-600 hover:text-gold-500 hover:bg-gold-50 transition-all duration-300">
         <i class="bi bi-bag text-lg"></i>
         <span data-cart-count class="hidden absolute top-0 right-0 min-w-[16px] h-4 px-1 rounded-full bg-ink text-white text-[9px] leading-4 text-center font-medium">0</span>
       </a>
 
-      <!-- Conta -->
       {% if user.is_authenticated %}
       <a href="{% url 'profile' %}" aria-label="Minha conta" class="hidden md:flex items-center justify-center w-9 h-9 rounded-full text-gray-600 hover:text-gold-500 hover:bg-gold-50 transition-all duration-300">
         <i class="bi bi-person-circle text-lg"></i>
@@ -114,7 +105,6 @@
       </a>
       {% endif %}
 
-      <!-- Toggle Mobile (Hamburger) -->
       <button
         class="md:hidden flex flex-col justify-center items-center gap-[6px] w-10 h-10 text-gray-700 focus:outline-none"
         id="navToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="navDrawer">
@@ -128,18 +118,14 @@
   </div>
 </nav>
 
-<!-- Drawer Mobile Premium -->
-<!-- Backdrop escuro que fecha o menu ao clicar fora -->
 <div
   class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-[60] opacity-0 pointer-events-none transition-opacity duration-300 [&.open]:opacity-100 [&.open]:pointer-events-auto"
   id="drawerBackdrop"></div>
 
-<!-- Painel lateral -->
 <div
   class="fixed top-0 right-0 h-[100dvh] w-[85vw] max-w-[360px] bg-white z-[70] translate-x-full transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] [&.open]:translate-x-0 flex flex-col shadow-2xl"
   id="navDrawer" role="dialog" aria-label="Menu de navegação" aria-modal="true">
 
-  <!-- Header do Drawer -->
   <div class="flex items-center justify-between px-5 h-[60px] border-b border-gray-100 shrink-0">
     <span class="text-lg font-serif tracking-[0.02em]">
       <span class="text-gray-800 font-medium">Ouri</span><span class="text-gold-500 italic font-light">Prata</span>
@@ -153,7 +139,6 @@
 
   <div class="flex-grow overflow-y-auto">
 
-    <!-- Busca Mobile -->
     <div class="px-5 pt-4 pb-3">
       <form method="get" action="{% url 'search_products' %}"
         class="flex items-center h-10 pl-4 pr-1 bg-gray-50 rounded-full border border-gray-200 focus-within:border-gold-400 focus-within:bg-white transition-colors duration-300">
@@ -171,7 +156,6 @@
       </form>
     </div>
 
-    <!-- Navegação -->
     <nav class="px-5 py-1">
       <a href="{% url 'home' %}"
         class="flex items-center justify-between py-3 border-b border-gray-100 text-[15px] font-serif text-gray-800 hover:text-gold-600 transition-colors duration-200 group">
@@ -200,7 +184,6 @@
       </a>
     </nav>
 
-    <!-- Atalhos da conta -->
     <div class="mx-5 my-3 p-1 bg-gray-50/70 rounded-xl">
       <a href="{% url 'wishlist' %}"
         class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] text-gray-700 hover:bg-white hover:text-gold-600 transition-colors duration-200">
@@ -231,7 +214,6 @@
 
   </div>
 
-  <!-- Footer do Drawer -->
   <div class="px-5 py-4 border-t border-gray-100 shrink-0">
     <a href="https://wa.me/5537998623061" target="_blank" rel="noopener"
       class="flex items-center justify-center gap-2 w-full py-3 border border-gold-500 text-gold-600 hover:bg-gold-500 hover:text-white rounded-full text-[11px] font-medium uppercase tracking-[0.15em] transition-colors duration-300">

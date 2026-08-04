@@ -1,11 +1,20 @@
 from decimal import Decimal, InvalidOperation
 
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404
+from django.db.models import Avg, Count, F, Max, Q
 from django.http import JsonResponse
-from django.db.models import Q, Max, Avg, Count, F
-from .models import Product, Category, Material, Occasion, Review, Collection, ProductVariant
+from django.shortcuts import get_object_or_404, render
+
 from accounts.models import BrowsingHistory
+
+from .models import (
+    Category,
+    Collection,
+    Material,
+    Occasion,
+    Product,
+    Review,
+)
 
 SORT_OPTIONS = {
     'recentes': '-created_at',
@@ -279,6 +288,7 @@ def search_products(request):
     return render(
         request, 'landing_page/produtos/search_results.html', context
     )
+
 
 def cart_page(request):
     return render(request, 'landing_page/carrinho/cart.html')
