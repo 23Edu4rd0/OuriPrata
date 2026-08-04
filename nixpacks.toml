@@ -1,0 +1,21 @@
+# O provider Python padrão do Nixpacks detecta o Poetry pelo poetry.lock, mas
+# fixa a versão 1.3.1 e roda `poetry install --no-dev`. Essa versão não lê o
+# formato do nosso pyproject.toml (dependências em [project], padrão PEP 621,
+# sem a antiga seção [tool.poetry]) e falha com
+# "[tool.poetry] section not found".
+#
+# Subir a versão do Poetry sozinha troca esse erro por outros dois, em
+# sequência:
+#   1. a partir da 2.0 a flag --no-dev foi removida, só existe --without dev;
+#   2. sem [tool.poetry] no pyproject.toml não há como declarar
+#      package-mode = false, então o Poetry tenta instalar o próprio projeto
+#      como pacote e falha com "No file/folder found for package ouriprata"
+#      (o app é um site Django, não uma biblioteca) — precisa de --no-root.
+#
+# Por isso a fase de instalação é redefinida aqui inteira, com uma versão do
+# Poetry que entende o pyproject.toml atual e as duas flags corretas.
+[phases.install]
+cmds = [
+  "python -m venv --copies /opt/venv",
+  ". /opt/venv/bin/activate && pip install poetry==2.4.1 && poetry install --without dev --no-root --no-interaction --no-ansi",
+]
